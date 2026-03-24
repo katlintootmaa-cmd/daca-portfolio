@@ -1,7 +1,7 @@
-# DACA Portfoolio -- [Sinu Nimi]
+# DACA Portfoolio -- [Kätlin Tootmaa]
 
 ## Minust
-[Kirjuta 2-3 lauset enda kohta. Miks sa liitusid DACA programmiga?]
+Soovin teha karjääripööret ning alustada andmeanalüütikuna.
 
 ## Eesmärk
 Õppida andmeanalüüsi -- SQL, Python, visualiseerimine -- ja ehitada professionaalne portfoolio.
