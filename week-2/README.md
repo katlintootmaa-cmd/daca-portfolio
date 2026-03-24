@@ -1,1 +1,1 @@
-# Nädal 1: SQL Cleaning
+# Nädal 2: SQL Cleaning
