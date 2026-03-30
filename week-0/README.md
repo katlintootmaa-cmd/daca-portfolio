@@ -1,4 +1,4 @@
-markdown## 📝 Kokkuvõte
+📝 Kokkuvõte
 
 Karmo lõi ühise koodikeskkonna, Mari lõi ühise andmebaasi,
 Kätlin pani tööle AI-teadmuskeskkonna ja Ragnar vormistas
