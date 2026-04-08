@@ -9,9 +9,9 @@ Soovin teha karjääripööret ning alustada andmeanalüütikuna.
 ## Nädala kaupa
 | Nädal | Teema | Staatus |
 |-------|-------|---------|
-| 0 | Onboarding | Käimas |
-| 1 | SQL Basics | Tulemas |
-| 2 | SQL Cleaning | Tulemas |
+| 0 | Onboarding | Läbitud |
+| 1 | SQL Basics | Läbitud |
+| 2 | SQL Cleaning | Käimas |
 | 3 | SQL JOINs | Tulemas |
 | 4 | SQL Aggregation | Tulemas |
 | 5-6 | Visualiseerimine | Tulemas |
