@@ -1,16 +1,22 @@
-📝 Kokkuvõte
+# DACA nädal 0: Onboarding
 
-Karmo lõi ühise koodikeskkonna, Mari lõi ühise andmebaasi,
-Kätlin pani tööle AI-teadmuskeskkonna ja Ragnar vormistas
-meeskonna koostööreeglid.
+**Tegu:** programmeerisin ülesandena esimest vertikaalset lahendust (`Supabase + GitHub + VS Code`)
 
----
+## 1) Setup
+- Supabase projekt `urbanstyle-daca`
+- tabel `team_members` + 4 rida (mina + Toomas + Kristi + Anna)
+- GitHub repo `daca-portfolio` (public)
+- VS Code + Python + SQLTools
 
-## 🔗 Meeskonna lingid
+## 2) Peamised õppetunnid
+- Excelit asendab andmebaas: õige “single source of truth”
+- Git = versioonihaldus + commit = töö checkpoint
+- GitHub = portfoolio nähtavus + koostöö
+- “Vertical slice”: kood versioonis + andmed pilves + päringu töötamine redaktorist
 
-| Tööriist | Link |
-|----------|------|
-| 💬 Suhtluskanal | Grupitöö G4 (Google Workspace Chat) |
-| 🐙 GitHub repo | [urbanstyle-Marketing-Data](https://github.com/karmo-nopri/urbanstyle-Marketing-Data) |
-| 🗄️ Supabase | [Andmebaasi projekt](https://supabase.com/dashboard/project/pfcnzcgrbqkflormvukb) |
-| 🤖 NotebookLM | [AI notebook](https://notebooklm.google.com/notebook/f12a8063-ab0f-471b-99ce-3a6
+## 3) Järgmiseks
+- week-1 SQL päringud (JOIN, GROUP BY, aggregatsioon)
+- andmete ellu rakendamine (supabase tabelitest dashboard või raport)
+- demo sessioonile ettevalmistus
+
+> Nädala kokkuvõte: esmased tööriistad on käivitunud ja töövoog on paigas; nüüd fookuses on andmeloogika lihvimine ja sügavam analüüs.
