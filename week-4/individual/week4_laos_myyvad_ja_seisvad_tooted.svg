@@ -24,10 +24,10 @@
   <text x="92" y="246" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">60</text>
   <text x="92" y="154" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">80</text>
 
-  <rect x="150" y="270.25" width="52" height="249.75" fill="#2f80ed"/>
-  <rect x="207" y="483" width="52" height="37" fill="#d64545"/>
-  <text x="176" y="261" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#202124">54</text>
-  <text x="233" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#202124">8</text>
+  <rect x="150" y="191.625" width="52" height="328.375" fill="#2f80ed"/>
+  <rect x="207" y="473.75" width="52" height="46.25" fill="#d64545"/>
+  <text x="176" y="183" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#202124">71</text>
+  <text x="233" y="465" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#202124">10</text>
 
   <rect x="320" y="224" width="52" height="296" fill="#2f80ed"/>
   <rect x="377" y="487.625" width="52" height="32.375" fill="#d64545"/>
@@ -39,21 +39,21 @@
   <text x="516" y="224" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#202124">62</text>
   <text x="573" y="484" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#202124">6</text>
 
-  <rect x="660" y="191.625" width="52" height="328.375" fill="#2f80ed"/>
-  <rect x="717" y="473.75" width="52" height="46.25" fill="#d64545"/>
-  <text x="686" y="183" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#202124">71</text>
-  <text x="743" y="465" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#202124">10</text>
+  <rect x="660" y="242.5" width="52" height="277.5" fill="#2f80ed"/>
+  <rect x="717" y="483" width="52" height="37" fill="#d64545"/>
+  <text x="686" y="234" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#202124">60</text>
+  <text x="743" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#202124">8</text>
 
-  <rect x="830" y="242.5" width="52" height="277.5" fill="#2f80ed"/>
+  <rect x="830" y="270.25" width="52" height="249.75" fill="#2f80ed"/>
   <rect x="887" y="483" width="52" height="37" fill="#d64545"/>
-  <text x="856" y="234" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#202124">60</text>
+  <text x="856" y="261" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#202124">54</text>
   <text x="913" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#202124">8</text>
 
-  <text x="205" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#3c4043">aksessuaarid</text>
+  <text x="205" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#3c4043">meeste riided</text>
   <text x="375" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#3c4043">jalanõud</text>
   <text x="545" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#3c4043">laste riided</text>
-  <text x="715" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#3c4043">meeste riided</text>
-  <text x="885" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#3c4043">naiste riided</text>
+  <text x="715" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#3c4043">naiste riided</text>
+  <text x="885" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#3c4043">aksessuaarid</text>
 
   <text x="70" y="604" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">Kõige rohkem seisvaid tooteid on meeste riiete kategoorias; kokku on 39 toodet, millel on laojääk olemas, kuid 2025. aastal müük puudub.</text>
 </svg>

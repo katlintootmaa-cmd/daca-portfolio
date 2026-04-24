@@ -321,4 +321,4 @@ SELECT
     SUM(laos_kokku) FILTER (WHERE toote_staatus = 'SEISAB') AS seisva_kauba_laoseis
 FROM toodete_staatus
 GROUP BY category
-ORDER BY seisvaid_tooteid DESC, myyvaid_tooteid DESC;
+ORDER BY myyvaid_tooteid DESC, seisvaid_tooteid DESC, category;
