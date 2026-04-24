@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="560" viewBox="0 0 1100 560" role="img" aria-labelledby="title desc">
+  <title id="title">M&#252;&#252;dud/laos suhe kategooriate l&#245;ikes</title>
+  <desc id="desc">Horisontaalne tulpdiagramm, mis v&#245;rdleb UrbanStyle kategooriate m&#252;&#252;dud/laos suhet.</desc>
+  <rect width="1100" height="560" fill="#ffffff"/>
+
+  <text x="70" y="48" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#202124">M&#252;&#252;dud/laos suhe kategooriate l&#245;ikes</text>
+  <text x="70" y="76" font-family="Arial, sans-serif" font-size="15" fill="#5f6368">K&#245;rgem suhe viitab kiiremale l&#228;bim&#252;&#252;gile v&#245;rreldes laoseisuga</text>
+
+  <line x1="250" y1="450" x2="960" y2="450" stroke="#9aa0a6" stroke-width="1.5"/>
+  <line x1="250" y1="126" x2="250" y2="450" stroke="#9aa0a6" stroke-width="1.5"/>
+  <line x1="368.3" y1="126" x2="368.3" y2="450" stroke="#e8eaed"/>
+  <line x1="486.7" y1="126" x2="486.7" y2="450" stroke="#e8eaed"/>
+  <line x1="605.0" y1="126" x2="605.0" y2="450" stroke="#e8eaed"/>
+  <line x1="723.3" y1="126" x2="723.3" y2="450" stroke="#e8eaed"/>
+  <line x1="841.7" y1="126" x2="841.7" y2="450" stroke="#e8eaed"/>
+  <line x1="960.0" y1="126" x2="960.0" y2="450" stroke="#e8eaed"/>
+
+  <text x="244" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">0.00</text>
+  <text x="368" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">0.01</text>
+  <text x="487" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">0.02</text>
+  <text x="605" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">0.03</text>
+  <text x="723" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">0.04</text>
+  <text x="842" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">0.05</text>
+  <text x="960" y="474" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">0.06</text>
+
+  <text x="210" y="161" text-anchor="end" font-family="Arial, sans-serif" font-size="15" fill="#3c4043">naiste riided</text>
+  <rect x="250" y="138" width="710" height="34" fill="#e67e22"/>
+  <text x="975" y="160" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#202124">0.06</text>
+
+  <text x="210" y="221" text-anchor="end" font-family="Arial, sans-serif" font-size="15" fill="#3c4043">aksessuaarid</text>
+  <rect x="250" y="198" width="710" height="34" fill="#e67e22"/>
+  <text x="975" y="220" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#202124">0.06</text>
+
+  <text x="210" y="281" text-anchor="end" font-family="Arial, sans-serif" font-size="15" fill="#3c4043">laste riided</text>
+  <rect x="250" y="258" width="591.7" height="34" fill="#f2c94c"/>
+  <text x="857" y="280" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#202124">0.05</text>
+
+  <text x="210" y="341" text-anchor="end" font-family="Arial, sans-serif" font-size="15" fill="#3c4043">jalan&#245;ud</text>
+  <rect x="250" y="318" width="473.3" height="34" fill="#2f80ed"/>
+  <text x="739" y="340" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#202124">0.04</text>
+
+  <text x="210" y="401" text-anchor="end" font-family="Arial, sans-serif" font-size="15" fill="#3c4043">meeste riided</text>
+  <rect x="250" y="378" width="473.3" height="34" fill="#2f80ed"/>
+  <text x="739" y="400" font-family="Arial, sans-serif" font-size="14" font-weight="700" fill="#202124">0.04</text>
+
+  <text x="70" y="520" font-family="Arial, sans-serif" font-size="12" fill="#5f6368">Kiireim l&#228;bim&#252;&#252;k on naisteriietel ja aksessuaaridel; neid kategooriaid tasub sagedamini t&#228;iendada.</text>
+</svg>

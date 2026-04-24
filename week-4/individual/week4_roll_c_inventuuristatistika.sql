@@ -210,3 +210,115 @@ JOIN laoseis_kategoorias l
 JOIN liikumised_kategoorias lk
     ON lk.category = m.category
 ORDER BY m.brutokasum DESC, muydud_lao_suhe DESC;
+
+
+-- 5. Laos olevad tooted: mis müüb ja mis seisab (2025 vaade)
+-- "Seisev" tähendab siin toodet, millel on laos jääk olemas,
+-- kuid 2025. aastal pole müüki toimunud.
+WITH laoseis_toote_kohta AS (
+    SELECT
+        p.product_id,
+        p.product_name,
+        p.category,
+        SUM(i.quantity_available) AS laos_kokku
+    FROM products p
+    JOIN inventory i
+        ON i.product_id = p.product_id
+    GROUP BY
+        p.product_id,
+        p.product_name,
+        p.category
+    HAVING SUM(i.quantity_available) > 0
+),
+muuk_2025_toote_kohta AS (
+    SELECT
+        s.product_id,
+        SUM(s.quantity) AS myydud_2025
+    FROM sales s
+    WHERE s.sale_date >= DATE '2025-01-01'
+    GROUP BY s.product_id
+),
+viimane_muuk_toote_kohta AS (
+    SELECT
+        s.product_id,
+        MAX(s.sale_date::date) AS viimase_muugi_kuupaev
+    FROM sales s
+    GROUP BY s.product_id
+),
+toodete_staatus AS (
+    SELECT
+        l.category,
+        l.product_id,
+        l.product_name,
+        l.laos_kokku,
+        COALESCE(m.myydud_2025, 0) AS myydud_2025,
+        v.viimase_muugi_kuupaev,
+        CASE
+            WHEN COALESCE(m.myydud_2025, 0) > 0 THEN 'MYYB'
+            ELSE 'SEISAB'
+        END AS toote_staatus
+    FROM laoseis_toote_kohta l
+    LEFT JOIN muuk_2025_toote_kohta m
+        ON m.product_id = l.product_id
+    LEFT JOIN viimane_muuk_toote_kohta v
+        ON v.product_id = l.product_id
+)
+SELECT
+    category,
+    product_id,
+    product_name,
+    laos_kokku,
+    myydud_2025,
+    viimase_muugi_kuupaev,
+    toote_staatus
+FROM toodete_staatus
+ORDER BY
+    toote_staatus DESC,
+    laos_kokku DESC,
+    category,
+    product_name;
+
+
+-- 6. Kategooriate koondvaade: mitu toodet müüb ja mitu seisab laos
+WITH laoseis_toote_kohta AS (
+    SELECT
+        p.product_id,
+        p.category,
+        SUM(i.quantity_available) AS laos_kokku
+    FROM products p
+    JOIN inventory i
+        ON i.product_id = p.product_id
+    GROUP BY
+        p.product_id,
+        p.category
+    HAVING SUM(i.quantity_available) > 0
+),
+muuk_2025_toote_kohta AS (
+    SELECT
+        s.product_id,
+        SUM(s.quantity) AS myydud_2025
+    FROM sales s
+    WHERE s.sale_date >= DATE '2025-01-01'
+    GROUP BY s.product_id
+),
+toodete_staatus AS (
+    SELECT
+        l.category,
+        l.laos_kokku,
+        CASE
+            WHEN COALESCE(m.myydud_2025, 0) > 0 THEN 'MYYB'
+            ELSE 'SEISAB'
+        END AS toote_staatus
+    FROM laoseis_toote_kohta l
+    LEFT JOIN muuk_2025_toote_kohta m
+        ON m.product_id = l.product_id
+)
+SELECT
+    category,
+    COUNT(*) FILTER (WHERE toote_staatus = 'MYYB') AS myyvaid_tooteid,
+    COUNT(*) FILTER (WHERE toote_staatus = 'SEISAB') AS seisvaid_tooteid,
+    SUM(laos_kokku) FILTER (WHERE toote_staatus = 'MYYB') AS myyva_kauba_laoseis,
+    SUM(laos_kokku) FILTER (WHERE toote_staatus = 'SEISAB') AS seisva_kauba_laoseis
+FROM toodete_staatus
+GROUP BY category
+ORDER BY seisvaid_tooteid DESC, myyvaid_tooteid DESC;
