@@ -492,6 +492,21 @@ Müügitulu trend näitab, kas UrbanStyle'i kasv on järjepidev või sõltub ük
 Kategooriate võrdlus aitab CEO-l näha, millised tooterühmad kasvu kõige rohkem veavad.
 ```
 
+Mida edastada rollile D:
+
+1. Tee CEO lehelt ekraanipilt.
+2. Kirjuta D-le 1-2 lauset kasvu kohta.
+3. Too välja, kas müügitulu trend on pigem kasvav, langev või kõikuv.
+4. Too välja, milline kategooria annab kõige rohkem käivet.
+
+Näidis D-le saatmiseks:
+
+```text
+CEO vaade: müügitulu trend on [kasvav / langev / kõikuv].
+Kõige suurema käibega kategooria on [kategooria].
+Investorivaates saab seda kasutada kasvu tugevuse hindamiseks.
+```
+
 ## 12. Roll B: Marketing dashboard
 
 Marketingi põhiküsimus: kas müügikanalid töötavad?
@@ -531,6 +546,21 @@ Pealkirjad:
 ```text
 Kanali vaade näitab, kas online või pood toob suurema osa käibest.
 Lojaalsustaseme võrdlus aitab hinnata, kas väärtuslikumad kliendid ostavad kindlas kanalis.
+```
+
+Mida edastada rollile D:
+
+1. Tee Marketingi lehelt ekraanipilt.
+2. Kirjuta D-le 1-2 lauset kanalite toimivuse kohta.
+3. Too välja, milline müügikanal annab kõige rohkem käivet.
+4. Too välja, kas mõni lojaalsustase või makseviis paistab eriti tugevalt silma.
+
+Näidis D-le saatmiseks:
+
+```text
+Marketingi vaade: kõige tugevam kanal on [kanal].
+Kõige väärtuslikum kliendigrupp või lojaalsustase on [lojaalsustase], sest [põhjus].
+Investorivaates saab seda kasutada müügikanalite skaleeritavuse hindamiseks.
 ```
 
 ## 13. Roll C: Operations dashboard
@@ -574,6 +604,21 @@ Laoseisu vaade näitab, millistes kategooriates võib tekkida puudujääk.
 Asukohapõhine matrix aitab otsustada, kuhu kaupa ümber jaotada või juurde tellida.
 ```
 
+Mida edastada rollile D:
+
+1. Tee Operationsi lehelt ekraanipilt.
+2. Kirjuta D-le 1-2 lauset laoseisu ja riskide kohta.
+3. Too välja, mitu toodet või laokirjet on alla tellimispunkti.
+4. Too välja, kas laoseis toetab müügikasvu või võib kasvu piirata.
+
+Näidis D-le saatmiseks:
+
+```text
+Operationsi vaade: alla tellimispunkti on [arv] laokirjet.
+Suurim laorisk on kategoorias [kategooria] või asukohas [asukoht].
+Investorivaates saab seda kasutada tegevusriski hindamiseks.
+```
+
 ## 14. Roll D: Investor dashboard
 
 Investori põhiküsimus: kas UrbanStyle on investeerimisväärne?
@@ -614,6 +659,23 @@ Pealkirjad:
 ```text
 Investorile on oluline mitte ainult käibe kasv, vaid ka kasumlikkus.
 Kui kogutulu kasvab ja brutomarginaal püsib tugev, on UrbanStyle'i ärimudel atraktiivsem.
+```
+
+Kuidas D kasutab teiste alaülesannete tulemusi:
+
+1. Kogu A-lt CEO ekraanipilt ja 1-2 kasvujäreldust.
+2. Kogu B-lt Marketingi ekraanipilt ja 1-2 kanalite järeldust.
+3. Kogu C-lt Operationsi ekraanipilt ja 1-2 laoseisu või riski järeldust.
+4. Lisa enda Investori lehele või Google Slides'i kokkuvõttesse lühike koondjäreldus.
+5. Koondjärelduses vasta küsimusele: kas UrbanStyle on investeerimisväärne?
+
+D koondteksti näidis:
+
+```text
+CEO vaade näitab, et müügitulu on [kasvav / langev / kõikuv].
+Marketingi vaade näitab, et tugevaim kanal on [kanal].
+Operationsi vaade näitab, et peamine risk on [laorisk / puudub suur laorisk].
+Investori vaates tähendab see, et UrbanStyle on [atraktiivne / vajab enne investeeringut parandusi], sest [põhjendus].
 ```
 
 ## 15. Kirjuta äritõlgendus samm-sammult
