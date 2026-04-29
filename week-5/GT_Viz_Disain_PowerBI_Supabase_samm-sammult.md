@@ -8,6 +8,8 @@ Andmeallikas: UrbanStyle andmed Supabase Postgres andmebaasis
 
 Selle juhendi eesmärk on teha UrbanStyle andmetest Power BI raport nii, et andmed tulevad otse Supabase andmebaasist, mitte CSV failidest.
 
+Juhend eeldab, et Power BI ja Supabase vaheline andmeallikas on sul juba olemas või õpetaja on selle ette valmistanud. Siin failis ei ole ühenduse loomise juhiseid, vaid töö algab andmete ettevalmistamisest ja raporti ehitamisest.
+
 See sobib eriti hästi siis, kui tahad grupitöös näidata realistlikumat andmevoogu:
 
 ```text
@@ -60,7 +62,14 @@ Bonus-tabelid, kui tahad rohkem analüüsi:
 
 See samm ei ole kohustuslik, aga teeb raporti palju lihtsamaks. Vaated ühendavad vajalikud tabelid juba Supabase poolel.
 
-Ava Supabase'is `SQL Editor` ja käivita järgmine SQL:
+Tee nii:
+
+1. Ava Supabase Dashboard.
+2. Vali UrbanStyle projekt.
+3. Vasakult menüüst vali `SQL Editor`.
+4. Vajuta `New query`.
+5. Kopeeri päringukasti järgmine SQL.
+6. Vajuta `Run`.
 
 ```sql
 create or replace view public.v_powerbi_sales_enriched as
@@ -93,7 +102,11 @@ left join public.customers c
     on c.customer_id = s.customer_id;
 ```
 
-Lisa ka laoseisu vaade:
+Kui päring lõppes veata, tee teine vaade.
+
+1. Vajuta uuesti `New query`.
+2. Kopeeri päringukasti järgmine SQL.
+3. Vajuta `Run`.
 
 ```sql
 create or replace view public.v_powerbi_inventory_enriched as
@@ -119,20 +132,26 @@ left join public.products p
     on p.product_id = i.product_id;
 ```
 
-Kontrolli, et vaated töötavad:
+Kontrolli kohe, et mõlemad vaated töötavad.
+
+1. Vajuta `New query`.
+2. Kopeeri päringukasti kontrollpäringud.
+3. Vajuta `Run`.
 
 ```sql
 select * from public.v_powerbi_sales_enriched limit 10;
 select * from public.v_powerbi_inventory_enriched limit 10;
 ```
 
-Kui need päringud annavad read tagasi, võid minna Power BI-sse.
+Kui mõlemad päringud annavad read tagasi, võid minna Power BI-sse.
 
 ## 4. Ava Power BI ja alusta uut faili
 
 1. Ava `Microsoft Power BI Desktop`.
 2. Vali `Blank report`.
-3. Salvesta fail kohe:
+3. Vajuta vasakul üleval `File`.
+4. Vali `Save as`.
+5. Salvesta fail kohe:
 
 ```text
 C:\Users\Kätlin\Documents\Õppeprojekt\daca-portfolio\week-5\gt_viz_disain_urbanstyle_supabase.pbix
@@ -140,23 +159,36 @@ C:\Users\Kätlin\Documents\Õppeprojekt\daca-portfolio\week-5\gt_viz_disain_urba
 
 ## 5. Vali tabelid või vaated
 
-Kui tegid peatükis 3 Power BI vaated, vali:
+Tee seda siis, kui Power BI näitab sulle andmeallika `Navigator` akent või tabelite nimekirja.
+
+1. Leia schema `public`.
+2. Kui tegid peatükis 3 Power BI vaated, vali need kaks vaadet:
 
 - `public v_powerbi_sales_enriched`
 - `public v_powerbi_inventory_enriched`
 
-Kui vaateid ei teinud, vali põhitäbelid:
+3. Kui vaateid ei teinud, vali põhitäbelid:
 
 - `public sales`
 - `public customers`
 - `public products`
 - `public inventory`
 
-Seejärel vajuta `Transform Data`, mitte kohe `Load`.
+4. Vajuta `Transform Data`, mitte kohe `Load`.
+
+Kui tabelite nimekirja ei näe, kontrolli, et oled valinud schema `public`.
 
 ## 6. Kontrolli Power Querys andmetüübid
 
-Kui kasutad vaadet `v_powerbi_sales_enriched`, kontrolli neid tüüpe:
+Power Query Editoris kontrolli andmetüübid enne andmete laadimist.
+
+1. Vasakul `Queries` paneelis vali `v_powerbi_sales_enriched`.
+2. Vaata iga veeru päises olevat andmetüübi ikooni.
+3. Kui tüüp on vale, vajuta veeru päises ikoonile.
+4. Vali õige tüüp.
+5. Kui Power BI küsib `Replace current step?`, vali `Replace current`.
+
+Kui kasutad vaadet `v_powerbi_sales_enriched`, kontrolli neid tüüpe.
 
 | Veerg | Tüüp Power BI-s |
 |---|---|
@@ -180,7 +212,7 @@ Kui kasutad vaadet `v_powerbi_sales_enriched`, kontrolli neid tüüpe:
 | `loyalty_tier` | Text |
 | `birth_year` | Whole Number |
 
-Kui kasutad `v_powerbi_inventory_enriched`, kontrolli:
+Nüüd vali vasakult `v_powerbi_inventory_enriched` ja kontrolli need tüübid.
 
 | Veerg | Tüüp |
 |---|---|
@@ -193,10 +225,42 @@ Kui kasutad `v_powerbi_inventory_enriched`, kontrolli:
 | `category` | Text |
 | `needs_reorder` | True/False |
 
+### 6.1. Tee Power Query kvaliteedikontroll
+
+Enne `Close & Apply` vajutamist tee väike kontroll. See aitab vältida olukorda, kus dashboard'i ehitamisel otsid viga visualist, kuigi probleem on andmetüübis või päringus.
+
+1. Kontrolli vasakult `Queries` paneelist, et näed õigeid tabeleid või vaateid.
+2. Kui kasutad vaateid, peaksid nimekirjas olema:
+   - `v_powerbi_sales_enriched`
+   - `v_powerbi_inventory_enriched`
+3. Kui kasutad põhitäbeleid, peaksid nimekirjas olema:
+   - `sales`
+   - `customers`
+   - `products`
+   - `inventory`
+4. Vali iga tabel või vaade ükshaaval.
+5. Kontrolli, et üheski veerus ei oleks väärtust `Error`.
+6. Kontrolli, et ID veerud oleksid `Whole Number`.
+7. Kontrolli, et hinna ja käibe veerud oleksid `Decimal Number`.
+8. Kontrolli, et kuupäevaveerud oleksid `Date` või `Date/Time`.
+9. Kontrolli, et tekstiveerud nagu `category`, `channel`, `location` ja `loyalty_tier` oleksid `Text`.
+10. Kui mõnes veerus on tüüp vale, muuda see enne andmete laadimist ära.
+
+Kiirkontroll:
+
+| Kontroll | Mida peab nägema |
+|---|---|
+| Müügikuupäev | `sale_date` on `Date/Time` |
+| Raha | `total_price`, `unit_price`, `cost_price` on `Decimal Number` |
+| Kogused | `quantity`, `quantity_available`, `reorder_point` on `Whole Number` |
+| Kategooriad | `category`, `subcategory`, `channel` on `Text` |
+| Laorisk | `needs_reorder` on `True/False` |
+
 Kui kõik on korras:
 
 1. Vali Power Query Editoris `Home`.
 2. Vajuta `Close & Apply`.
+3. Oota, kuni Power BI laeb andmed mudelisse.
 
 ## 7. Kui kasutad põhitäbeleid, loo seosed
 
@@ -217,7 +281,13 @@ Kui Power BI pakub many-to-many seost, kontrolli, kas ID veerud on õige tüübi
 
 ## 8. Loo kuupäevatabel
 
-Power BI-s vali `Modeling` > `New table` ja lisa:
+Kuupäevatabel on vajalik, et müügitulu trend ja ajafiltrid töötaksid korrektselt.
+
+1. Mine Power BI-s `Report view` vaatesse.
+2. Üleval ribal vali `Modeling`.
+3. Vajuta `New table`.
+4. Sisesta valemiribale järgmine DAX.
+5. Vajuta `Enter`.
 
 ```DAX
 Date =
@@ -231,8 +301,10 @@ ADDCOLUMNS (
 
 Kui kasutad vaadet:
 
-- loo seos `Date[Date]` -> `v_powerbi_sales_enriched[sale_date]`
-- seose loomisel vali kuupäevaveeru date-osa, kui Power BI seda küsib
+1. Mine vasakul `Model view`.
+2. Lohista `Date[Date]` veerult seos `v_powerbi_sales_enriched[sale_date]` veerule.
+3. Kui Power BI küsib kuupäevaveeru date-osa, vali date-osa.
+4. Kontrolli, et seos oleks aktiivne.
 
 Kui Power BI ei lase `Date` ja `Date/Time` veergu ühendada, tee Power Querys müügivaates uus veerg:
 
@@ -244,7 +316,14 @@ Kui Power BI ei lase `Date` ja `Date/Time` veergu ühendada, tee Power Querys m�
 
 ## 9. Loo põhimõõdikud
 
-Kui kasutad vaadet `v_powerbi_sales_enriched`, vali see tabel ja loo `Modeling` > `New measure`.
+Mõõdikud loo ükshaaval. Kui kasutad vaadet `v_powerbi_sales_enriched`, tee nii:
+
+1. Mine `Report view` vaatesse.
+2. Paremal `Data` paneelis tee paremklõps tabelil `v_powerbi_sales_enriched`.
+3. Vali `New measure`.
+4. Kopeeri valemiribale esimene mõõdik.
+5. Vajuta `Enter`.
+6. Korda sama iga järgmise mõõdikuga.
 
 ```DAX
 Kogutulu =
@@ -285,7 +364,11 @@ Brutomarginaal % =
 DIVIDE ( [Brutokasum], [Kogutulu] )
 ```
 
-Laoseisu mõõdikud loo `v_powerbi_inventory_enriched` tabelile:
+Laoseisu mõõdikud loo `v_powerbi_inventory_enriched` tabelile.
+
+1. Paremal `Data` paneelis tee paremklõps tabelil `v_powerbi_inventory_enriched`.
+2. Vali `New measure`.
+3. Lisa järgmised mõõdikud ükshaaval.
 
 ```DAX
 Laos kokku =
@@ -315,9 +398,46 @@ SUMX (
 )
 ```
 
+### 9.1. Tee mõõdikute testleht
+
+Enne päris stakeholder'i dashboard'ide tegemist tee üks ajutine testleht. See aitab kontrollida, kas mõõdikud, seosed ja kuupäevad töötavad.
+
+1. All lehesakkide juures vajuta `+`, et luua uus raportileht.
+2. Tee lehe nimel paremklõps.
+3. Vali `Rename`.
+4. Nimeta leht `Test`.
+5. Lisa `Card` visual ja pane väärtuseks `Kogutulu`.
+6. Lisa teine `Card` visual ja pane väärtuseks `Tellimusi`.
+7. Lisa kolmas `Card` visual ja pane väärtuseks `Kliente`.
+8. Lisa `Table` visual.
+9. Pane tabelisse `category` ja `Kogutulu`.
+10. Lisa `Line chart`.
+11. Pane X-teljeks `Date[YearMonth]` ja Y-väärtuseks `Kogutulu`.
+12. Lisa `Slicer` visual.
+13. Pane slicerisse `category`.
+14. Vali sliceris üks kategooria ja kontrolli, kas kaardid ning joondiagramm muutuvad.
+
+Kui slicer muudab numbreid, töötavad seosed ja mõõdikud tõenäoliselt õigesti.
+
+Kui midagi tundub vale:
+
+| Probleem | Kontrolli |
+|---|---|
+| `Kogutulu` on tühi | Kas `total_price` on `Decimal Number` ja tabelis on read olemas |
+| `Tellimusi` on tühi | Kas `invoice_id` on olemas ja `Text` tüübiga |
+| Joondiagramm on tühi | Kas `Date` tabel on seotud müügikuupäevaga |
+| Slicer ei muuda numbreid | Kas mudelis on aktiivsed seosed |
+| Kategooriad ei ilmu | Kas `category` on imporditud ja `Text` tüübiga |
+
 ## 10. Vorminda mõõdikud
 
-Vali iga mõõdik ja määra ülemisel ribal formaat:
+Vorminda mõõdikud kohe pärast loomist.
+
+1. Paremal `Data` paneelis klõpsa mõõdikul.
+2. Üleval avaneb `Measure tools` või `Measure`.
+3. Vali sobiv `Format`.
+4. Vajadusel määra `Decimal places` väärtuseks `0` või `2`.
+5. Korda sama kõigi mõõdikutega.
 
 | Mõõdik | Formaat |
 |---|---|
@@ -335,6 +455,20 @@ Kui euro sümbol ei tööta mugavalt, pane ühik visuali pealkirja, näiteks `Ko
 ## 11. Roll A: CEO dashboard
 
 CEO põhiküsimus: kas UrbanStyle kasvab?
+
+Tee CEO leht nii:
+
+1. All lehesakkide juures vajuta `+`, et luua uus raportileht.
+2. Tee lehe nimel paremklõps.
+3. Vali `Rename`.
+4. Nimeta leht `CEO`.
+5. Lisa esimene `Card` visual ja pane väärtuseks `Kogutulu`.
+6. Lisa teine `Card` visual ja pane väärtuseks `Tellimusi`.
+7. Lisa `Line chart`.
+8. Pane X-teljeks `Date[YearMonth]` ja Y-väärtuseks `Kogutulu`.
+9. Lisa `Clustered column chart`.
+10. Pane X-teljeks `category` ja Y-väärtuseks `Kogutulu`.
+11. Muuda visualide pealkirjad allolevate soovituste järgi.
 
 Soovituslikud visualid:
 
@@ -362,6 +496,21 @@ Kategooriate võrdlus aitab CEO-l näha, millised tooterühmad kasvu kõige rohk
 
 Marketingi põhiküsimus: kas müügikanalid töötavad?
 
+Tee Marketingi leht nii:
+
+1. Loo uus raportileht.
+2. Nimeta leht `Marketing`.
+3. Lisa `Clustered column chart`.
+4. Pane X-teljeks `channel` ja Y-väärtuseks `Kogutulu`.
+5. Lisa `Bar chart`.
+6. Pane Y-teljeks `payment_method` ja X-väärtuseks `Tellimusi`.
+7. Lisa `Matrix`.
+8. Pane ridadeks `loyalty_tier`.
+9. Pane veergudeks `channel`.
+10. Pane väärtuseks `Kogutulu`.
+11. Lisa `Card` visual ja pane väärtuseks `Keskmine tellimus`.
+12. Muuda visualide pealkirjad allolevate soovituste järgi.
+
 Soovituslikud visualid:
 
 | Visual | Väljad |
@@ -387,6 +536,20 @@ Lojaalsustaseme võrdlus aitab hinnata, kas väärtuslikumad kliendid ostavad ki
 ## 13. Roll C: Operations dashboard
 
 Operationsi põhiküsimus: kas laoseis ja poed toimivad?
+
+Tee Operationsi leht nii:
+
+1. Loo uus raportileht.
+2. Nimeta leht `Operations`.
+3. Lisa `Card` visual ja pane väärtuseks `Laos kokku`.
+4. Lisa teine `Card` visual ja pane väärtuseks `Alla tellimispunkti tooteid`.
+5. Lisa `Clustered bar chart`.
+6. Pane Y-teljeks `category` ja X-väärtuseks `Laos kokku`.
+7. Lisa `Matrix`.
+8. Pane ridadeks `location`.
+9. Pane veergudeks `category`.
+10. Pane väärtuseks `Laos kokku`.
+11. Muuda visualide pealkirjad allolevate soovituste järgi.
 
 Soovituslikud visualid:
 
@@ -415,6 +578,19 @@ Asukohapõhine matrix aitab otsustada, kuhu kaupa ümber jaotada või juurde tel
 
 Investori põhiküsimus: kas UrbanStyle on investeerimisväärne?
 
+Tee Investori leht nii:
+
+1. Loo uus raportileht.
+2. Nimeta leht `Investor`.
+3. Lisa `Card` visual ja pane väärtuseks `Kogutulu`.
+4. Lisa teine `Card` visual ja pane väärtuseks `Brutomarginaal %`.
+5. Lisa kolmas `Card` visual ja pane väärtuseks `Kliente`.
+6. Lisa `Line chart`.
+7. Pane X-teljeks `Date[YearMonth]` ja Y-väärtuseks `Kogutulu`.
+8. Lisa `Clustered column chart`.
+9. Pane X-teljeks `category` ja Y-väärtuseks `Brutokasum`.
+10. Muuda visualide pealkirjad allolevate soovituste järgi.
+
 Soovituslikud visualid:
 
 | Visual | Väljad |
@@ -440,7 +616,53 @@ Investorile on oluline mitte ainult käibe kasv, vaid ka kasumlikkus.
 Kui kogutulu kasvab ja brutomarginaal püsib tugev, on UrbanStyle'i ärimudel atraktiivsem.
 ```
 
-## 15. Disainisoovitused
+## 15. Kirjuta äritõlgendus samm-sammult
+
+Iga dashboard'i juurde lisa 1-2 lauset, mis ei kirjelda ainult graafikut, vaid ütleb ka, mida see äri jaoks tähendab.
+
+Tee nii:
+
+1. Vali üks visual.
+2. Vaata, mis on seal kõige suurem, väiksem või selgem muutus.
+3. Kirjuta esimene lause faktina.
+4. Kirjuta teine lause ärilise tähendusena.
+5. Kontrolli, et lause vastaks sinu stakeholder'i küsimusele.
+
+Kasuta seda vormi:
+
+```text
+Diagramm näitab, et [mis on suurim, väikseim või muutub ajas].
+See on [stakeholder] jaoks oluline, sest [äriline põhjus].
+```
+
+Näited:
+
+```text
+Käive on kõige suurem online-kanalis.
+Marketingi jaoks tähendab see, et online-kanalisse tasub panna rohkem kampaaniaeelarvet või testida seal uusi pakkumisi.
+```
+
+```text
+Mõnes kategoorias on laoseis madal ja tooted on alla tellimispunkti.
+Operationsi jaoks tähendab see, et neid kategooriaid tuleb enne järgmist müügiperioodi juurde tellida.
+```
+
+```text
+Brutomarginaal püsib tugev ka siis, kui müügitulu kasvab.
+Investori jaoks tähendab see, et kasv ei tule ainult suurema mahu arvelt, vaid äri võib olla ka kasumlik.
+```
+
+Väldi selliseid lauseid:
+
+```text
+Siin on tulpdiagramm.
+Diagramm näitab müüki.
+Numbrid on erinevad.
+```
+
+Parem on öelda, mida otsustaja sellest teada saab.
+
+## 16. Disainisoovitused
 
 Kasuta rahulikku ja ühtset visuaalset stiili:
 
@@ -460,7 +682,7 @@ Kontrolli enne esitamist:
 - Kõik numbrid on vormindatud loogiliselt.
 - Iga visual vastab stakeholder'i küsimusele.
 
-## 16. Andmete värskendamine
+## 17. Andmete värskendamine
 
 Power BI Desktopis:
 
@@ -470,7 +692,7 @@ Power BI Desktopis:
 
 Kui Supabase tabelites on andmed muutunud, peaksid ka Power BI visualid pärast refresh'i muutuma.
 
-## 17. Ekraanipildi tegemine
+## 18. Ekraanipildi tegemine
 
 Power BI-st kiire ekraanipilt:
 
@@ -492,7 +714,7 @@ week5_supabase_roll_c_operations_dashboard.png
 week5_supabase_roll_d_investor_dashboard.png
 ```
 
-## 18. Google Slides'i koondvaade
+## 19. Google Slides'i koondvaade
 
 Koondslide'i soovituslik ülesehitus:
 
@@ -510,7 +732,7 @@ UrbanStyle'i andmed tulevad Supabase Postgres andmebaasist.
 Dashboard näitab kasvu, kanalite toimivust, laoseisu ja kasumlikkust.
 ```
 
-## 19. Portfoolio README tekst
+## 20. Portfoolio README tekst
 
 Lisa `week-5/README.md` faili näiteks:
 
@@ -544,7 +766,7 @@ Värvipalett põhineb UrbanStyle värvidel `#009B8D` ja `#1A1A2E`.
 AI aitas koostada Power BI mõõdikud ja dashboard'i struktuuri.
 ```
 
-## 20. Kui midagi ei tööta
+## 21. Kui midagi ei tööta
 
 | Probleem | Lahendus |
 |---|---|
