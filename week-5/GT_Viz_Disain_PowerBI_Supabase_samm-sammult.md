@@ -487,6 +487,54 @@ Vorminda mõõdikud kohe pärast loomist.
 
 Kui euro sümbol ei tööta mugavalt, pane ühik visuali pealkirja, näiteks `Kogutulu (EUR)`.
 
+### 10.1. Rakenda ühtne kujundus enne rollivaadete tegemist
+
+Et kõigi grupiliikmete dashboard'id näeksid välja sama stiiliga, leppige enne rollivaadete tegemist kokku üks kujundus ja kasutage seda igal lehel.
+
+Kasuta kõigil Power BI lehtedel sama põhistiili:
+
+| Element | Seadistus |
+|---|---|
+| Page background | `#F7F9FB` või valge |
+| Visual background | valge |
+| Põhivärv | `#009B8D` |
+| Tume tekst | `#1A1A2E` |
+| Rõhuvärv / hoiatus | `#D9902F` |
+| Font | Segoe UI |
+| Pealkirja suurus | 14-16 pt |
+| Telgede ja siltide suurus | 10-11 pt |
+| Kaardi numbri suurus | 24-32 pt |
+
+Tee iga visuali puhul sama vormindus:
+
+1. Klõpsa visualil.
+2. Ava paremal `Format visual`.
+3. `General` > `Title`: lülita sisse.
+4. Määra pealkirja fondiks `Segoe UI`.
+5. Määra pealkirja värviks `#1A1A2E`.
+6. Määra diagrammi põhivärviks `#009B8D`.
+7. Kui visual vajab hoiatust või rõhutust, kasuta ainult värvi `#D9902F`.
+8. Hoia taust valge või väga helehall.
+9. Ära kasuta 3D efekte, varjusid ega juhuslikke lisavärve.
+
+Kaartide puhul kasuta sama stiili:
+
+| Kaardi osa | Seadistus |
+|---|---|
+| Category label | sees, `#1A1A2E`, Segoe UI |
+| Callout value | `#009B8D`, Segoe UI, suur ja loetav |
+| Background | valge |
+| Border | helehall või välja lülitatud |
+
+Diagrammide puhul kasuta sama stiili:
+
+| Diagrammi osa | Seadistus |
+|---|---|
+| Data colors | esimene värv `#009B8D` |
+| X-axis ja Y-axis | tekst `#1A1A2E`, Segoe UI |
+| Data labels | sisse ainult siis, kui need ei tee visuali kirjuks |
+| Legend | sees ainult siis, kui visualis on mitu sarja |
+
 ## 11. Roll A: CEO dashboard
 
 CEO põhiküsimus: kas UrbanStyle kasvab?
@@ -504,6 +552,7 @@ Tee CEO leht nii:
 9. Lisa `Clustered column chart`.
 10. Pane X-teljeks `category` ja Y-väärtuseks `Kogutulu`.
 11. Muuda visualide pealkirjad allolevate soovituste järgi.
+12. Rakenda kõigile visualidele samad värvid ja font jaotisest 10.1.
 
 Soovituslikud visualid:
 
@@ -560,6 +609,7 @@ Tee Marketingi leht nii:
 10. Pane väärtuseks `Kogutulu`.
 11. Lisa `Card` visual ja pane väärtuseks `Keskmine tellimus`.
 12. Muuda visualide pealkirjad allolevate soovituste järgi.
+13. Rakenda kõigile visualidele samad värvid ja font jaotisest 10.1.
 
 Soovituslikud visualid:
 
@@ -615,6 +665,7 @@ Tee Operationsi leht nii:
 9. Pane veergudeks `category`.
 10. Pane väärtuseks `Laos kokku`.
 11. Muuda visualide pealkirjad allolevate soovituste järgi.
+12. Rakenda kõigile visualidele samad värvid ja font jaotisest 10.1.
 
 Soovituslikud visualid:
 
@@ -670,6 +721,7 @@ Tee Investori leht nii:
 8. Lisa `Clustered column chart`.
 9. Pane X-teljeks `category` ja Y-väärtuseks `Brutokasum`.
 10. Muuda visualide pealkirjad allolevate soovituste järgi.
+11. Rakenda kõigile visualidele samad värvid ja font jaotisest 10.1.
 
 Soovituslikud visualid:
 
@@ -769,6 +821,10 @@ Kasuta rahulikku ja ühtset visuaalset stiili:
 | Tume tekst | `#1A1A2E` |
 | Hoiatus / rõhutus | `#D9902F` |
 | Taust | valge või väga helehall |
+| Font | Segoe UI |
+| Pealkirjad | `#1A1A2E`, 14-16 pt |
+| Kaardi väärtused | `#009B8D`, 24-32 pt |
+| Teljed ja sildid | `#1A1A2E`, 10-11 pt |
 
 Kontrolli enne esitamist:
 
@@ -778,6 +834,9 @@ Kontrolli enne esitamist:
 - Ühel lehel ei ole liiga palju visuale.
 - Kõik numbrid on vormindatud loogiliselt.
 - Iga visual vastab stakeholder'i küsimusele.
+- Kõigil lehtedel on sama font.
+- Kõigil lehtedel on sama värvipalett.
+- Kaardid, diagrammid ja matrix'id kasutavad sama tausta ja tekstivärvi.
 
 ## 17. Andmete värskendamine
 
