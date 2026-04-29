@@ -226,8 +226,10 @@ Kui pead seost käsitsi muutma:
 
 ## 10. Loo kuupäevatabel
 
-1. Mine vasakult `Data view`.
-2. Üleval vali `Table tools`.
+Sinu Power BI Desktop 2.153.910.0 versioonis ei pruugi vasakul `Data view` ikooni näha. See ei takista töö tegemist.
+
+1. Mine `Report view` peale ehk raporti/lõuendi vaatesse.
+2. Üleval ribal vali `Modeling`.
 3. Vajuta `New table`.
 4. Sisesta valemiribale:
 
@@ -267,6 +269,8 @@ Kui `sales[sale_date]` on Date/Time ja seos ei teki, tee Power Querys eraldi kuu
 3. Vali `New measure`.
 4. Lisa mõõdikud ükshaaval.
 
+Kui sa `Data view` ikooni ei näe, on see okei. Mõõdikuid saab luua `Report view` all parempoolsest `Data` paneelist või ülevalt `Modeling` > `New measure`.
+
 ### 11.1. Üldmõõdikud
 
 ```DAX
@@ -289,6 +293,8 @@ Keskmine tellimus = DIVIDE ( [Kogutulu], [Tellimusi] )
 Müüdud kogus = SUM ( sales[quantity] )
 ```
 
+Need müügimõõdikud arvestavad ainult ridu, mis on `sales` tabelis olemas. See tähendab, et müümata tooted ei lähe `Kogutulu`, `Tellimusi` ega `Müüdud kogus` arvutusse, sest müümata tootel ei ole müügirida.
+
 ### 11.2. Kasvu mõõdikud
 
 ```DAX
@@ -300,13 +306,83 @@ CALCULATE (
 ```
 
 ```DAX
-Kasv YoY % =
+Kasv võrreldes eelmise aastaga % =
 DIVIDE ( [Kogutulu] - [Kogutulu eelmine aasta], [Kogutulu eelmine aasta] )
 ```
 
-Kui see mõõdik näitab tühja väärtust, siis sinu valitud perioodil puudub eelmine aasta. Investorivaates võid kasutada lihtsalt kogutulu ja kuist trendi.
+`YoY` tähendab inglise keeles `Year over Year`. Eesti keeles kasuta pealkirjana `Kasv võrreldes eelmise aastaga %` või lühemalt `Aastane kasv %`.
 
-### 11.3. Laoseisu mõõdikud
+Kui see mõõdik näitab tühja väärtust, siis sinu valitud perioodil puudub eelmine aasta või kuupäevaseos ei ole aktiivne. Investorivaates võid kasutada lihtsalt kogutulu ja kuist trendi.
+
+### 11.3. Müümata toodete mõõdikud
+
+Selle osa eesmärk on leida tooted, mis on `products` tabelis olemas, aga mida valitud perioodil ei ole müüdud. Ainult `sales` tabeli põhjal neid tooteid ei näe, sest müügitabelis on kirjas ainult need tooted, millel on vähemalt üks müügirida.
+
+Enne alustamist kontrolli, et sul oleks olemas müügikoguse mõõdik:
+
+```DAX
+Müüdud kogus = SUM ( sales[quantity] )
+```
+
+Kui tahad müümata toodete tabelis näidata ka laoseisu, vajad lisaks laomõõdikut. Kui sa ei ole seda veel loonud, saad selle teha kohe tabelile `inventory` või hiljem peatükis `11.4`.
+
+```DAX
+Laos kokku = SUM ( inventory[quantity_available] )
+```
+
+Kui vajalikud mõõdikud on olemas, tee edasi järgmised sammud.
+
+1. Mine Power BI-s `Report view` vaatesse.
+2. Paremal `Data` paneelis leia tabel `products`.
+3. Tee tabeli `products` nimel paremklõps.
+4. Vali `New measure`.
+5. Kirjuta valemiribale uus mõõdik:
+
+```DAX
+Müümata tooteid =
+COUNTROWS (
+    FILTER (
+        products,
+        ISBLANK ( [Müüdud kogus] )
+    )
+)
+```
+
+6. Vajuta `Enter`.
+
+See mõõdik käib läbi `products` tabeli ja loeb kokku need tooted, mille puhul mõõdik `[Müüdud kogus]` annab tühja väärtuse. Tühi väärtus tähendab siin seda, et selle toote kohta ei ole valitud filtrite või perioodi sees müügiridu.
+
+Nüüd tee tabel, kus müümata tooted on nimekirjana näha.
+
+1. Klõpsa raporti lõuendil tühjale kohale.
+2. Vali `Visualizations` paneelist `Table` visual.
+3. Lisa tabelisse järgmised väljad:
+
+- `products[product_name]`
+- `products[category]`
+- `Laos kokku`
+- `Müüdud kogus`
+
+4. Klõpsa loodud tabelivisualil.
+5. Paremal `Filters` paneelis leia filter `Müüdud kogus`.
+6. Sea filtriks:
+
+```text
+Müüdud kogus is blank
+```
+
+Kui sinu Power BI kuvab filtri valikuid teisiti, tee nii:
+
+1. Ava `Müüdud kogus` filtri rippmenüü.
+2. Vali `Advanced filtering`.
+3. Vali tingimuseks `is blank`.
+4. Vajuta `Apply filter`, kui Power BI seda nuppu näitab.
+
+Tulemuseks näed tabelis tooteid, mis on kataloogis olemas, kuid mida valitud perioodil ei müüdud. Kui lisad raportile kuupäevafiltri või sliceri, muutub ka müümata toodete nimekiri vastavalt valitud perioodile.
+
+Soovi korral lisa eraldi `Card` visual ja pane sinna mõõdik `Müümata tooteid`. Nii saad ühe numbrina näidata, mitu toodet valitud perioodil müümata jäi.
+
+### 11.4. Laoseisu mõõdikud
 
 Tee need mõõdikud paremklõpsuga tabelile `inventory` > `New measure`.
 
@@ -333,7 +409,7 @@ Laoriski % =
 DIVIDE ( [Alla tellimuspunkti], COUNTROWS ( inventory ) )
 ```
 
-### 11.4. Kasum ja marginaal
+### 11.5. Kasum ja marginaal
 
 Tee need mõõdikud tabelile `sales`.
 
@@ -355,22 +431,27 @@ Brutomarginaal % = DIVIDE ( [Brutokasum], [Kogutulu] )
 
 ## 12. Vorminda mõõdikud
 
-1. Mine `Data view`.
-2. Vali paremal mõõdik `Kogutulu`.
-3. Üleval `Measure tools`.
-4. `Format`: vali `Currency`.
-5. `Currency symbol`: vali `€`, kui olemas.
+Kui sul vasakul `Data view` ikooni ei ole, tee vormindus `Report view` all:
+
+1. Mine `Report view`.
+2. Paremal `Data` paneelis klõpsa mõõdikul `Kogutulu`.
+3. Üleval avaneb `Measure tools` või `Measure`.
+4. `Format`: vali `Currency`, kui saad valida euro.
+5. Kui euro sümbolit valida ei saa, jäta `Format` väärtuseks `Decimal number`.
 6. `Decimal places`: `0` või `2`.
+7. Visuali pealkirjas kasuta ühikut, näiteks `Kogutulu (€)`.
+
+Power BI vormindusribal on `$`, `%` ja koma nupp eraldi. Koma nupp tähendab tuhandete eraldajat. Sa ei pea seda sisse lülitama, kui sa ei taha koma tuhandete eraldajana kasutada. Hindamise jaoks on täiesti korrektne, kui mõõdik on `Decimal number` ja diagrammi/kaardi pealkiri ütleb `€`.
 
 Tee sama:
 
 | Mõõdik | Format |
 |---|---|
-| Kogutulu | Currency |
-| Keskmine tellimus | Currency |
-| Omahind kokku | Currency |
-| Brutokasum | Currency |
-| Kasv YoY % | Percentage |
+| Kogutulu | Currency või Decimal number + pealkiri `Kogutulu (€)` |
+| Keskmine tellimus | Currency või Decimal number + pealkiri `Keskmine tellimus (€)` |
+| Omahind kokku | Currency või Decimal number + pealkiri `Omahind kokku (€)` |
+| Brutokasum | Currency või Decimal number + pealkiri `Brutokasum (€)` |
+| Kasv võrreldes eelmise aastaga % | Percentage |
 | Brutomarginaal % | Percentage |
 | Laoriski % | Percentage |
 
@@ -436,9 +517,9 @@ Korda sama mõõdikutega:
 
 - `Kliente`, pealkiri `Kliente`.
 - `Tellimusi`, pealkiri `Tellimusi`.
-- `Kasv YoY %`, pealkiri `Kasv YoY`.
+- `Kasv võrreldes eelmise aastaga %`, pealkiri `Aastane kasv %`.
 
-Kui `Kasv YoY %` on tühi, kasuta selle asemel `Keskmine tellimus`.
+Kui `Kasv võrreldes eelmise aastaga %` on tühi, kasuta selle asemel `Keskmine tellimus`.
 
 ### 14.3. Lisa müügitulu trend
 
@@ -820,12 +901,59 @@ AI aitas koostada Power BI sammud, valida sobivad diagrammitüübid ja sõnastad
 | Probleem | Lahendus |
 |---|---|
 | Täpitähed on katki | Impordis vali `File Origin` = `65001: Unicode (UTF-8)` |
+| Power Query näitab `Errors in customers` | Kontrolli `customers` tabelis sammu `Changed Type`; `phone`, `email`, `city`, `loyalty_tier`, `first_name`, `last_name` peavad olema `Text` |
+| Vasakul ei ole `Data view` ikooni | Kasuta `Report view` + parempoolne `Data` paneel mõõdikute jaoks; kuupäevatabel tee `Modeling` > `New table` |
+| Euro / currency vormindus ei lase sobivat sümbolit valida | Jäta mõõdik `Decimal number` formaati ja pane visuali pealkirja ühik, nt `Kogutulu (€)` |
+| Tahad näha müümata tooteid | Müügimõõdikud loevad ainult `sales` ridu; kasuta `products` tabelil mõõdikut `Müümata tooteid` |
 | Kuupäev ei tööta trendis | Kontrolli Power Querys, et `sale_date` on `Date/Time` |
 | Seos ei teki | Kontrolli, et mõlemad ID veerud on `Whole Number` |
 | DAX `RELATED` annab vea | Kontrolli, et `products` -> `sales` seos on olemas |
-| `Kasv YoY %` on tühi | Andmetes puudub võrdlusperiood või kuupäevaseos on vale |
+| `Kasv võrreldes eelmise aastaga %` on tühi | Andmetes puudub võrdlusperiood või kuupäevaseos on vale |
 | Donut chart on segane | Kasuta `Clustered bar chart` |
 | Dashboard ei mahu lehele | Vähenda visualide arvu ja jäta ainult KPI + 2 põhidiagrammi |
+
+### 23.1. `Errors in customers` parandamine Power Querys
+
+Kui vasakul tekib grupp `Query Errors` ja selle all `Errors in customers`, ära kasuta seda põhitabelina. See on Power BI loodud abipäring, mis näitab ainult vigaseid ridu.
+
+Tee nii:
+
+1. Power Query Editoris vali vasakult päring `customers`, mitte `Errors in customers`.
+2. Paremal `Query Settings` paneelis leia `Applied Steps`.
+3. Klõpsa sammul `Changed Type`.
+4. Vaata eelvaates, millise veeru päises on `Error`.
+5. Kui error on veerus `phone`, vali `phone` veerg.
+6. Vajuta veeru päises andmetüübi ikoonile.
+7. Vali `Text`.
+8. Kui Power BI küsib `Replace current step?`, vali `Replace current`.
+
+`customers` tabelis kasuta neid tüüpe:
+
+| Veerg | Tüüp |
+|---|---|
+| `customer_id` | Whole Number |
+| `first_name` | Text |
+| `last_name` | Text |
+| `email` | Text |
+| `phone` | Text |
+| `city` | Text |
+| `registration_date` | Date |
+| `loyalty_tier` | Text |
+| `birth_year` | Whole Number |
+
+Kui `Errors in customers` jääb pärast parandust ikka vasakule:
+
+1. Tee vasakul `Errors in customers` päringul paremklõps.
+2. Vali `Delete`.
+3. Kui Power BI küsib kinnitust, vajuta `Delete`.
+4. Vali `Home` > `Close & Apply`.
+
+Kui `Close & Apply` annab ikka vea:
+
+1. Mine tagasi `Transform data`.
+2. Vali `customers`.
+3. Vali ülevalt `Home` > `Remove Rows` > `Remove Errors`.
+4. Tee seda ainult siis, kui vigaseid ridu on vähe ja sul on kiire grupitöö lõpuni jõuda.
 
 ## 24. Kasutatud Power BI dokumentatsioon
 
@@ -839,4 +967,3 @@ AI aitas koostada Power BI sammud, valida sobivad diagrammitüübid ja sõnastad
   https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-new-card
 - Microsoft Learn: Conditional formatting in Power BI visuals  
   https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-conditional-formatting
-
