@@ -58,9 +58,9 @@ Bonus-tabelid, kui tahad rohkem analüüsi:
 | `suppliers` | tarnijate info |
 | `promotions` | kampaaniad |
 
-## 3. Soovituslik: loo Power BI jaoks vaated Supabase'is
+## 3. Kontrolli Supabase'is tabelid üle
 
-See samm ei ole kohustuslik, aga teeb raporti palju lihtsamaks. Vaated ühendavad vajalikud tabelid juba Supabase poolel.
+Enne Power BI-sse minekut kontrolli, et Supabase'is on olemas õiged UrbanStyle tabelid.
 
 Tee nii:
 
@@ -68,82 +68,27 @@ Tee nii:
 2. Vali UrbanStyle projekt.
 3. Vasakult menüüst vali `SQL Editor`.
 4. Vajuta `New query`.
-5. Kopeeri päringukasti järgmine SQL.
+5. Kopeeri päringukasti järgmine kontrollpäring.
 6. Vajuta `Run`.
 
 ```sql
-create or replace view public.v_powerbi_sales_enriched as
-select
-    s.sale_id,
-    s.invoice_id,
-    s.sale_date,
-    s.customer_id,
-    s.product_id,
-    s.quantity,
-    s.unit_price,
-    s.total_price,
-    s.channel,
-    coalesce(s.store_location, 'Online') as store_location,
-    s.payment_method,
-    p.product_name,
-    p.category,
-    p.subcategory,
-    p.supplier,
-    p.cost_price,
-    p.retail_price,
-    p.eco_certified,
-    c.city as customer_city,
-    c.loyalty_tier,
-    c.birth_year
-from public.sales s
-left join public.products p
-    on p.product_id = s.product_id
-left join public.customers c
-    on c.customer_id = s.customer_id;
+select table_name
+from information_schema.tables
+where table_schema = 'public'
+  and table_name in (
+      'customers',
+      'inventory',
+      'inventory_movements',
+      'products',
+      'promotions',
+      'sales',
+      'suppliers',
+      'web_logs'
+  )
+order by table_name;
 ```
 
-Kui päring lõppes veata, tee teine vaade.
-
-1. Vajuta uuesti `New query`.
-2. Kopeeri päringukasti järgmine SQL.
-3. Vajuta `Run`.
-
-```sql
-create or replace view public.v_powerbi_inventory_enriched as
-select
-    i.inventory_id,
-    i.product_id,
-    i.location,
-    i.quantity_available,
-    i.reorder_point,
-    i.last_updated,
-    p.product_name,
-    p.category,
-    p.subcategory,
-    p.supplier,
-    p.cost_price,
-    p.retail_price,
-    case
-        when i.quantity_available <= i.reorder_point then true
-        else false
-    end as needs_reorder
-from public.inventory i
-left join public.products p
-    on p.product_id = i.product_id;
-```
-
-Kontrolli kohe, et mõlemad vaated töötavad.
-
-1. Vajuta `New query`.
-2. Kopeeri päringukasti kontrollpäringud.
-3. Vajuta `Run`.
-
-```sql
-select * from public.v_powerbi_sales_enriched limit 10;
-select * from public.v_powerbi_inventory_enriched limit 10;
-```
-
-Kui mõlemad päringud annavad read tagasi, võid minna Power BI-sse.
+Kui päring tagastab need tabelid, võid minna Power BI-sse.
 
 ## 4. Ava Power BI ja alusta uut faili
 
@@ -157,17 +102,12 @@ Kui mõlemad päringud annavad read tagasi, võid minna Power BI-sse.
 C:\Users\Kätlin\Documents\Õppeprojekt\daca-portfolio\week-5\gt_viz_disain_urbanstyle_supabase.pbix
 ```
 
-## 5. Vali tabelid või vaated
+## 5. Vali tabelid
 
 Tee seda siis, kui Power BI näitab sulle andmeallika `Navigator` akent või tabelite nimekirja.
 
 1. Leia schema `public`.
-2. Kui tegid peatükis 3 Power BI vaated, vali need kaks vaadet:
-
-- `public v_powerbi_sales_enriched`
-- `public v_powerbi_inventory_enriched`
-
-3. Kui vaateid ei teinud, vali Supabase'i tabelid:
+2. Vali Supabase'i tabelid:
 
 - `public customers`
 - `public inventory`
@@ -180,7 +120,7 @@ Tee seda siis, kui Power BI näitab sulle andmeallika `Navigator` akent või tab
 
 Ära vali `public customers_test` tabelit. See on test- või puhastustabel, mitte raporti põhiandmestik.
 
-4. Vajuta `Transform Data`, mitte kohe `Load`.
+3. Vajuta `Transform Data`, mitte kohe `Load`.
 
 Kui tabelite nimekirja ei näe, kontrolli, et oled valinud schema `public`.
 
@@ -188,13 +128,13 @@ Kui tabelite nimekirja ei näe, kontrolli, et oled valinud schema `public`.
 
 Power Query Editoris kontrolli andmetüübid enne andmete laadimist.
 
-1. Vasakul `Queries` paneelis vali `v_powerbi_sales_enriched`.
+1. Vasakul `Queries` paneelis vali `sales`.
 2. Vaata iga veeru päises olevat andmetüübi ikooni.
 3. Kui tüüp on vale, vajuta veeru päises ikoonile.
 4. Vali õige tüüp.
 5. Kui Power BI küsib `Replace current step?`, vali `Replace current`.
 
-Kui kasutad vaadet `v_powerbi_sales_enriched`, kontrolli neid tüüpe.
+`sales` tabelis kontrolli neid tüüpe.
 
 | Veerg | Tüüp Power BI-s |
 |---|---|
@@ -209,16 +149,30 @@ Kui kasutad vaadet `v_powerbi_sales_enriched`, kontrolli neid tüüpe.
 | `channel` | Text |
 | `store_location` | Text |
 | `payment_method` | Text |
+
+Nüüd vali vasakult `products` ja kontrolli need tüübid.
+
+| Veerg | Tüüp |
+|---|---|
+| `product_id` | Whole Number |
+| `product_name` | Text |
 | `category` | Text |
 | `subcategory` | Text |
+| `supplier` | Text |
 | `cost_price` | Decimal Number |
 | `retail_price` | Decimal Number |
 | `eco_certified` | True/False |
-| `customer_city` | Text |
+
+Nüüd vali vasakult `customers` ja kontrolli need tüübid.
+
+| Veerg | Tüüp |
+|---|---|
+| `customer_id` | Whole Number |
+| `city` | Text |
 | `loyalty_tier` | Text |
 | `birth_year` | Whole Number |
 
-Nüüd vali vasakult `v_powerbi_inventory_enriched` ja kontrolli need tüübid.
+Nüüd vali vasakult `inventory` ja kontrolli need tüübid.
 
 | Veerg | Tüüp |
 |---|---|
@@ -228,18 +182,104 @@ Nüüd vali vasakult `v_powerbi_inventory_enriched` ja kontrolli need tüübid.
 | `quantity_available` | Whole Number |
 | `reorder_point` | Whole Number |
 | `last_updated` | Date/Time |
-| `category` | Text |
-| `needs_reorder` | True/False |
 
-### 6.1. Tee Power Query kvaliteedikontroll
+### 6.1. Puhasta ja ühtlusta andmed Power Querys
+
+Need sammud tulevad samast loogikast nagu CSV põhises Power BI juhendis, aga siin teed need Supabase'ist imporditud tabelitele Power Query Editoris.
+
+#### 6.1.1. Puhasta `sales`
+
+1. Vali vasakult `sales`.
+2. Vali veerg `total_price`.
+3. Üleval vali `Home` > `Remove Rows` > `Remove Errors`, kui veerus on vigu.
+4. Vali veerg `sale_date`.
+5. Vali uuesti `Home` > `Remove Rows` > `Remove Errors`, kui kuupäevades on vigu.
+
+Kui tahad tagastused või negatiivsed müügiread raportist välja jätta:
+
+1. Vali veeru `total_price` päises filtrinool.
+2. Vali `Number Filters`.
+3. Vali `Greater Than...`.
+4. Sisesta `0`.
+5. Vajuta `OK`.
+
+Grupitöö jaoks on lihtsam kasutada ainult positiivseid müüke. Kui tahad tagastusi analüüsida, ära seda filtrit rakenda.
+
+#### 6.1.2. Ühtlusta `sales[store_location]`
+
+1. Vali `sales` tabelis veerg `store_location`.
+2. Üleval vali `Transform`.
+3. Vajuta `Format` > `Trim`.
+4. Vajuta `Format` > `Clean`.
+
+Online müükidel võib `store_location` olla tühi. Selle parandamiseks:
+
+1. Vali veerg `store_location`.
+2. Üleval vali `Transform`.
+3. Vajuta `Replace Values`.
+4. `Value To Find`: jäta tühjaks.
+5. `Replace With`: kirjuta `Online`.
+6. Vajuta `OK`.
+
+Kui tühja väärtuse asendamine nii ei toimi, jäta see samm vahele ja kasuta raportis `sales[channel]` filtrit online müügi eristamiseks.
+
+#### 6.1.3. Ühtlusta `customers[city]`
+
+1. Vali vasakult `customers`.
+2. Vali veerg `city`.
+3. Üleval vali `Transform`.
+4. Vajuta `Format` > `Trim`.
+5. Vajuta `Format` > `Clean`.
+
+Kui linnade kirjapilt on ebaühtlane, paranda sagedasemad variandid käsitsi:
+
+1. Vali veerg `city`.
+2. Vali `Transform` > `Replace Values`.
+3. Asenda näiteks `Tallinn ` väärtusega `Tallinn`.
+4. Korda sama teiste nähtavate kirjavigade või tühikutega.
+
+#### 6.1.4. Ühtlusta tekstiveerud `products` ja `inventory` tabelites
+
+Tee sama `Trim` ja `Clean` samm ka nendele veergudele:
+
+- `products[category]`
+- `products[subcategory]`
+- `products[supplier]`
+- `inventory[location]`
+
+See aitab vältida olukorda, kus Power BI näitab sama kategooriat või asukohta mitme eraldi väärtusena ainult peidetud tühiku tõttu.
+
+#### 6.1.5. Kui tekib `Errors in customers`
+
+Kui vasakul tekib grupp `Query Errors` ja selle all `Errors in customers`, ära kasuta seda põhitabelina. See on Power BI loodud abipäring, mis näitab ainult vigaseid ridu.
+
+Tee nii:
+
+1. Vali vasakult päring `customers`, mitte `Errors in customers`.
+2. Paremal `Query Settings` paneelis leia `Applied Steps`.
+3. Klõpsa sammul `Changed Type`.
+4. Vaata eelvaates, millise veeru päises on `Error`.
+5. Kui error on näiteks veerus `phone` või `email`, vali see veerg.
+6. Vajuta veeru päises andmetüübi ikoonile.
+7. Vali `Text`.
+8. Kui Power BI küsib `Replace current step?`, vali `Replace current`.
+
+`customers` tabelis peaksid tekstina olema vähemalt `first_name`, `last_name`, `email`, `phone`, `city` ja `loyalty_tier`.
+
+Kui `Errors in customers` jääb pärast parandust ikka vasakule:
+
+1. Tee vasakul `Errors in customers` päringul paremklõps.
+2. Vali `Delete`.
+3. Kui Power BI küsib kinnitust, vajuta `Delete`.
+
+Kui `Close & Apply` annab ikka vea, vali `customers` tabelis `Home` > `Remove Rows` > `Remove Errors`. Tee seda ainult siis, kui vigaseid ridu on vähe ja sul on vaja raport kiiresti valmis saada.
+
+### 6.2. Tee Power Query kvaliteedikontroll
 
 Enne `Close & Apply` vajutamist tee väike kontroll. See aitab vältida olukorda, kus dashboard'i ehitamisel otsid viga visualist, kuigi probleem on andmetüübis või päringus.
 
-1. Kontrolli vasakult `Queries` paneelist, et näed õigeid tabeleid või vaateid.
-2. Kui kasutad vaateid, peaksid nimekirjas olema:
-   - `v_powerbi_sales_enriched`
-   - `v_powerbi_inventory_enriched`
-3. Kui kasutad Supabase'i tabeleid, peaksid nimekirjas olema:
+1. Kontrolli vasakult `Queries` paneelist, et näed õigeid tabeleid.
+2. Nimekirjas peaksid olema:
    - `customers`
    - `inventory`
    - `inventory_movements`
@@ -249,23 +289,23 @@ Enne `Close & Apply` vajutamist tee väike kontroll. See aitab vältida olukorda
    - `suppliers`
    - `web_logs`
    - `customers_test` ei tohi olla valitud
-4. Vali iga tabel või vaade ükshaaval.
-5. Kontrolli, et üheski veerus ei oleks väärtust `Error`.
-6. Kontrolli, et ID veerud oleksid `Whole Number`.
-7. Kontrolli, et hinna ja käibe veerud oleksid `Decimal Number`.
-8. Kontrolli, et kuupäevaveerud oleksid `Date` või `Date/Time`.
-9. Kontrolli, et tekstiveerud nagu `category`, `channel`, `location` ja `loyalty_tier` oleksid `Text`.
-10. Kui mõnes veerus on tüüp vale, muuda see enne andmete laadimist ära.
+3. Vali iga tabel ükshaaval.
+4. Kontrolli, et üheski veerus ei oleks väärtust `Error`.
+5. Kontrolli, et ID veerud oleksid `Whole Number`.
+6. Kontrolli, et hinna ja käibe veerud oleksid `Decimal Number`.
+7. Kontrolli, et kuupäevaveerud oleksid `Date` või `Date/Time`.
+8. Kontrolli, et tekstiveerud nagu `category`, `channel`, `location` ja `loyalty_tier` oleksid `Text`.
+9. Kui mõnes veerus on tüüp vale, muuda see enne andmete laadimist ära.
 
 Kiirkontroll:
 
 | Kontroll | Mida peab nägema |
 |---|---|
 | Müügikuupäev | `sale_date` on `Date/Time` |
-| Raha | `total_price`, `unit_price`, `cost_price` on `Decimal Number` |
+| Raha | `sales[total_price]`, `sales[unit_price]` ja `products[cost_price]` on `Decimal Number` |
 | Kogused | `quantity`, `quantity_available`, `reorder_point` on `Whole Number` |
-| Kategooriad | `category`, `subcategory`, `channel` on `Text` |
-| Laorisk | `needs_reorder` on `True/False` |
+| Kategooriad | `products[category]`, `products[subcategory]` ja `sales[channel]` on `Text` |
+| Laorisk | `inventory[quantity_available]` ja `inventory[reorder_point]` on numbrilised |
 
 Kui kõik on korras:
 
@@ -273,11 +313,9 @@ Kui kõik on korras:
 2. Vajuta `Close & Apply`.
 3. Oota, kuni Power BI laeb andmed mudelisse.
 
-## 7. Kui kasutad põhitäbeleid, loo seosed
+## 7. Loo tabelite seosed
 
-Kui kasutad ainult kahte vaadet, võid selle peatüki vahele jätta.
-
-Kui importisid `sales`, `customers`, `products` ja `inventory` eraldi tabelitena:
+Kui importisid Supabase'i tabelid Power BI-sse:
 
 1. Mine vasakul `Model view`.
 2. Loo või kontrolli seosed:
@@ -287,6 +325,8 @@ Kui importisid `sales`, `customers`, `products` ja `inventory` eraldi tabelitena
 | `customers[customer_id]` -> `sales[customer_id]` | One-to-many | Single |
 | `products[product_id]` -> `sales[product_id]` | One-to-many | Single |
 | `products[product_id]` -> `inventory[product_id]` | One-to-many | Single |
+| `products[product_id]` -> `inventory_movements[product_id]` | One-to-many | Single |
+| `suppliers[supplier_name]` -> `products[supplier]` | One-to-many | Single |
 
 Kui Power BI pakub many-to-many seost, kontrolli, kas ID veerud on õige tüübiga.
 
@@ -310,27 +350,27 @@ ADDCOLUMNS (
 )
 ```
 
-Kui kasutad vaadet:
+Seo kuupäevatabel müügitabeliga.
 
 1. Mine vasakul `Model view`.
-2. Lohista `Date[Date]` veerult seos `v_powerbi_sales_enriched[sale_date]` veerule.
+2. Lohista `Date[Date]` veerult seos `sales[sale_date]` veerule.
 3. Kui Power BI küsib kuupäevaveeru date-osa, vali date-osa.
 4. Kontrolli, et seos oleks aktiivne.
 
-Kui Power BI ei lase `Date` ja `Date/Time` veergu ühendada, tee Power Querys müügivaates uus veerg:
+Kui Power BI ei lase `Date` ja `Date/Time` veergu ühendada, tee Power Querys müügitabelisse uus veerg:
 
-1. Vali `v_powerbi_sales_enriched`.
+1. Vali `sales`.
 2. Vali `Add Column`.
 3. Vali `Date` > `Date Only`.
 4. Nimeta uus veerg `sale_day`.
-5. Loo seos `Date[Date]` -> `v_powerbi_sales_enriched[sale_day]`.
+5. Loo seos `Date[Date]` -> `sales[sale_day]`.
 
 ## 9. Loo põhimõõdikud
 
-Mõõdikud loo ükshaaval. Kui kasutad vaadet `v_powerbi_sales_enriched`, tee nii:
+Mõõdikud loo ükshaaval `sales` tabelile.
 
 1. Mine `Report view` vaatesse.
-2. Paremal `Data` paneelis tee paremklõps tabelil `v_powerbi_sales_enriched`.
+2. Paremal `Data` paneelis tee paremklõps tabelil `sales`.
 3. Vali `New measure`.
 4. Kopeeri valemiribale esimene mõõdik.
 5. Vajuta `Enter`.
@@ -338,22 +378,22 @@ Mõõdikud loo ükshaaval. Kui kasutad vaadet `v_powerbi_sales_enriched`, tee ni
 
 ```DAX
 Kogutulu =
-SUM ( v_powerbi_sales_enriched[total_price] )
+SUM ( sales[total_price] )
 ```
 
 ```DAX
 Müüdud ühikuid =
-SUM ( v_powerbi_sales_enriched[quantity] )
+SUM ( sales[quantity] )
 ```
 
 ```DAX
 Tellimusi =
-DISTINCTCOUNT ( v_powerbi_sales_enriched[invoice_id] )
+DISTINCTCOUNT ( sales[invoice_id] )
 ```
 
 ```DAX
 Kliente =
-DISTINCTCOUNT ( v_powerbi_sales_enriched[customer_id] )
+DISTINCTCOUNT ( sales[customer_id] )
 ```
 
 ```DAX
@@ -364,9 +404,8 @@ DIVIDE ( [Kogutulu], [Tellimusi] )
 ```DAX
 Brutokasum =
 SUMX (
-    v_powerbi_sales_enriched,
-    v_powerbi_sales_enriched[total_price]
-        - v_powerbi_sales_enriched[quantity] * v_powerbi_sales_enriched[cost_price]
+    sales,
+    sales[total_price] - sales[quantity] * RELATED ( products[cost_price] )
 )
 ```
 
@@ -375,37 +414,22 @@ Brutomarginaal % =
 DIVIDE ( [Brutokasum], [Kogutulu] )
 ```
 
-Laoseisu mõõdikud loo `v_powerbi_inventory_enriched` tabelile.
+Laoseisu mõõdikud loo `inventory` tabelile.
 
-1. Paremal `Data` paneelis tee paremklõps tabelil `v_powerbi_inventory_enriched`.
+1. Paremal `Data` paneelis tee paremklõps tabelil `inventory`.
 2. Vali `New measure`.
 3. Lisa järgmised mõõdikud ükshaaval.
 
 ```DAX
 Laos kokku =
-SUM ( v_powerbi_inventory_enriched[quantity_available] )
+SUM ( inventory[quantity_available] )
 ```
 
 ```DAX
 Alla tellimispunkti tooteid =
 CALCULATE (
-    COUNTROWS ( v_powerbi_inventory_enriched ),
-    v_powerbi_inventory_enriched[needs_reorder] = TRUE ()
-)
-```
-
-Kui kasutad eraldi põhitäbeleid, asenda mõõdikutes tabelinimi vastavalt:
-
-- `v_powerbi_sales_enriched` -> `sales`
-- `v_powerbi_inventory_enriched` -> `inventory`
-
-Brutokasumi puhul on eraldi tabelite mudelis vaja töötavat seost `products` -> `sales` ja valemit:
-
-```DAX
-Brutokasum =
-SUMX (
-    sales,
-    sales[total_price] - sales[quantity] * RELATED ( products[cost_price] )
+    COUNTROWS ( inventory ),
+    inventory[quantity_available] <= inventory[reorder_point]
 )
 ```
 
