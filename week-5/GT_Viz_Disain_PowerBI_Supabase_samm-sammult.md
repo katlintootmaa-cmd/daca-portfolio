@@ -167,12 +167,18 @@ Tee seda siis, kui Power BI näitab sulle andmeallika `Navigator` akent või tab
 - `public v_powerbi_sales_enriched`
 - `public v_powerbi_inventory_enriched`
 
-3. Kui vaateid ei teinud, vali põhitäbelid:
+3. Kui vaateid ei teinud, vali Supabase'i tabelid:
 
-- `public sales`
 - `public customers`
-- `public products`
 - `public inventory`
+- `public inventory_movements`
+- `public products`
+- `public promotions`
+- `public sales`
+- `public suppliers`
+- `public web_logs`
+
+Ära vali `public customers_test` tabelit. See on test- või puhastustabel, mitte raporti põhiandmestik.
 
 4. Vajuta `Transform Data`, mitte kohe `Load`.
 
@@ -233,11 +239,16 @@ Enne `Close & Apply` vajutamist tee väike kontroll. See aitab vältida olukorda
 2. Kui kasutad vaateid, peaksid nimekirjas olema:
    - `v_powerbi_sales_enriched`
    - `v_powerbi_inventory_enriched`
-3. Kui kasutad põhitäbeleid, peaksid nimekirjas olema:
-   - `sales`
+3. Kui kasutad Supabase'i tabeleid, peaksid nimekirjas olema:
    - `customers`
-   - `products`
    - `inventory`
+   - `inventory_movements`
+   - `products`
+   - `promotions`
+   - `sales`
+   - `suppliers`
+   - `web_logs`
+   - `customers_test` ei tohi olla valitud
 4. Vali iga tabel või vaade ükshaaval.
 5. Kontrolli, et üheski veerus ei oleks väärtust `Error`.
 6. Kontrolli, et ID veerud oleksid `Whole Number`.
