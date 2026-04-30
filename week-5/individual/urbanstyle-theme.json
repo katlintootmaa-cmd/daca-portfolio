@@ -1,0 +1,127 @@
+{
+  "name": "UrbanStyle Clean",
+  "dataColors": [
+    "#009B8D",
+    "#1A1A2E",
+    "#3B6EA8",
+    "#D9902F",
+    "#C84C61",
+    "#2F8F5B",
+    "#666666"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#2B2B35",
+  "tableAccent": "#009B8D",
+  "textClasses": {
+    "label": {
+      "fontFace": "Segoe UI",
+      "color": "#666666"
+    },
+    "callout": {
+      "fontFace": "Segoe UI",
+      "color": "#2B2B35"
+    },
+    "title": {
+      "fontFace": "Segoe UI",
+      "color": "#2B2B35"
+    },
+    "header": {
+      "fontFace": "Segoe UI",
+      "color": "#2B2B35"
+    }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": false,
+            "color": {
+              "solid": {
+                "color": "#E6E6E6"
+              }
+            }
+          }
+        ],
+        "visualHeader": [
+          {
+            "foreground": {
+              "solid": {
+                "color": "#666666"
+              }
+            }
+          }
+        ],
+        "title": [
+          {
+            "show": true,
+            "fontColor": {
+              "solid": {
+                "color": "#2B2B35"
+              }
+            },
+            "fontFace": "Segoe UI"
+          }
+        ]
+      }
+    },
+    "lineChart": {
+      "*": {
+        "dataPoint": [
+          {
+            "defaultColor": {
+              "solid": {
+                "color": "#009B8D"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "card": {
+      "*": {
+        "labels": [
+          {
+            "color": {
+              "solid": {
+                "color": "#2B2B35"
+              }
+            },
+            "fontFace": "Segoe UI"
+          }
+        ],
+        "categoryLabels": [
+          {
+            "color": {
+              "solid": {
+                "color": "#666666"
+              }
+            },
+            "fontFace": "Segoe UI"
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#E6E6E6"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
