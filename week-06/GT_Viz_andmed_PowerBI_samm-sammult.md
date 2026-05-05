@@ -77,7 +77,7 @@ Enne uue vaate tegemist kontrolli, et vajalikud mõõdikud on olemas.
 
 | Mõõdik | Milleks kasutatakse |
 |---|---|
-| `Kogutulu` | KPI kaart ja müügitrend |
+| `Kogukäive` | KPI kaart ja müügitrend |
 | `Tellimusi` | tellimuste arv |
 | `Kliente` | klientide arv |
 | `Keskmine tellimus` | keskmine ostukorv |
@@ -92,7 +92,7 @@ Kui mõõdikuid ei ole, loo need uuesti.
 5. Korda sama iga mõõdikuga.
 
 ```DAX
-Kogutulu =
+Kogukäive =
 SUM ( sales[total_price] )
 ```
 
@@ -108,7 +108,7 @@ DISTINCTCOUNT ( sales[customer_id] )
 
 ```DAX
 Keskmine tellimus =
-DIVIDE ( [Kogutulu], [Tellimusi] )
+DIVIDE ( [Kogukäive], [Tellimusi] )
 ```
 
 ```DAX
@@ -247,7 +247,7 @@ Kasuta seda vormi:
 
 ```text
 Peamine järeldus:
-- [Asukoht] kogutulu on [number või suund].
+- [Asukoht] kogukäive on [number või suund].
 - Kõige tugevam kategooria on [kategooria].
 - Suurim võimalus või risk on [võimalus/risk].
 - Soovitus: [mida peaks Anna või juhatus tegema].
@@ -280,7 +280,7 @@ Soovitus on suurendada digikanali investeeringuid, kui kasv ja keskmine tellimus
 Igal dashboard'il peaks üleval olema 3-4 KPI kaarti.
 
 1. Vali paremal `Visualizations` paneelis `Card`.
-2. Lohista `Kogutulu` väljale `Data` või `Fields`.
+2. Lohista `Kogukäive` väljale `Data` või `Fields`.
 3. Paiguta kaart dashboard'i ülemisse ossa.
 4. Tee sama järgmiste mõõdikutega:
    - `Tellimusi`
@@ -304,7 +304,7 @@ KPI kaartide soovituslikud pealkirjad:
 
 | Mõõdik | Pealkiri |
 |---|---|
-| `Kogutulu` | `Kogutulu` |
+| `Kogukäive` | `Kogukäive` |
 | `Tellimusi` | `Tellimuste arv` |
 | `Kliente` | `Klientide arv` |
 | `Keskmine tellimus` | `Keskmine tellimus` |
@@ -314,7 +314,7 @@ KPI kaartide soovituslikud pealkirjad:
 1. Vali `Visualizations` paneelis `Line chart`.
 2. Paiguta diagramm dashboard'i keskmisse või vasakusse ossa.
 3. Pane X-teljeks `Date[YearMonth]` või `sales[sale_date]`.
-4. Pane Y-teljeks `Kogutulu`.
+4. Pane Y-teljeks `Kogukäive`.
 5. Klõpsa diagrammil.
 6. Ava `Format visual`.
 7. Ava `General` > `Title`.
@@ -322,7 +322,7 @@ KPI kaartide soovituslikud pealkirjad:
 9. Kirjuta pealkirjaks:
 
 ```text
-Müügitulu trend kuude lõikes
+Müügikäibe trend kuude lõikes
 ```
 
 10. Ava `Visual` > `Lines`.
@@ -344,22 +344,22 @@ Rollipõhine fookus:
 1. Vali `Visualizations` paneelis `Clustered bar chart`.
 2. Paiguta diagramm trendi kõrvale või alla.
 3. Pane Y-teljeks `products[product_name]` või `products[category]`.
-4. Pane X-teljeks `Kogutulu`.
+4. Pane X-teljeks `Kogukäive`.
 5. Klõpsa visuali paremas ülemises nurgas kolme punkti peal.
 6. Vali `Sort axis`.
-7. Vali `Kogutulu`.
+7. Vali `Kogukäive`.
 8. Vali `Sort descending`.
 9. Ava paremal `Filters on this visual`.
 10. Lohista sama väli, mida kasutad Y-teljel, filtrisse.
 11. Vali `Filter type` väärtuseks `Top N`.
 12. Sisesta `5`.
-13. Lohista `Kogutulu` väljale `By value`.
+13. Lohista `Kogukäive` väljale `By value`.
 14. Vajuta `Apply filter`.
 
 Pane pealkirjaks:
 
 ```text
-TOP 5 tooted kogutulu järgi
+TOP 5 tooted kogukäibe järgi
 ```
 
 Kui tootenimed on liiga pikad, kasuta kategooriat ja pane pealkirjaks:
@@ -374,11 +374,11 @@ Kui tabelis `customers` on olemas `loyalty_tier`, tee kliendisegmentide vaade.
 
 1. Vali `Visualizations` paneelis `Clustered column chart`.
 2. Pane X-teljeks `customers[loyalty_tier]`.
-3. Pane Y-teljeks `Kogutulu` või `Kliente`.
+3. Pane Y-teljeks `Kogukäive` või `Kliente`.
 4. Pane pealkirjaks:
 
 ```text
-Kliendisegmendid müügitulu järgi
+Kliendisegmendid müügikäibe järgi
 ```
 
 Kui `loyalty_tier` puudub, kasuta `customers[city]` või jäta see visual ära ja lisa selle asemel makseviisi või kanali visual.
@@ -393,7 +393,7 @@ Tallinna puhul lisa kanalite või kategooriate võrdlus.
 
 1. Lisa `Clustered column chart`.
 2. Pane X-teljeks `sales[channel]`.
-3. Pane Y-teljeks `Kogutulu`.
+3. Pane Y-teljeks `Kogukäive`.
 4. Pane pealkirjaks:
 
 ```text
@@ -406,7 +406,7 @@ Tartu puhul lisa võrdlus või probleemikoht.
 
 1. Lisa `Clustered column chart`.
 2. Pane X-teljeks `products[category]`.
-3. Pane Y-teljeks `Kogutulu`.
+3. Pane Y-teljeks `Kogukäive`.
 4. Pane pealkirjaks:
 
 ```text
@@ -421,7 +421,7 @@ Pärnu puhul lisa hooajaline võrdlus.
 
 1. Lisa `Clustered column chart`.
 2. Pane X-teljeks `Date[Month]`.
-3. Pane Y-teljeks `Kogutulu`.
+3. Pane Y-teljeks `Kogukäive`.
 4. Pane pealkirjaks:
 
 ```text
@@ -434,7 +434,7 @@ E-poe puhul lisa kanalite osakaal.
 
 1. Lisa `Donut chart` või `Clustered column chart`.
 2. Pane legendiks või X-teljeks `sales[channel]`.
-3. Pane väärtuseks `Kogutulu`.
+3. Pane väärtuseks `Kogukäive`.
 4. Pane pealkirjaks:
 
 ```text
@@ -449,7 +449,7 @@ Viitejoon aitab vaatajal aru saada, kas tulemus on üle või alla ootuse.
 
 Lihtsaim variant on lisada viitejoon müügitrendi joondiagrammile.
 
-1. Klõpsa `Müügitulu trend kuude lõikes` visualil.
+1. Klõpsa `Müügikäibe trend kuude lõikes` visualil.
 2. Paremal `Visualizations` paneelis vali `Analytics`.
 3. Leia `Y-axis constant line`.
 4. Vajuta `Add line`.
@@ -543,7 +543,7 @@ Roll A näide:
 
 ```text
 Tallinn on UrbanStyle'i suurim ja kõige olulisem füüsiline kauplus.
-Dashboard näitab, et Tallinna müük on tugev ning peamised kategooriad annavad suure osa kogutulust.
+Dashboard näitab, et Tallinna müük on tugev ning peamised kategooriad annavad suure osa kogukäibest.
 See tähendab, et Tallinn võib olla mudel, mille toimivaid kampaaniaid ja tootevalikut saab testida ka teistes asukohtades.
 Soovitame hoida Tallinna tugevamate kategooriate laoseisu ning kasutada sealt saadud õppetunde Tartu ja Pärnu parandamiseks.
 ```
@@ -656,12 +656,12 @@ Soovitame Annal [tegevus], sest [põhjus].
 3. Ära pane sellele lehele asukoha page-level filtrit.
 4. Lisa `Clustered column chart`.
 5. Pane X-teljeks `sales[store_location]`.
-6. Pane Y-teljeks `Kogutulu`.
+6. Pane Y-teljeks `Kogukäive`.
 7. Lisa teine visual `Line chart`.
 8. Pane X-teljeks `Date[YearMonth]`.
-9. Pane Y-teljeks `Kogutulu`.
+9. Pane Y-teljeks `Kogukäive`.
 10. Pane legendiks `sales[store_location]`.
-11. Lisa KPI kaardid `Kogutulu`, `Tellimusi`, `Kliente`.
+11. Lisa KPI kaardid `Kogukäive`, `Tellimusi`, `Kliente`.
 12. Lisa tekstikast koondjäreldusega.
 
 Kui online-müügil ei ole `store_location` väärtust, kasuta koondvaates `sales[channel]` või tee online kohta eraldi tekstirida.
@@ -812,4 +812,3 @@ Enne esitamist kontrolli:
 - [ ] Meeskonna koondvaade on koostatud.
 - [ ] Sünteesiküsimustele on vastatud.
 - [ ] AI kasutamine on portfoolios kirjeldatud.
-
