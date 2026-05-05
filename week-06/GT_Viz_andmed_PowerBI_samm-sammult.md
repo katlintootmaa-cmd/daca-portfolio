@@ -163,18 +163,21 @@ ADDCOLUMNS (
 6. Paremal `Format page` paneelis ava `Canvas settings`.
 7. Kui vaja, vali formaadiks `16:9`.
 8. Ava `Canvas background`.
-9. Pane taustaks valge või väga helehall.
+9. Pane taustaks peaaegu valge või väga helehall.
 
 Soovituslik stiil:
 
 | Element | Seadistus |
 |---|---|
-| Page background | `#F7F9FB` või valge |
-| Visual background | valge |
-| Põhivärv | `#009B8D` |
-| Tume tekst | `#1A1A2E` |
-| Hoiatusvärv | `#D9902F` |
-| Negatiivne / langus | `#C0392B` |
+| Page background | `#F8FAFA` või `#F6F7F8` |
+| Visual background | `#F1F3F4` või `#EEF1F2` |
+| Ülemine pealkirjariba | `#E3F5F3` või `#DDF3F1` |
+| Soovituste ploki taust | `#E3F5F3` või `#DDF3F1` |
+| Põhiaktsent, jooned ja nooled | `#18AFA5` või `#21B8AD` |
+| Tume tekst ja KPI väärtused | `#1E2430` või `#2B2F3A` |
+| Sekundaarne tekst ja sildid | `#7A858E` või `#8B949C` |
+| Negatiivne rõhutus | crimson red `#DC143C` või tumedam crimson `#B11226` |
+| Negatiivse ploki taust | hele crimson toon `#FDECEF` või `#F9DDE3` |
 | Font | Segoe UI |
 
 ## 8. Lisa asukoha või kanali filter
@@ -231,8 +234,9 @@ Kui andmetes on väärtus `Online`, `E-pood` või `web`, vali see variant, mis v
 4. Märgi tekst ära.
 5. Vali fondiks `Segoe UI`.
 6. Pane suuruseks umbes `22-26`.
-7. Pane värviks `#1A1A2E`.
-8. Paiguta pealkiri lehe ülemisse vasakusse nurka.
+7. Pane värviks `#1E2430`.
+8. Lisa pealkirja taha hele mint/türkiis riba värviga `#E3F5F3`.
+9. Paiguta pealkiri lehe ülemisse vasakusse nurka.
 
 ## 10. Lisa juhtide kokkuvõte
 
@@ -242,6 +246,8 @@ Juhtide kokkuvõte peab ütlema, mis toimub ja miks see oluline on.
 2. Vajuta `Text box`.
 3. Paiguta tekstikast pealkirja alla või KPI kaartide kõrvale.
 4. Kirjuta 3-5 lühikest järeldust.
+5. Kui kokkuvõttes on eraldi soovitus, kasuta selle ploki taustaks `#E3F5F3` või `#DDF3F1`.
+6. Pane põhiteksti värviks `#1E2430` ja väiksemate selgituste värviks `#7A858E`.
 
 Kasuta seda vormi:
 
@@ -292,13 +298,14 @@ Kaardi vormindamine:
 1. Klõpsa kaardil.
 2. Ava paremal `Format visual`.
 3. Ava `Callout value`.
-4. Pane värviks `#009B8D`.
+4. Pane värviks `#1E2430`.
 5. Pane fondiks `Segoe UI`.
 6. Ava `Category label`.
-7. Pane värviks `#1A1A2E`.
+7. Pane värviks `#7A858E`.
 8. Ava `General` > `Effects`.
-9. Pane `Background` sisse ja värviks valge.
-10. Kui kasutad piire, pane `Border` helehalliks.
+9. Pane `Background` sisse ja värviks `#F1F3F4` või `#EEF1F2`.
+10. Kui kasutad piire, pane `Border` väga helehalliks.
+11. Kui lisad muutuse protsendi, näiteks `↑15%`, pane see värviga `#18AFA5`.
 
 KPI kaartide soovituslikud pealkirjad:
 
@@ -326,9 +333,10 @@ Müügikäibe trend kuude lõikes
 ```
 
 10. Ava `Visual` > `Lines`.
-11. Pane joone värviks `#009B8D`.
+11. Pane joone värviks `#18AFA5` või `#21B8AD`.
 12. Ava `X-axis` ja `Y-axis`.
-13. Kontrolli, et tekst oleks loetav.
+13. Pane telgede ja siltide värviks `#7A858E` või `#8B949C`.
+14. Kontrolli, et tekst oleks loetav.
 
 Rollipõhine fookus:
 
@@ -463,7 +471,7 @@ Kui sa ei tea eesmärki, kasuta ligikaudset keskmist:
 
 Vorminda viitejoon:
 
-1. Pane joone värviks `#D9902F`.
+1. Pane joone värviks `#18AFA5` või `#21B8AD`.
 2. Pane joone stiiliks katkeline joon, kui see valik on olemas.
 3. Lülita `Data label` sisse.
 4. Kirjuta labeliks näiteks:
@@ -492,7 +500,10 @@ Power BI-s tee annotatsioon tekstikastiga.
 3. Kirjuta lühike märkus.
 4. Paiguta tekstikast selle visuali kõrvale või peale, mida märkus selgitab.
 5. Tee tekst väiksemaks kui pealkiri, näiteks `10-12 pt`.
-6. Kasuta rõhutuseks värvi `#D9902F` või languse puhul `#C0392B`.
+6. Kasuta rõhutuseks värvi `#18AFA5` või `#21B8AD`.
+7. Kui lisad noole, tee nool sama türkiissinise aktsendiga.
+8. Negatiivse muutuse puhul kasuta rõhutuseks crimson red tooni `#DC143C` või tumedamat crimson tooni `#B11226`.
+9. Kui negatiivne tähelepanek on eraldi tekstiplokis, kasuta taustaks heledat crimson tooni `#FDECEF` või `#F9DDE3`.
 
 Lisa vähemalt 2 annotatsiooni.
 
@@ -512,6 +523,24 @@ Suvekuud annavad suure osa Pärnu aastakäibest.
 
 ```text
 Black Friday tõi e-poele nähtava müügihüppe.
+```
+
+Negatiivse rõhutuse näited:
+
+```text
+Müük langes kolm kuud järjest, seega vajab kampaaniaplaan ülevaatamist.
+```
+
+```text
+Keskmine tellimus on alla eesmärgi, mis võib vähendada kogu kuu kasumlikkust.
+```
+
+```text
+Laoseis ei toeta müügitrendi: populaarsete toodete varu võib lõppeda enne tipphooaega.
+```
+
+```text
+E-poe kasv aeglustus pärast kampaaniat, seega ei pruugi ühekordne allahindlus püsivat nõudlust näidata.
 ```
 
 Väldi selliseid annotatsioone:
