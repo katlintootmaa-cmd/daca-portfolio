@@ -307,6 +307,68 @@ Kaardi vormindamine:
 10. Kui kasutad piire, pane `Border` väga helehalliks.
 11. Kui lisad muutuse protsendi, näiteks `↑15%`, pane see värviga `#18AFA5`.
 
+### 11.1. Lisa noolega callout
+
+Kui tahad, et muutuse protsendi ette tuleks automaatselt üles- või allapoole nool, tee selleks eraldi measure.
+
+Kui sul on juba olemas `Käive 2024` ja `Käive 2023`, tee uus measure:
+
+```DAX
+Käibe kasv noolega =
+VAR Muutus =
+    DIVIDE(
+        [Käive 2024] - [Käive 2023],
+        [Käive 2023]
+    )
+RETURN
+SWITCH(
+    TRUE(),
+    Muutus > 0, "↑ " & FORMAT(Muutus, "0%"),
+    Muutus < 0, "↓ " & FORMAT(ABS(Muutus), "0%"),
+    "→ 0%"
+)
+```
+
+Kasuta seda measure'it `Card` visualis samamoodi nagu tavalist KPI-d:
+
+1. Vali `Card`.
+2. Lohista `Käibe kasv noolega` väljale `Data` või `Fields`.
+3. Pane kaardi pealkirjaks näiteks `Käibe muutus`.
+
+Füüsilise poe puhul kasuta sõnastuses pigem `Müüke` või `Oste`. `Tellimusi` sobib rohkem e-poe kohta.
+
+### 11.2. Muuda noole värvi automaatselt
+
+Noole ja protsendi värvi jaoks tee teine measure:
+
+```DAX
+Käibe kasvu värv =
+VAR Muutus =
+    DIVIDE(
+        [Käive 2024] - [Käive 2023],
+        [Käive 2023]
+    )
+RETURN
+SWITCH(
+    TRUE(),
+    Muutus > 0, "#18AFA5",
+    Muutus < 0, "#D64545",
+    "#777777"
+)
+```
+
+Rakenda see `Card` visualile nii:
+
+1. Klõpsa kaardil, kus on `Käibe kasv noolega`.
+2. Ava paremal `Format visual`.
+3. Ava `Callout value`.
+4. Leia `Color` ja vajuta selle juures `fx`.
+5. Pane `Format style` valikuks `Field value`.
+6. Pane `Based on field` valikuks `Käibe kasvu värv`.
+7. Vajuta `OK`.
+
+Nüüd kuvab Power BI positiivse muutuse näiteks `↑ 15%` värviga `#18AFA5`, negatiivse muutuse punasega ja nullmuutuse halliga.
+
 KPI kaartide soovituslikud pealkirjad:
 
 | Mõõdik | Pealkiri |
