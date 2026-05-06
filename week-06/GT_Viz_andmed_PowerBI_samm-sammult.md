@@ -29,6 +29,150 @@ Miinimumtulemus iga inimese kohta:
 - 3-4-lauseline andmelugu;
 - ekraanipilt või link portfoolio jaoks.
 
+### 1.1. Töö üldine järjekord
+
+Selle töö tegemisel tuleb läbida mitu väiksemat etappi:
+
+- Power BI nädala 6 faili loomine eelmise nädala dashboard'i põhjal;
+- rollipõhise vaate tegemine, eriti Tallinna ja Tartu dashboard'i jaoks;
+- KPI kaartide, müügitrendi ja TOP 5 visualide korrastamine;
+- annotatsioonide, viitejoone ja juhtide kokkuvõtte lisamine;
+- 3-4-lauselise andmeloo kirjutamine;
+- meeskonna koondloo ja alarühmade kokkuvõtte sõnastamine;
+- portfoolio README teksti täiendamine;
+- AI kasutamise kirjeldamine nii, et oleks selge, mida AI aitas teha ja mida kontrolliti ise.
+
+Tee need sammud sellises järjekorras.
+
+1. Ava eelmise nädala Power BI fail ja salvesta sellest nädala 6 koopia.
+2. Loo uus raportileht oma rolli jaoks: `Tallinn`, `Tartu`, `Parnu` või `E-pood`.
+3. Pane lehele õige page-level filter:
+   - Tallinna puhul `sales[store_location] = Tallinn`;
+   - Tartu puhul `sales[store_location] = Tartu`;
+   - Pärnu puhul `sales[store_location] = Pärnu`;
+   - e-poe puhul `sales[channel] = online`.
+4. Kontrolli, et põhimeasure'id oleksid olemas: `Kogukäive`, `Tellimusi`, `Kliente`, `Keskmine tellimus` ja `Müüdud ühikuid`.
+5. Lisa 3-4 KPI kaarti, et juht näeks kohe müügi, tellimuste, klientide ja keskmise tellimuse seisu.
+6. Lisa joondiagramm müügitrendi jaoks ja kasuta X-teljel kuupäeva või `Date[YearMonth]` välja.
+7. Lisa TOP 5 toodete või kategooriate tulpdiagramm, sorteeri see kahanevalt ja rakenda `Top N = 5` filter.
+8. Lisa vähemalt üks rollipõhine lisavisual:
+   - Tallinn: kanalite või kategooriate võrdlus;
+   - Tartu: tugevamate ja nõrgemate kategooriate võrdlus;
+   - Pärnu: hooajalisus kuude lõikes;
+   - e-pood: online-kanali kasv või toodete võrdlus.
+9. Lisa viitejoon müügitrendi visualile, näiteks keskmine kuukäive, eesmärk või teise asukoha võrdluspunkt.
+10. Lisa vähemalt kaks annotatsiooni, mis ei ütle ainult numbrit, vaid selgitavad selle tähendust. Hea annotatsioon vastab küsimusele: "Ja mis siis?"
+11. Kirjuta juhtide kokkuvõte 3-5 lühikese järeldusena: mis toimub, miks see on oluline ja mida Anna peaks tegema.
+12. Kirjuta 3-4-lauseline andmelugu vormis: olukord, peamine fakt, äriline tõlgendus ja soovitus.
+13. Salvesta dashboard'ist ekraanipilt nädala 6 kausta.
+14. Lisa portfooliosse ekraanipilt, oma roll, juhtide kokkuvõte, andmelugu, meeskonna koondvaade ja AI kasutamise kirjeldus.
+15. Meeskonna töö jaoks koonda iga roll üheks lühikeseks looks: Tallinn kui tugev põhikauplus, Tartu kui tähelepanu vajav kauplus, Pärnu kui hooajaline kauplus ja e-pood kui skaleeritav kasvukanal.
+
+Kui kasutad AI abi, kirjuta portfooliosse näiteks nii:
+
+```text
+Kasutasin AI-d Power BI dashboard'i andmeloo, annotatsioonide ja juhtide kokkuvõtte sõnastamiseks. Kontrollisin Power BI visualide põhjal üle, et AI ei lisaks numbreid ega põhjuseid, mida andmetes ei olnud.
+```
+
+### 1.2. Pealkirjad ja vormistus Power BI-s
+
+Kasuta seda osa siis, kui visualid on sisuliselt olemas, aga pealkirjad, tekstikastid või kujundus vajavad veel korrastamist.
+
+#### Kuidas muuta visuali pealkirja
+
+1. Klõpsa visuali peal, mille pealkirja tahad muuta.
+2. Paremal ava `Format visual`.
+3. Ava jaotis `General`.
+4. Ava `Title`.
+5. Kontrolli, et `Title` oleks sisse lülitatud.
+6. Kirjuta väljale `Text` uus pealkiri.
+7. Pane pealkiri lühikeseks ja sisukaks, näiteks:
+   - `Müügikäibe trend kuude lõikes`;
+   - `TOP 5 tooted kogukäibe järgi`;
+   - `Käive kategooriate lõikes`;
+   - `Kliendisegmendid käibe järgi`.
+
+Hea pealkiri ütleb, mida visual näitab. Väldi liiga üldist pealkirja nagu `Chart`, `Sum of total_price` või `Visual 1`.
+
+#### Kuidas pealkiri eemaldada
+
+1. Klõpsa visuali peal.
+2. Ava paremal `Format visual`.
+3. Ava `General` > `Title`.
+4. Lülita `Title` välja.
+
+Eemalda visuali enda pealkiri siis, kui kasutad selle kohal eraldi tekstikasti pealkirjana. Ära jäta korraga alles nii tekstikasti pealkirja kui ka visuali automaatset pealkirja, sest siis tekib topeltpealkiri.
+
+#### Kuidas muuta KPI kaardi nime
+
+KPI kaardil võib Power BI näidata mõõdiku tehnilist nime, näiteks `Sum of total_price`. Selle parandamiseks on kaks võimalust.
+
+Variant A: muuda visuali pealkirja.
+
+1. Klõpsa KPI kaardil.
+2. Ava `Format visual`.
+3. Ava `General` > `Title`.
+4. Lülita `Title` sisse.
+5. Kirjuta pealkirjaks näiteks `Kogukäive`, `Müüke`, `Kliente` või `Keskmine ost`.
+
+Variant B: muuda väljanime ainult selles visualis.
+
+1. Klõpsa KPI kaardil.
+2. Paremal väljade alas leia kasutatud mõõdik.
+3. Ava mõõdiku kõrval rippmenüü.
+4. Vali `Rename for this visual`.
+5. Kirjuta kasutajasõbralik nimi.
+
+Füüsilise poe dashboard'il kõlab `Müüke` või `Oste` sageli loomulikumalt kui `Tellimusi`. E-poe puhul sobib `Tellimusi` hästi.
+
+#### Kuidas tekstikasti muuta või kustutada
+
+Tekstikastid on kasulikud pealkirjade, annotatsioonide ja andmeloo jaoks.
+
+1. Klõpsa tekstikasti serval, mitte ainult teksti sees.
+2. Kui tahad teksti muuta, tee tekstikasti sees topeltklõps ja kirjuta uus tekst.
+3. Kui tahad tekstikasti liigutada, lohista seda servast.
+4. Kui tahad tekstikasti kustutada, vali tekstikast ja vajuta `Delete`.
+5. Kui kustutamine ei tööta, kontrolli, et valitud oleks kogu tekstikast, mitte ainult tekstikursor selle sees.
+
+Kui tekstikast katab visuali või jääb graafiku peale segama, liiguta see visuali kõrvale või tee väiksemaks. Annotatsioon peab toetama visuali, mitte selle andmeid kinni katma.
+
+#### Ühtne vormistus kogu dashboard'il
+
+Kui dashboard näeb liiga kirju välja, tee need parandused:
+
+1. Kasuta kogu lehel sama fonti, näiteks `Segoe UI`.
+2. Kasuta pealkirjades tumedat teksti: `#1E2430`.
+3. Kasuta selgitavas tekstis halli: `#7A858E`.
+4. Kasuta positiivse või olulise rõhutuse jaoks türkiisi: `#18AFA5`.
+5. Kasuta negatiivse koha rõhutamiseks crimson punast: `#DC143C`.
+6. Pane lehe taust väga heledaks: `#F8FAFA` või `#F6F7F8`.
+7. Pane KPI kaartide ja tekstiplokkide taustaks helehall või hele mint: `#F1F3F4`, `#EEF1F2` või `#E3F5F3`.
+8. Ära kasuta igal visualil erinevat värvi. Piisab ühest põhivärvist ja ühest hoiatusvärvist.
+9. Joonda KPI kaardid ühele reale ja jäta nende vahele sama suur vahe.
+10. Jäta visualide ümber tühja ruumi, et leht ei näeks ülerahvastatud välja.
+
+Soovituslik suuruste loogika:
+
+| Element | Soovitus |
+|---|---|
+| Dashboard'i põhipealkiri | `22-26 pt`, tume |
+| Visuali pealkiri | `12-14 pt`, tume |
+| KPI väärtus | `24-32 pt`, tume |
+| KPI silt | `10-12 pt`, hall |
+| Annotatsioon | `10-12 pt`, rõhutuse värviga |
+| Andmeloo tekst | `11-13 pt`, tume või hall |
+
+#### Kiire kontroll enne esitamist
+
+- Kas kõik automaatsed pealkirjad on muudetud arusaadavaks?
+- Kas topeltpealkirjad on eemaldatud?
+- Kas KPI kaartidel on inimesele loetavad nimed?
+- Kas annotatsioonid ei kata graafiku olulisi punkte?
+- Kas värvid on ühtsed?
+- Kas tekst on piisavalt suur, et ekraanipildilt lugeda?
+- Kas lehel on näha üks selge põhisõnum?
+
 ## 2. Mida vajad enne alustamist
 
 Sul peab olema:
