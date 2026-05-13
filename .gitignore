@@ -6,7 +6,6 @@ requirements.txt
 .vscode/settings.json
 
 # Local project files and generated data that should not be committed
-.env.example
 AGENT.md
 N7_2_1_P_GT_Python_Pandas_v2.9.docx
 UrbanStyle DACA.session.sql
