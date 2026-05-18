@@ -14,8 +14,22 @@ from supabase import create_client
 
 
 ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = ROOT.parent
 OUTPUT_DIR = ROOT / "output"
 LOG_FILE = ROOT / "week8_pipeline.log"
+ANALYSIS_END_DATE = "2025-02-28"
+FALLBACK_SALES_PATHS = [
+    PROJECT_ROOT / "datasets" / "clean" / "sales.csv",
+    ROOT / "datasets" / "clean" / "sales.csv",
+    PROJECT_ROOT / "SQL" / "sales_rows.csv",
+    PROJECT_ROOT / "SQL" / "sales_supabase_import.csv",
+]
+FALLBACK_CUSTOMER_PATHS = [
+    PROJECT_ROOT / "datasets" / "clean" / "customers.csv",
+    ROOT / "datasets" / "clean" / "customers.csv",
+    PROJECT_ROOT / "SQL" / "customers.csv",
+    PROJECT_ROOT / "SQL" / "customers_rows.csv",
+]
 
 
 def setup_logging() -> logging.Logger:
@@ -54,7 +68,13 @@ def get_supabase_client() -> Any | None:
     return create_client(url, key)
 
 
-def fetch_table(supabase: Any, table_name: str, page_size: int = 1000) -> pd.DataFrame:
+def fetch_table(
+    supabase: Any,
+    table_name: str,
+    page_size: int = 1000,
+    date_column: str | None = None,
+    end_date: str | None = None,
+) -> pd.DataFrame:
     """Too kogu tabel Supabase API kaudu lehekülgede kaupa."""
     try:
         rows: list[dict[str, Any]] = []
@@ -62,7 +82,10 @@ def fetch_table(supabase: Any, table_name: str, page_size: int = 1000) -> pd.Dat
 
         while True:
             end = start + page_size - 1
-            response = supabase.table(table_name).select("*").range(start, end).execute()
+            query = supabase.table(table_name).select("*")
+            if date_column and end_date:
+                query = query.lte(date_column, end_date)
+            response = query.range(start, end).execute()
             page = response.data or []
             rows.extend(page)
             logger.info(
@@ -165,10 +188,46 @@ def sample_data() -> tuple[pd.DataFrame, pd.DataFrame]:
             "customer_id": [1001, 1002, 1003, 1004, 1005, 1006, 1007],
             "first_name": ["Juri", "Kati", "Maris", "Peeter", "Liina", "Andres", "Tiina"],
             "last_name": ["Tamm", "Kask", "Sepp", "Rebane", "Ots", "Puu", "Kuusk"],
+            "email": [
+                "juri.tamm@example.com",
+                "kati.kask@example.com",
+                "",
+                "peeter.rebane@example.com",
+                "",
+                "",
+                "tiina.kuusk@example.com",
+            ],
+            "phone": ["+3725000001", "", "+3725000003", "+3725000004", "+3725000005", "", ""],
             "city": ["Tallinn", "Tartu", "Tallinn", "Parnu", "Tartu", "Parnu", "Tallinn"],
         }
     )
     logger.info("Näidisandmed loodud: %s tellimust, %s klienti", len(orders), len(customers))
+    return orders, customers
+
+
+def read_first_existing_csv(paths: list[Path], label: str) -> pd.DataFrame:
+    """Loe esimene olemasolev fallback CSV fail."""
+    for path in paths:
+        if path.exists():
+            df = pd.read_csv(path)
+            logger.info("Fallback CSV '%s': %s rida failist %s", label, len(df), path)
+            return df
+
+    logger.warning("Fallback CSV '%s' puudub. Otsitud failid: %s", label, ", ".join(str(path) for path in paths))
+    return pd.DataFrame()
+
+
+def fallback_csv_data() -> tuple[pd.DataFrame, pd.DataFrame] | None:
+    """Fallback: kasuta kohalikke CSV faile, kui API ei ole saadaval."""
+    orders = read_first_existing_csv(FALLBACK_SALES_PATHS, "sales")
+    if orders.empty:
+        return None
+
+    customers = read_first_existing_csv(FALLBACK_CUSTOMER_PATHS, "customers")
+    print(f"Fallback CSV: {len(orders)} sales rows")
+    if not customers.empty:
+        print(f"Fallback CSV: {len(customers)} customer rows")
+
     return orders, customers
 
 
@@ -181,14 +240,16 @@ def extract(use_sample: bool = False) -> tuple[pd.DataFrame, pd.DataFrame]:
 
     supabase = get_supabase_client()
     if supabase is None:
-        return sample_data()
+        fallback = fallback_csv_data()
+        return fallback if fallback is not None else sample_data()
 
-    orders = fetch_table(supabase, "sales")
+    orders = fetch_table(supabase, "sales", date_column="sale_date", end_date=ANALYSIS_END_DATE)
     customers = fetch_table(supabase, "customers")
 
     if orders.empty or customers.empty:
-        logger.warning("API andmed olid puudulikud. Kasutan kontrollitavat näidisandmestikku.")
-        return sample_data()
+        logger.warning("API andmed olid puudulikud. Proovin fallback CSV faile.")
+        fallback = fallback_csv_data()
+        return fallback if fallback is not None else sample_data()
 
     return orders, customers
 
@@ -204,13 +265,40 @@ def normalize_orders(orders: pd.DataFrame, customers: pd.DataFrame) -> pd.DataFr
     if "sale_date" not in df.columns and "date" in df.columns:
         df = df.rename(columns={"date": "sale_date"})
 
+    customer_columns = [
+        column
+        for column in ["customer_id", "first_name", "last_name", "email", "phone", "city"]
+        if column in customer_df.columns
+    ]
+    if len(customer_columns) > 1:
+        customer_lookup = customer_df[customer_columns].drop_duplicates("customer_id")
+        df = df.merge(customer_lookup, on="customer_id", how="left", suffixes=("", "_customer"))
+
     if "city" not in df.columns:
         if "store_location" in df.columns:
             df["city"] = df["store_location"].fillna("Online")
-        elif "city" in customer_df.columns:
-            df = df.merge(customer_df[["customer_id", "city"]], on="customer_id", how="left")
+        elif "city_customer" in df.columns:
+            df["city"] = df["city_customer"]
         else:
             df["city"] = "Teadmata"
+    elif "city_customer" in df.columns:
+        df["city"] = df["city"].fillna(df["city_customer"])
+
+    for column in ["first_name", "last_name"]:
+        if column not in df.columns:
+            df[column] = ""
+    for column in ["email", "phone"]:
+        if column not in df.columns:
+            df[column] = ""
+    df["customer_name"] = (
+        df["first_name"].fillna("").astype(str).str.strip()
+        + " "
+        + df["last_name"].fillna("").astype(str).str.strip()
+    ).str.strip()
+    df.loc[df["customer_name"] == "", "customer_name"] = "Klient " + df["customer_id"].astype(str)
+    df["has_email"] = df["email"].notna() & (df["email"].astype(str).str.strip() != "")
+    df["has_phone"] = df["phone"].notna() & (df["phone"].astype(str).str.strip() != "")
+    df["has_contact"] = df["has_email"] | df["has_phone"]
 
     required = ["customer_id", "sale_date", "total_price", "city"]
     missing = [column for column in required if column not in df.columns]
@@ -224,8 +312,20 @@ def normalize_orders(orders: pd.DataFrame, customers: pd.DataFrame) -> pd.DataFr
     df = df[df["total_price"] > 0]
     df["customer_id"] = pd.to_numeric(df["customer_id"], errors="coerce").astype("Int64")
     df = df.dropna(subset=["customer_id"])
+    cutoff = pd.to_datetime(ANALYSIS_END_DATE)
+    before_cutoff = len(df)
+    df = df[df["sale_date"] <= cutoff].copy()
+    before_contact_filter = len(df)
+    df = df[df["has_contact"]].copy()
 
-    logger.info("[TRANSFORM] Puhastatud müügiridu: %s", len(df))
+    logger.info(
+        "[TRANSFORM] Puhastatud müügiridu kuni %s: kuupäevafilter %s -> %s; kontaktifilter %s -> %s",
+        ANALYSIS_END_DATE,
+        before_cutoff,
+        before_contact_filter,
+        before_contact_filter,
+        len(df),
+    )
     return df
 
 
@@ -265,7 +365,7 @@ def assign_segment(score: int) -> str:
     return "At Risk"
 
 
-def calculate_rfm(df: pd.DataFrame, reference_date: str | None = None) -> pd.DataFrame:
+def calculate_rfm(df: pd.DataFrame, reference_date: str | None = ANALYSIS_END_DATE) -> pd.DataFrame:
     """Arvuta RFM skoorid ja segmendid iga kliendi kohta."""
     if df.empty:
         return pd.DataFrame()
@@ -284,11 +384,19 @@ def calculate_rfm(df: pd.DataFrame, reference_date: str | None = None) -> pd.Dat
     frequency = rfm_source.groupby("customer_id").size().reset_index(name="frequency")
     monetary = rfm_source.groupby("customer_id")["total_price"].sum().reset_index()
     monetary.columns = ["customer_id", "monetary"]
+    names = rfm_source.groupby("customer_id")["customer_name"].first().reset_index()
+    contacts = (
+        rfm_source.groupby("customer_id")
+        .agg(has_email=("has_email", "max"), has_phone=("has_phone", "max"), has_contact=("has_contact", "max"))
+        .reset_index()
+    )
 
     rfm = (
         recency[["customer_id", "last_purchase", "recency_days"]]
         .merge(frequency, on="customer_id")
         .merge(monetary, on="customer_id")
+        .merge(names, on="customer_id", how="left")
+        .merge(contacts, on="customer_id", how="left")
     )
 
     unique_customers = len(rfm)
@@ -379,7 +487,7 @@ def load(results: dict[str, pd.DataFrame]) -> None:
         y="monetary",
         color="segment",
         size="frequency",
-        hover_data=["customer_id", "RFM_score"],
+        hover_data=["customer_name", "RFM_score"],
         title="UrbanStyle RFM kliendisegmendid",
         labels={"recency_days": "Päevi viimasest ostust", "monetary": "Kogukulutus (EUR)"},
     ).write_html(rfm_chart_path)
@@ -411,7 +519,16 @@ def print_summary(results: dict[str, pd.DataFrame]) -> None:
 
     print("\n--- RFM SEGMENDID: TOP 20 ---")
     print(
-        rfm[["customer_id", "frequency", "monetary", "recency_days", "RFM_score", "segment"]]
+        rfm[
+            [
+                "customer_name",
+                "frequency",
+                "monetary",
+                "recency_days",
+                "RFM_score",
+                "segment",
+            ]
+        ]
         .head(20)
         .to_string(index=False)
     )
@@ -423,7 +540,7 @@ def print_summary(results: dict[str, pd.DataFrame]) -> None:
 
     print("\n--- VASTUSED ---")
     print(f"RFM segmentide arv: {rfm['segment'].nunique()}")
-    print(f"Kõige väärtuslikum klient: {int(best_customer['customer_id'])}, monetary {best_customer['monetary']:.2f} EUR")
+    print(f"Kõige väärtuslikum klient: {best_customer['customer_name']}, monetary {best_customer['monetary']:.2f} EUR")
     print(f"Kõige kasumlikum kuu: {best_month['sale_date']}, käive {best_month['revenue']:.2f} EUR")
 
 

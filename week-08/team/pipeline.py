@@ -1,0 +1,173 @@
+from __future__ import annotations
+
+import logging
+import time
+from pathlib import Path
+from typing import Any
+
+import pandas as pd
+import yaml
+
+from data_fetcher import create_supabase_client, fetch_customers, fetch_products, fetch_sales, sample_data
+from transform import (
+    build_business_interpretation,
+    calculate_kpis,
+    calculate_rfm,
+    calculate_segment_summary,
+    calculate_weekly_aggregates,
+    clean_data,
+    merge_datasets,
+)
+from visualize_export import export_results
+
+
+ROOT = Path(__file__).resolve().parent
+CONFIG_FILE = ROOT / "config.yaml"
+LOG_DIR = ROOT / "logs"
+
+
+def load_config() -> dict[str, Any]:
+    if not CONFIG_FILE.exists():
+        return {
+            "date_filter": {"start_date": None, "end_date": None},
+            "pipeline": {
+                "page_size": 1000,
+                "max_retries": 3,
+                "reference_date": "2025-02-28",
+                "output_dir": "output",
+                "use_sample_if_api_missing": True,
+            },
+        }
+    return yaml.safe_load(CONFIG_FILE.read_text(encoding="utf-8"))
+
+
+def setup_logging() -> None:
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    log_file = LOG_DIR / f"pipeline_{time.strftime('%Y%m%d')}.log"
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+        handlers=[logging.StreamHandler(), logging.FileHandler(log_file, encoding="utf-8")],
+        force=True,
+    )
+
+
+def extract(config: dict[str, Any]) -> tuple[Any, Any, Any]:
+    logger = logging.getLogger(__name__)
+    logger.info("[EXTRACT] start")
+
+    pipeline_config = config["pipeline"]
+    date_filter = config["date_filter"]
+    table_config = config.get("tables", {})
+
+    try:
+        supabase = create_supabase_client()
+        sales = fetch_sales(
+            supabase,
+            start_date=date_filter.get("start_date"),
+            end_date=date_filter.get("end_date"),
+            page_size=pipeline_config.get("page_size", 1000),
+            max_retries=pipeline_config.get("max_retries", 3),
+            table_name=table_config.get("sales", "sales"),
+        )
+        customers = fetch_customers(
+            supabase,
+            page_size=pipeline_config.get("page_size", 1000),
+            max_retries=pipeline_config.get("max_retries", 3),
+            table_name=table_config.get("customers", "customers"),
+        )
+        products = fetch_products(
+            supabase,
+            page_size=pipeline_config.get("page_size", 1000),
+            max_retries=pipeline_config.get("max_retries", 3),
+            table_name=table_config.get("products", "products"),
+        )
+        logger.info("[EXTRACT] done: sales=%s customers=%s products=%s", len(sales), len(customers), len(products))
+        return sales, customers, products
+    except Exception:
+        logger.exception("[EXTRACT] Supabase API ebaonnestus")
+        if pipeline_config.get("use_sample_if_api_missing", True):
+            logger.warning("[EXTRACT] Kasutan varu-naidisandmeid, et pipeline jookseks lopuni")
+            return sample_data()
+        raise
+
+
+def transform_data(sales: Any, customers: Any, products: Any, config: dict[str, Any]) -> dict[str, Any]:
+    logger = logging.getLogger(__name__)
+    logger.info("[TRANSFORM] start")
+    merged = merge_datasets(sales, customers, products)
+    clean = clean_data(merged)
+    reference_date = config["pipeline"].get("reference_date", "2025-02-28")
+    cutoff = pd.to_datetime(reference_date)
+    before_cutoff = len(clean)
+    clean = clean[clean["sale_date"] <= cutoff].copy()
+    logger.info("[TRANSFORM] Kuupäevafilter kuni %s: %s -> %s rida", reference_date, before_cutoff, len(clean))
+    weekly = calculate_weekly_aggregates(clean)
+    kpis = calculate_kpis(clean)
+    rfm = calculate_rfm(clean, reference_date=reference_date)
+    segment_summary = calculate_segment_summary(rfm)
+    interpretation = build_business_interpretation(rfm)
+    logger.info("[TRANSFORM] done: rows=%s customers=%s", len(clean), kpis["unique_customers"])
+    return {
+        "clean_sales": clean,
+        "weekly": weekly,
+        "kpis": kpis,
+        "rfm": rfm,
+        "segment_summary": segment_summary,
+        "business_interpretation": interpretation,
+    }
+
+
+def validate_results(results: dict[str, Any]) -> None:
+    logger = logging.getLogger(__name__)
+    logger.info("[VALIDATE] start")
+    checks = {
+        "clean_sales_not_empty": not results["clean_sales"].empty,
+        "weekly_not_empty": not results["weekly"].empty,
+        "rfm_not_empty": not results["rfm"].empty,
+        "revenue_matches": round(results["clean_sales"]["total_price"].sum(), 2)
+        == round(results["rfm"]["monetary_value"].sum(), 2),
+    }
+    for name, ok in checks.items():
+        logger.info("[VALIDATE] %s: %s", name, "OK" if ok else "PROBLEEM")
+    if not all(checks.values()):
+        raise RuntimeError("Pipeline'i valideerimine ebaonnestus.")
+
+
+def notify(status: str, summary: dict[str, Any]) -> None:
+    logging.getLogger(__name__).info(
+        "[NOTIFY] %s | revenue=%s orders=%s customers=%s",
+        status,
+        summary.get("total_revenue"),
+        summary.get("orders"),
+        summary.get("unique_customers"),
+    )
+
+
+def run_pipeline() -> dict[str, Any]:
+    logger = logging.getLogger(__name__)
+    config = load_config()
+    start_time = time.perf_counter()
+
+    try:
+        logger.info("Pipeline started")
+        sales, customers, products = extract(config)
+        results = transform_data(sales, customers, products, config)
+        validate_results(results)
+        output_dir = ROOT / config["pipeline"].get("output_dir", "output")
+        paths = export_results(results, output_dir=output_dir)
+        elapsed = time.perf_counter() - start_time
+        notify("SUCCESS", results["kpis"])
+        logger.info("Pipeline complete %.2f seconds, files=%s", elapsed, len(paths))
+        print(f"Pipeline valmis {elapsed:.2f} sekundiga. Väljundid: {output_dir}")
+        print(results["segment_summary"].to_string(index=False))
+        return results
+    except Exception:
+        logger.exception("Pipeline failed")
+        notify("FAILED", {})
+        raise
+
+
+if __name__ == "__main__":
+    setup_logging()
+    run_pipeline()

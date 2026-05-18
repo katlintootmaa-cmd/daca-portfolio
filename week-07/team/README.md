@@ -23,5 +23,6 @@ Vajalikud paketid on projekti `.venv` keskkonnas olemas. Notebooki avamisel vali
 - Roll B: puhastab andmed, eemaldab duplikaadid, NULL-id, vigased kuupäevad ja mittepositiivsed summad.
 - Roll C: arvutab Recency, Frequency ja Monetary väärtused ning määrab RFM segmendid.
 - Roll D: loob kolm Plotly diagrammi ja sõnastab soovitused Markole.
+## Kuup?evapiirang
 
-
+Anal??s kasutab RFM v?rdluskuup?evana `2025-02-28` ja filtreerib RFM sisendist v?lja k?ik hilisemad m??giread. Nii arvestab Week 7 t?? andmeid kuni 2025. aasta veebruari l?puni.

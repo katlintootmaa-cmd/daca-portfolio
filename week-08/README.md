@@ -71,3 +71,6 @@ python week-08/week8_api_pipeline.py --sample
 ## Minu kokkuvõte
 
 Sain aru, kuidas API, pandas, funktsioonid, logimine ja visualiseerimine kokku üheks andmepipeline'iks ühendada. See on oluline samm edasi, sest sellist lahendust saab hiljem ajastada ja kasutada korduvate raportite tegemiseks ilma käsitsi CSV-faile eksportimata.
+## Kuup?evapiirang
+
+Week 8 pipeline kasutab anal??si l?ppkuup?evana `2025-02-28`. API p?ringul seatakse `end_date` v??rtuseks `2025-02-28` ja transform-etapis filtreeritakse ka varu-/n?idisandmed sama kuup?evani.

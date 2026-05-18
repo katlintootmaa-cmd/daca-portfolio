@@ -1,0 +1,16 @@
+tables:
+  sales: sales
+  customers: customers
+  products: products
+
+date_filter:
+  start_date: null
+  end_date: "2025-02-28"
+
+pipeline:
+  page_size: 1000
+  max_retries: 3
+  retry_base_seconds: 1
+  reference_date: "2025-02-28"
+  output_dir: output
+  use_sample_if_api_missing: true
