@@ -342,12 +342,14 @@ def normalize_orders(
     df = df[df["has_contact"]].copy()
 
     logger.info(
-        "[TRANSFORM] Puhastatud müügiridu kuni %s: kuupäevafilter %s -> %s; kontaktifilter %s -> %s",
+        "[TRANSFORM] Periood andmebaasi algusest kuni %s: kuupäevafilter %s -> %s; kontaktifilter %s -> %s; tegelik vahemik %s kuni %s",
         analysis_date,
         before_cutoff,
         before_contact_filter,
         before_contact_filter,
         len(df),
+        df["sale_date"].min().date() if not df.empty else "puudub",
+        df["sale_date"].max().date() if not df.empty else "puudub",
     )
     return df
 

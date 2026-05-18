@@ -14,7 +14,7 @@ on:
       analysis_date:
         description: "Analysis end date in YYYY-MM-DD format"
         required: false
-        default: "2025-03-01"
+        default: "2025-02-28"
 
 jobs:
   run-week8-pipeline:
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ANALYSIS_DATE: ${{ github.event.inputs.analysis_date || '2025-03-01' }}
+      ANALYSIS_DATE: ${{ github.event.inputs.analysis_date || '2025-02-28' }}
 
     steps:
       - name: Check out repository

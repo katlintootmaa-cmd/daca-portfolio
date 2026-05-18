@@ -127,7 +127,16 @@ def transform_data(sales: Any, customers: Any, products: Any, config: dict[str, 
     cutoff = pd.to_datetime(reference_date)
     before_cutoff = len(clean)
     clean = clean[clean["sale_date"] <= cutoff].copy()
-    logger.info("[TRANSFORM] Kuupäevafilter kuni %s: %s -> %s rida", reference_date, before_cutoff, len(clean))
+    period_start = clean["sale_date"].min().date() if not clean.empty else "puudub"
+    period_end = clean["sale_date"].max().date() if not clean.empty else "puudub"
+    logger.info(
+        "[TRANSFORM] Periood andmebaasi algusest kuni %s: %s -> %s rida; tegelik vahemik %s kuni %s",
+        reference_date,
+        before_cutoff,
+        len(clean),
+        period_start,
+        period_end,
+    )
     weekly = calculate_weekly_aggregates(clean)
     kpis = calculate_kpis(clean)
     rfm = calculate_rfm(clean, reference_date=reference_date)
@@ -189,7 +198,7 @@ def run_pipeline(analysis_date: str | None = None) -> dict[str, Any]:
         notify("SUCCESS", results["kpis"])
         logger.info("Pipeline complete %.2f seconds, files=%s", elapsed, len(paths))
         print(f"Pipeline valmis {elapsed:.2f} sekundiga. Väljundid: {output_dir}")
-        print(f"Analüüsi kuupäev: {config['pipeline'].get('reference_date')}")
+        print(f"Analüüsi periood: andmebaasi algusest kuni {config['pipeline'].get('reference_date')}")
         print(results["segment_summary"].to_string(index=False))
         return results
     except Exception:
