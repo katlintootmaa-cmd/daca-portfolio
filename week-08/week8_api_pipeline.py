@@ -1,3 +1,10 @@
+"""Week 8 API pipeline.
+
+See skript laeb UrbanStyle müügi- ja kliendiandmed Supabase API-st,
+kasutab vajadusel CSV fallbacki, puhastab andmed, arvutab KPI-d ja RFM
+segmendid ning salvestab raportid CSV/HTML failidena.
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -17,7 +24,11 @@ ROOT = Path(__file__).resolve().parent
 PROJECT_ROOT = ROOT.parent
 OUTPUT_DIR = ROOT / "output"
 LOG_FILE = ROOT / "week8_pipeline.log"
+
+# Analüüsi lõppkuupäev: hilisemaid müügiridu RFM arvutuses ei kasutata.
 ANALYSIS_END_DATE = "2025-02-28"
+
+# Kohalikud CSV failid, mida kasutatakse siis, kui API ei ole saadaval.
 FALLBACK_SALES_PATHS = [
     PROJECT_ROOT / "datasets" / "clean" / "sales.csv",
     ROOT / "datasets" / "clean" / "sales.csv",
@@ -62,7 +73,7 @@ def get_supabase_client() -> Any | None:
     key = os.getenv("SUPABASE_KEY") or os.getenv("SUPABASE_ANON_KEY")
 
     if not url or not key:
-        logger.warning("SUPABASE_URL ja/või SUPABASE_KEY puudub. Kasutan näidisandmeid.")
+        logger.warning("SUPABASE_URL ja/või SUPABASE_KEY puudub. Proovin CSV fallbacki.")
         return None
 
     return create_client(url, key)
@@ -110,7 +121,7 @@ def fetch_table(
 
 
 def sample_data() -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Loo juhendi struktuurile vastavad näidisandmed."""
+    """Loo väike näidisandmestik viimase varuvariandina."""
     orders = pd.DataFrame(
         {
             "sale_id": range(1, 21),
@@ -265,6 +276,7 @@ def normalize_orders(orders: pd.DataFrame, customers: pd.DataFrame) -> pd.DataFr
     if "sale_date" not in df.columns and "date" in df.columns:
         df = df.rename(columns={"date": "sale_date"})
 
+    # Toome klienditabelist nime ja kontaktid müügiridade juurde.
     customer_columns = [
         column
         for column in ["customer_id", "first_name", "last_name", "email", "phone", "city"]
@@ -296,6 +308,7 @@ def normalize_orders(orders: pd.DataFrame, customers: pd.DataFrame) -> pd.DataFr
         + df["last_name"].fillna("").astype(str).str.strip()
     ).str.strip()
     df.loc[df["customer_name"] == "", "customer_name"] = "Klient " + df["customer_id"].astype(str)
+    # Analüüsi jäävad ainult kliendid, kellel on e-mail või telefon olemas.
     df["has_email"] = df["email"].notna() & (df["email"].astype(str).str.strip() != "")
     df["has_phone"] = df["phone"].notna() & (df["phone"].astype(str).str.strip() != "")
     df["has_contact"] = df["has_email"] | df["has_phone"]
@@ -416,6 +429,7 @@ def calculate_rfm(df: pd.DataFrame, reference_date: str | None = ANALYSIS_END_DA
             rfm["monetary"].rank(method="first"), q=q, labels=range(1, q + 1)
         ).astype(int)
 
+    # Koondskoor määrab, millisesse turundussegmenti klient kuulub.
     rfm["RFM_score"] = rfm["R_score"] + rfm["F_score"] + rfm["M_score"]
     rfm["segment"] = rfm["RFM_score"].apply(assign_segment)
     return rfm.sort_values(["RFM_score", "monetary"], ascending=False)

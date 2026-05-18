@@ -1,3 +1,10 @@
+"""Roll A: API Query.
+
+See moodul loob Supabase ühenduse, pärib sales/customers/products tabelid
+DataFrame'idena ning kasutab pagination'i ja retry loogikat, et suurte
+tabelite laadimine oleks töökindlam.
+"""
+
 from __future__ import annotations
 
 import logging
@@ -15,6 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 def load_environment() -> None:
+    """Leia lähim .env fail ja lae API tunnused keskkonnamuutujatesse."""
     dotenv_path = next(
         (path for path in [Path.cwd() / ".env", *[parent / ".env" for parent in Path.cwd().parents]] if path.exists()),
         None,
@@ -23,6 +31,7 @@ def load_environment() -> None:
 
 
 def create_supabase_client() -> Any:
+    """Loo Supabase klient .env failis olevate URL-i ja API võtme põhjal."""
     load_environment()
     url = os.getenv("SUPABASE_URL")
     key = os.getenv("SUPABASE_ANON_KEY") or os.getenv("SUPABASE_KEY")
@@ -42,6 +51,7 @@ def fetch_table(
     start_date: str | None = None,
     end_date: str | None = None,
 ) -> pd.DataFrame:
+    """Päri üks Supabase tabel lehekülgede kaupa ja proovi vea korral uuesti."""
     rows: list[dict[str, Any]] = []
     start = 0
 
@@ -89,6 +99,7 @@ def fetch_sales(
     max_retries: int = 3,
     table_name: str = "sales",
 ) -> pd.DataFrame:
+    """Päri müügiandmed, vajadusel kuupäevavahemiku filtriga."""
     return fetch_table(
         supabase,
         table_name,
@@ -106,6 +117,7 @@ def fetch_customers(
     max_retries: int = 3,
     table_name: str = "customers",
 ) -> pd.DataFrame:
+    """Päri kliendiandmed Supabase customers tabelist."""
     return fetch_table(supabase, table_name, page_size=page_size, max_retries=max_retries)
 
 
@@ -115,10 +127,12 @@ def fetch_products(
     max_retries: int = 3,
     table_name: str = "products",
 ) -> pd.DataFrame:
+    """Päri tooteandmed Supabase products tabelist."""
     return fetch_table(supabase, table_name, page_size=page_size, max_retries=max_retries)
 
 
 def sample_data() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Loo väike varuandmestik, et pipeline saaks ka API tõrke korral joosta."""
     sales = pd.DataFrame(
         {
             "sale_id": range(1, 22),

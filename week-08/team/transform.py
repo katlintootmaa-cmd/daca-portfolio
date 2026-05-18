@@ -1,3 +1,9 @@
+"""Roll B: Data Processing.
+
+See moodul puhastab API-st tulnud andmed, ühendab müügi-, kliendi- ja
+tooteandmed, arvutab nädalased koondnäitajad, KPI-d ning RFM segmendid.
+"""
+
 from __future__ import annotations
 
 import logging
@@ -10,6 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 def clean_data(df: pd.DataFrame) -> pd.DataFrame:
+    """Eemalda vigased read ja lisa kontaktide kontrolliks abiveerud."""
     required = {"customer_id", "sale_date", "total_price"}
     missing = sorted(required - set(df.columns))
     if missing:
@@ -44,6 +51,7 @@ def merge_datasets(
     df_customers: pd.DataFrame,
     df_products: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
+    """Ühenda müügiandmed kliendiandmetega ja võimalusel tooteandmetega."""
     if "customer_id" not in df_sales.columns or "customer_id" not in df_customers.columns:
         raise ValueError("Müügi- ja kliendiandmetes peab olema customer_id veerg.")
 
@@ -65,6 +73,7 @@ def merge_datasets(
 
 
 def calculate_weekly_aggregates(df: pd.DataFrame) -> pd.DataFrame:
+    """Arvuta nädalate kaupa tulu, tellimuste arv ja unikaalsed kliendid."""
     weekly = (
         df.resample("W-MON", on="sale_date", label="left", closed="left")
         .agg(
@@ -81,6 +90,7 @@ def calculate_weekly_aggregates(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def calculate_kpis(df: pd.DataFrame) -> dict[str, Any]:
+    """Tagasta peamised juhtimisnäitajad ühe dict objektina."""
     orders = len(df)
     total_revenue = float(df["total_price"].sum())
     return {
@@ -92,6 +102,7 @@ def calculate_kpis(df: pd.DataFrame) -> dict[str, Any]:
 
 
 def _score_column(series: pd.Series, labels: list[int]) -> pd.Series:
+    """Jaga väärtused kuni viide kvantiili ja teisenda need R/F/M skooriks."""
     q = min(5, series.nunique())
     if q < 2:
         return pd.Series([max(labels)] * len(series), index=series.index, dtype="int64")
@@ -99,6 +110,7 @@ def _score_column(series: pd.Series, labels: list[int]) -> pd.Series:
 
 
 def assign_segment(score: int) -> str:
+    """Määra RFM koondskoori põhjal turundussegment."""
     if score >= 13:
         return "VIP Champions"
     if score >= 10:
@@ -111,6 +123,7 @@ def assign_segment(score: int) -> str:
 
 
 def calculate_rfm(df: pd.DataFrame, reference_date: str = "2025-02-28") -> pd.DataFrame:
+    """Koonda andmed kliendi tasemele ning arvuta RFM skoorid ja segment."""
     today = pd.to_datetime(reference_date)
     rfm = (
         df.groupby("customer_id")
@@ -146,6 +159,7 @@ def calculate_rfm(df: pd.DataFrame, reference_date: str = "2025-02-28") -> pd.Da
 
 
 def calculate_segment_summary(rfm: pd.DataFrame) -> pd.DataFrame:
+    """Tee segmentide lõikes kokkuvõte klientide arvu ja käibe kohta."""
     summary = (
         rfm.groupby("Segment")
         .agg(
@@ -165,6 +179,7 @@ def calculate_segment_summary(rfm: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_business_interpretation(rfm: pd.DataFrame) -> str:
+    """Koosta Markole lühike tekstiline tõlgendus RFM tulemustest."""
     total_customers = int(rfm["customer_id"].nunique())
     total_revenue = rfm["monetary_value"].sum()
     vip_customers = int((rfm["Segment"] == "VIP Champions").sum())

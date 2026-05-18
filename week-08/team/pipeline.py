@@ -1,3 +1,10 @@
+"""Roll D: Automation Script.
+
+See fail ühendab Roll A, B ja C moodulid üheks pipeline'iks:
+extract -> transform -> validate -> export. Käivitamiseks kasuta
+`python week-08/team/pipeline.py`.
+"""
+
 from __future__ import annotations
 
 import logging
@@ -27,6 +34,7 @@ LOG_DIR = ROOT / "logs"
 
 
 def load_config() -> dict[str, Any]:
+    """Loe config.yaml või kasuta vaikeseadeid, kui faili pole."""
     if not CONFIG_FILE.exists():
         return {
             "date_filter": {"start_date": None, "end_date": None},
@@ -42,6 +50,7 @@ def load_config() -> dict[str, Any]:
 
 
 def setup_logging() -> None:
+    """Seadista logimine nii terminali kui logs/ kausta failina."""
     LOG_DIR.mkdir(parents=True, exist_ok=True)
     log_file = LOG_DIR / f"pipeline_{time.strftime('%Y%m%d')}.log"
     logging.basicConfig(
@@ -53,6 +62,7 @@ def setup_logging() -> None:
 
 
 def extract(config: dict[str, Any]) -> tuple[Any, Any, Any]:
+    """Lae API-st sales/customers/products või kasuta varuandmeid."""
     logger = logging.getLogger(__name__)
     logger.info("[EXTRACT] start")
 
@@ -93,6 +103,7 @@ def extract(config: dict[str, Any]) -> tuple[Any, Any, Any]:
 
 
 def transform_data(sales: Any, customers: Any, products: Any, config: dict[str, Any]) -> dict[str, Any]:
+    """Puhasta, filtreeri ja teisenda andmed raportite jaoks sobivaks."""
     logger = logging.getLogger(__name__)
     logger.info("[TRANSFORM] start")
     merged = merge_datasets(sales, customers, products)
@@ -119,6 +130,7 @@ def transform_data(sales: Any, customers: Any, products: Any, config: dict[str, 
 
 
 def validate_results(results: dict[str, Any]) -> None:
+    """Kontrolli, et pipeline'i peamised tulemused on olemas ja summad klapivad."""
     logger = logging.getLogger(__name__)
     logger.info("[VALIDATE] start")
     checks = {
@@ -135,6 +147,7 @@ def validate_results(results: dict[str, Any]) -> None:
 
 
 def notify(status: str, summary: dict[str, Any]) -> None:
+    """Logi lihtne teavitus pipeline'i õnnestumise või ebaõnnestumise kohta."""
     logging.getLogger(__name__).info(
         "[NOTIFY] %s | revenue=%s orders=%s customers=%s",
         status,
@@ -145,6 +158,7 @@ def notify(status: str, summary: dict[str, Any]) -> None:
 
 
 def run_pipeline() -> dict[str, Any]:
+    """Käivita kogu Week 8 tiimitöö pipeline algusest lõpuni."""
     logger = logging.getLogger(__name__)
     config = load_config()
     start_time = time.perf_counter()

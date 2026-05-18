@@ -1,3 +1,9 @@
+"""Roll C: Visualization + Saving.
+
+See moodul loob töödeldud andmetest Plotly graafikud ja salvestab
+tulemused CSV, HTML ja Markdown failidena output kausta.
+"""
+
 from __future__ import annotations
 
 import logging
@@ -15,6 +21,7 @@ SEGMENT_ORDER = ["VIP Champions", "Loyal", "Potential", "At Risk", "Lost"]
 
 
 def create_weekly_chart(df_weekly: pd.DataFrame) -> go.Figure:
+    """Loo nädalase tulu joondiagramm."""
     return px.line(
         df_weekly,
         x="week",
@@ -26,6 +33,7 @@ def create_weekly_chart(df_weekly: pd.DataFrame) -> go.Figure:
 
 
 def create_kpi_summary(kpis: dict[str, Any]) -> go.Figure:
+    """Loo KPI tabel total revenue, orders, customers ja avg order väärtustega."""
     return go.Figure(
         data=[
             go.Table(
@@ -48,6 +56,7 @@ def create_kpi_summary(kpis: dict[str, Any]) -> go.Figure:
 
 
 def create_segment_chart(segment_summary: pd.DataFrame) -> go.Figure:
+    """Loo tulpdiagramm RFM segmentide klientide arvust."""
     fig = px.bar(
         segment_summary.sort_values("customers", ascending=False),
         x="Segment",
@@ -63,6 +72,7 @@ def create_segment_chart(segment_summary: pd.DataFrame) -> go.Figure:
 
 
 def create_rfm_scatter(rfm: pd.DataFrame) -> go.Figure:
+    """Loo RFM hajuvusdiagramm recency, monetary ja frequency näitajatega."""
     return px.scatter(
         rfm,
         x="recency_days",
@@ -81,6 +91,7 @@ def create_rfm_scatter(rfm: pd.DataFrame) -> go.Figure:
 
 
 def create_top_vip_chart(rfm: pd.DataFrame) -> go.Figure:
+    """Loo top 10 VIP kliendi tulpdiagramm kogukulutuse järgi."""
     top_vip = rfm[rfm["Segment"] == "VIP Champions"].nlargest(10, "monetary_value").copy()
     if top_vip.empty:
         top_vip = rfm.nlargest(10, "monetary_value").copy()
@@ -98,6 +109,7 @@ def create_top_vip_chart(rfm: pd.DataFrame) -> go.Figure:
 
 
 def export_results(results: dict[str, Any], output_dir: str | Path = "output") -> dict[str, Path]:
+    """Salvesta kõik raportid ja graafikud ajatempliga failinimedega."""
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
     date_str = datetime.now().strftime("%Y%m%d_%H%M%S")

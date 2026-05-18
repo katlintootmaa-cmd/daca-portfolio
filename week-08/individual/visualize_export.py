@@ -1,3 +1,9 @@
+"""Individuaalne Roll C lahendus.
+
+Fail loob näidisandmete põhjal nädalase tulugraafiku, KPI tabeli ja
+RFM segmentide jaotuse ning ekspordib need CSV/HTML failidena.
+"""
+
 from __future__ import annotations
 
 from datetime import datetime
@@ -138,6 +144,7 @@ def sample_weekly_data() -> pd.DataFrame:
 
 
 def sample_kpis(df_weekly: pd.DataFrame) -> dict[str, Any]:
+    """Arvuta näidisnädalate põhjal KPI väärtused."""
     orders = int(df_weekly["orders"].sum())
     revenue = float(df_weekly["revenue"].sum())
     return {
@@ -149,6 +156,7 @@ def sample_kpis(df_weekly: pd.DataFrame) -> dict[str, Any]:
 
 
 def sample_segments() -> pd.DataFrame:
+    """Loo väike näidis RFM segmentide tabel graafiku testimiseks."""
     return pd.DataFrame(
         {
             "Segment": ["VIP Champions", "Loyal", "Potential", "At Risk"],
@@ -159,6 +167,7 @@ def sample_segments() -> pd.DataFrame:
 
 
 def main() -> None:
+    """Käivita Roll C iseseisev test ja kirjuta väljundfailide asukohad."""
     weekly = sample_weekly_data()
     kpis = sample_kpis(weekly)
     segments = sample_segments()

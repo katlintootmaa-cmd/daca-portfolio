@@ -1,3 +1,9 @@
+"""Week 7 pandas/RFM harjutuste skript.
+
+Fail ühendub Supabase PostgreSQL andmebaasiga, laeb müügi- ja kliendiandmed,
+teeb pandas ülevaated, lihtsad töötlused, Plotly graafikud ja RFM analüüsi.
+"""
+
 from __future__ import annotations
 
 import os
@@ -18,10 +24,12 @@ REQUIRED_ENV_VARS = (
 
 
 def print_section(title: str) -> None:
+    """Prindi terminali loetav sektsiooni pealkiri."""
     print(f"\n{'=' * 12} {title} {'=' * 12}")
 
 
 def get_supabase_connection() -> psycopg.Connection:
+    """Loo PostgreSQL ühendus Supabase andmebaasiga .env muutujate põhjal."""
     load_dotenv()
 
     missing = [name for name in REQUIRED_ENV_VARS if not os.getenv(name)]
@@ -41,6 +49,7 @@ def get_supabase_connection() -> psycopg.Connection:
 
 
 def load_supabase_data() -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Lae Supabase'ist müügi- ja kliendiandmed ning korrasta tüübid."""
     sales_query = """
         SELECT
             s.sale_id,
@@ -92,6 +101,7 @@ def load_supabase_data() -> tuple[pd.DataFrame, pd.DataFrame]:
 
 
 def fetch_dataframe(conn: psycopg.Connection, query: str) -> pd.DataFrame:
+    """Käivita SQL päring ja tagasta tulemus pandas DataFrame'ina."""
     with conn.cursor() as cur:
         cur.execute(query)
         rows = cur.fetchall()
@@ -101,6 +111,7 @@ def fetch_dataframe(conn: psycopg.Connection, query: str) -> pd.DataFrame:
 
 
 def exercise_1_dataframe_overview(df: pd.DataFrame) -> None:
+    """Kuva DataFrame'i põhiülevaade ja lihtsad kirjeldavad näitajad."""
     print_section("Osa 1: DataFrame uurimine")
 
     print("Shape:", df.shape)
@@ -133,6 +144,7 @@ def exercise_1_dataframe_overview(df: pd.DataFrame) -> None:
 
 
 def exercise_2_processing(df: pd.DataFrame, customers: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Filtreeri, grupeerib ja ühenda andmeid kliendi ostukäitumise leidmiseks."""
     print_section("Osa 2: filtreerimine, groupby ja merge")
 
     tallinn = df[df["city"] == "Tallinn"]
@@ -184,6 +196,7 @@ def exercise_2_processing(df: pd.DataFrame, customers: pd.DataFrame) -> tuple[pd
 
 
 def exercise_3_visualizations(df: pd.DataFrame, customer_summary: pd.DataFrame) -> None:
+    """Koosta Plotly graafikud kategooriate, kuude, VIP ja tellimuse suuruse kohta."""
     print_section("Osa 3: Plotly visualiseerimised")
 
     cat_revenue = (
@@ -253,6 +266,7 @@ def exercise_3_visualizations(df: pd.DataFrame, customer_summary: pd.DataFrame) 
 
 
 def assign_segment(score: int) -> str:
+    """Määra lihtsustatud RFM segment koondskoori põhjal."""
     if score >= 8:
         return "VIP Champions"
     if score >= 6:
@@ -263,6 +277,7 @@ def assign_segment(score: int) -> str:
 
 
 def rfm_analysis(df: pd.DataFrame) -> pd.DataFrame:
+    """Arvuta Recency, Frequency ja Monetary skoorid ning kliendisegmendid."""
     print_section("Süntees: RFM kliendisegmenteerimine")
 
     rfm_source = df.dropna(subset=["customer_id"]).copy()
@@ -337,6 +352,7 @@ def rfm_analysis(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def main() -> None:
+    """Käivita kõik Week 7 harjutuse sammud järjest."""
     df, customers = load_supabase_data()
     print(f"Laadisin Supabase'ist {len(df)} müügirida ja {len(customers)} klienti.")
 
