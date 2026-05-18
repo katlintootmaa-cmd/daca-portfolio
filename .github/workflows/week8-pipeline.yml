@@ -1,0 +1,64 @@
+name: Week 8 Pipeline
+
+on:
+  push:
+    paths:
+      - "week-08/**"
+      - ".github/workflows/week8-pipeline.yml"
+  pull_request:
+    paths:
+      - "week-08/**"
+      - ".github/workflows/week8-pipeline.yml"
+  workflow_dispatch:
+    inputs:
+      analysis_date:
+        description: "Analysis end date in YYYY-MM-DD format"
+        required: false
+        default: "2025-03-01"
+
+jobs:
+  run-week8-pipeline:
+    name: Run Week 8 API pipeline
+    runs-on: ubuntu-latest
+
+    env:
+      ANALYSIS_DATE: ${{ github.event.inputs.analysis_date || '2025-03-01' }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: "pip"
+
+      - name: Install pipeline dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pandas plotly python-dotenv supabase PyYAML
+
+      - name: Compile Week 8 Python files
+        run: |
+          python -m py_compile \
+            week-08/week8_api_pipeline.py \
+            week-08/team/data_fetcher.py \
+            week-08/team/transform.py \
+            week-08/team/visualize_export.py \
+            week-08/team/pipeline.py \
+            week-08/individual/visualize_export.py
+
+      - name: Run team pipeline
+        working-directory: week-08/team
+        run: python pipeline.py --date "$ANALYSIS_DATE"
+
+      - name: Upload pipeline outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: week8-pipeline-output
+          path: |
+            week-08/team/output/
+            week-08/team/logs/
+          if-no-files-found: warn

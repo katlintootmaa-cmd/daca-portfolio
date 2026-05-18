@@ -7,6 +7,7 @@ extract -> transform -> validate -> export. Käivitamiseks kasuta
 
 from __future__ import annotations
 
+import argparse
 import logging
 import time
 from pathlib import Path
@@ -49,14 +50,28 @@ def load_config() -> dict[str, Any]:
     return yaml.safe_load(CONFIG_FILE.read_text(encoding="utf-8"))
 
 
+def apply_cli_date(config: dict[str, Any], analysis_date: str | None) -> dict[str, Any]:
+    """Kasuta --date väärtust nii API filtris kui RFM võrdluskuupäevana."""
+    if not analysis_date:
+        return config
+
+    pd.to_datetime(analysis_date, format="%Y-%m-%d")
+    config.setdefault("date_filter", {})["end_date"] = analysis_date
+    config.setdefault("pipeline", {})["reference_date"] = analysis_date
+    return config
+
+
 def setup_logging() -> None:
     """Seadista logimine nii terminali kui logs/ kausta failina."""
     LOG_DIR.mkdir(parents=True, exist_ok=True)
     log_file = LOG_DIR / f"pipeline_{time.strftime('%Y%m%d')}.log"
+    error_log_file = LOG_DIR / f"pipeline_errors_{time.strftime('%Y%m%d')}.log"
+    error_handler = logging.FileHandler(error_log_file, encoding="utf-8")
+    error_handler.setLevel(logging.ERROR)
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-        handlers=[logging.StreamHandler(), logging.FileHandler(log_file, encoding="utf-8")],
+        handlers=[logging.StreamHandler(), logging.FileHandler(log_file, encoding="utf-8"), error_handler],
         force=True,
     )
 
@@ -157,10 +172,10 @@ def notify(status: str, summary: dict[str, Any]) -> None:
     )
 
 
-def run_pipeline() -> dict[str, Any]:
+def run_pipeline(analysis_date: str | None = None) -> dict[str, Any]:
     """Käivita kogu Week 8 tiimitöö pipeline algusest lõpuni."""
     logger = logging.getLogger(__name__)
-    config = load_config()
+    config = apply_cli_date(load_config(), analysis_date)
     start_time = time.perf_counter()
 
     try:
@@ -174,6 +189,7 @@ def run_pipeline() -> dict[str, Any]:
         notify("SUCCESS", results["kpis"])
         logger.info("Pipeline complete %.2f seconds, files=%s", elapsed, len(paths))
         print(f"Pipeline valmis {elapsed:.2f} sekundiga. Väljundid: {output_dir}")
+        print(f"Analüüsi kuupäev: {config['pipeline'].get('reference_date')}")
         print(results["segment_summary"].to_string(index=False))
         return results
     except Exception:
@@ -182,6 +198,17 @@ def run_pipeline() -> dict[str, Any]:
         raise
 
 
+def parse_args() -> argparse.Namespace:
+    """Loe käsurealt analüüsi kuupäev, nt: python pipeline.py --date 2025-03-01."""
+    parser = argparse.ArgumentParser(description="Week 8 team API pipeline")
+    parser.add_argument(
+        "--date",
+        help="Analüüsi lõppkuupäev formaadis YYYY-MM-DD. Näiteks: --date 2025-03-01",
+    )
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
+    args = parse_args()
     setup_logging()
-    run_pipeline()
+    run_pipeline(analysis_date=args.date)

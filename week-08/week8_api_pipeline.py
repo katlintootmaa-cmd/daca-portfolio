@@ -24,6 +24,7 @@ ROOT = Path(__file__).resolve().parent
 PROJECT_ROOT = ROOT.parent
 OUTPUT_DIR = ROOT / "output"
 LOG_FILE = ROOT / "week8_pipeline.log"
+ERROR_LOG_FILE = ROOT / "week8_pipeline_errors.log"
 
 # Analüüsi lõppkuupäev: hilisemaid müügiridu RFM arvutuses ei kasutata.
 ANALYSIS_END_DATE = "2025-02-28"
@@ -58,6 +59,11 @@ def setup_logging() -> logging.Logger:
     file_handler = logging.FileHandler(LOG_FILE, encoding="utf-8")
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
+
+    error_handler = logging.FileHandler(ERROR_LOG_FILE, encoding="utf-8")
+    error_handler.setLevel(logging.ERROR)
+    error_handler.setFormatter(formatter)
+    logger.addHandler(error_handler)
 
     return logger
 
@@ -242,7 +248,7 @@ def fallback_csv_data() -> tuple[pd.DataFrame, pd.DataFrame] | None:
     return orders, customers
 
 
-def extract(use_sample: bool = False) -> tuple[pd.DataFrame, pd.DataFrame]:
+def extract(use_sample: bool = False, analysis_date: str = ANALYSIS_END_DATE) -> tuple[pd.DataFrame, pd.DataFrame]:
     """EXTRACT: too müügi- ja kliendiandmed API-st või näidisandmetest."""
     logger.info("[EXTRACT] Alustan")
 
@@ -254,7 +260,7 @@ def extract(use_sample: bool = False) -> tuple[pd.DataFrame, pd.DataFrame]:
         fallback = fallback_csv_data()
         return fallback if fallback is not None else sample_data()
 
-    orders = fetch_table(supabase, "sales", date_column="sale_date", end_date=ANALYSIS_END_DATE)
+    orders = fetch_table(supabase, "sales", date_column="sale_date", end_date=analysis_date)
     customers = fetch_table(supabase, "customers")
 
     if orders.empty or customers.empty:
@@ -265,7 +271,11 @@ def extract(use_sample: bool = False) -> tuple[pd.DataFrame, pd.DataFrame]:
     return orders, customers
 
 
-def normalize_orders(orders: pd.DataFrame, customers: pd.DataFrame) -> pd.DataFrame:
+def normalize_orders(
+    orders: pd.DataFrame,
+    customers: pd.DataFrame,
+    analysis_date: str = ANALYSIS_END_DATE,
+) -> pd.DataFrame:
     """Ühtlusta veerud, et pipeline töötaks nii API kui näidisandmetega."""
     df = orders.copy()
     customer_df = customers.copy()
@@ -325,7 +335,7 @@ def normalize_orders(orders: pd.DataFrame, customers: pd.DataFrame) -> pd.DataFr
     df = df[df["total_price"] > 0]
     df["customer_id"] = pd.to_numeric(df["customer_id"], errors="coerce").astype("Int64")
     df = df.dropna(subset=["customer_id"])
-    cutoff = pd.to_datetime(ANALYSIS_END_DATE)
+    cutoff = pd.to_datetime(analysis_date)
     before_cutoff = len(df)
     df = df[df["sale_date"] <= cutoff].copy()
     before_contact_filter = len(df)
@@ -333,7 +343,7 @@ def normalize_orders(orders: pd.DataFrame, customers: pd.DataFrame) -> pd.DataFr
 
     logger.info(
         "[TRANSFORM] Puhastatud müügiridu kuni %s: kuupäevafilter %s -> %s; kontaktifilter %s -> %s",
-        ANALYSIS_END_DATE,
+        analysis_date,
         before_cutoff,
         before_contact_filter,
         before_contact_filter,
@@ -447,14 +457,18 @@ def monthly_report(df: pd.DataFrame) -> pd.DataFrame:
     return monthly
 
 
-def transform(orders: pd.DataFrame, customers: pd.DataFrame) -> dict[str, pd.DataFrame]:
+def transform(
+    orders: pd.DataFrame,
+    customers: pd.DataFrame,
+    analysis_date: str = ANALYSIS_END_DATE,
+) -> dict[str, pd.DataFrame]:
     """TRANSFORM: puhasta andmed ning loo raportid."""
     logger.info("[TRANSFORM] Alustan")
-    clean_orders = normalize_orders(orders, customers)
+    clean_orders = normalize_orders(orders, customers, analysis_date=analysis_date)
 
     reports = pd.DataFrame([city_report(clean_orders, city) for city in sorted(clean_orders["city"].dropna().unique())])
     weekly = pd.DataFrame([weekly_sales_report(clean_orders)])
-    rfm = calculate_rfm(clean_orders)
+    rfm = calculate_rfm(clean_orders, reference_date=analysis_date)
     monthly = monthly_report(clean_orders)
 
     logger.info("[TRANSFORM] RFM segmente: %s", rfm["segment"].nunique() if not rfm.empty else 0)
@@ -558,13 +572,17 @@ def print_summary(results: dict[str, pd.DataFrame]) -> None:
     print(f"Kõige kasumlikum kuu: {best_month['sale_date']}, käive {best_month['revenue']:.2f} EUR")
 
 
-def run_pipeline(use_sample: bool = False) -> dict[str, pd.DataFrame]:
+def run_pipeline(
+    use_sample: bool = False,
+    analysis_date: str = ANALYSIS_END_DATE,
+) -> dict[str, pd.DataFrame]:
     """Käivita kogu ETL pipeline."""
+    pd.to_datetime(analysis_date, format="%Y-%m-%d")
     started_at = datetime.now()
-    logger.info("MARKO IGANÄDALANE RFM PIPELINE")
+    logger.info("MARKO IGANÄDALANE RFM PIPELINE kuni %s", analysis_date)
 
-    orders, customers = extract(use_sample=use_sample)
-    results = transform(orders, customers)
+    orders, customers = extract(use_sample=use_sample, analysis_date=analysis_date)
+    results = transform(orders, customers, analysis_date=analysis_date)
 
     if validate(results):
         load(results)
@@ -582,13 +600,22 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Kasuta Supabase API asemel juhendi näidisandmeid.",
     )
+    parser.add_argument(
+        "--date",
+        default=ANALYSIS_END_DATE,
+        help="Analüüsi lõppkuupäev formaadis YYYY-MM-DD. Näiteks: --date 2025-03-01",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    results = run_pipeline(use_sample=args.sample)
-    print_summary(results)
+    try:
+        results = run_pipeline(use_sample=args.sample, analysis_date=args.date)
+        print_summary(results)
+    except Exception:
+        logger.exception("Pipeline ebaõnnestus")
+        raise
 
 
 if __name__ == "__main__":
