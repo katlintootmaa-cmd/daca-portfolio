@@ -50,7 +50,15 @@ jobs:
 
       - name: Run team pipeline
         working-directory: week-08/team
-        run: python pipeline.py --date "$ANALYSIS_DATE"
+        run: |
+          mkdir -p output logs
+          python pipeline.py --date "$ANALYSIS_DATE"
+
+      - name: Show generated files
+        if: always()
+        run: |
+          echo "Generated Week 8 files:"
+          find "${{ github.workspace }}/week-08/team" -maxdepth 2 -type f | sort
 
       - name: Upload pipeline outputs
         if: always()
@@ -58,6 +66,6 @@ jobs:
         with:
           name: week8-pipeline-output
           path: |
-            week-08/team/output/
-            week-08/team/logs/
+            ${{ github.workspace }}/week-08/team/output/
+            ${{ github.workspace }}/week-08/team/logs/
           if-no-files-found: warn
