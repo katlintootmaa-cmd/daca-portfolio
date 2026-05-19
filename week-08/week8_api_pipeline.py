@@ -427,14 +427,14 @@ def load(results: dict[str, pd.DataFrame]) -> None:
         labels={"recency_days": "Päevi viimasest ostust", "monetary": "Kogukulutus (EUR)"},
     ).write_html(rfm_chart_path)
 
-    px.bar(
+    px.line(
         results["monthly"],
         x="sale_date",
         y="revenue",
         title="UrbanStyle kuukäive",
         labels={"sale_date": "Kuu", "revenue": "Käive (EUR)"},
-        text="revenue",
-    ).write_html(monthly_chart_path)
+        markers=True,
+    ).update_traces(line={"width": 3}, marker={"size": 8}).write_html(monthly_chart_path)
 
     logger.info("[LOAD] CSV ja HTML väljundid salvestatud kausta %s", OUTPUT_DIR)
 
