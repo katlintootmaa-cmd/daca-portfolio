@@ -1,11 +1,14 @@
 """Individuaalne Roll C lahendus.
 
-Fail loob näidisandmete põhjal nädalase tulugraafiku, KPI tabeli ja
+Fail loob Supabase andmete põhjal nädalase tulugraafiku, KPI tabeli ja
 RFM segmentide jaotuse ning ekspordib need CSV/HTML failidena.
 """
 
 from __future__ import annotations
 
+import argparse
+import importlib.util
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -16,8 +19,10 @@ import plotly.graph_objects as go
 
 
 ROOT = Path(__file__).resolve().parent
+WEEK8_DIR = ROOT.parent
 OUTPUT_DIR = ROOT / "output"
 SEGMENT_ORDER = ["VIP Champions", "Loyal", "Potential", "At Risk", "Lost"]
+DEFAULT_ANALYSIS_DATE = "2025-02-28"
 
 
 def create_weekly_chart(df_weekly: pd.DataFrame) -> go.Figure:
@@ -105,12 +110,18 @@ def normalize_segment_summary(df_segments: pd.DataFrame) -> pd.DataFrame:
     segments = df_segments.copy()
     if "Segment" not in segments.columns and "segment" in segments.columns:
         segments = segments.rename(columns={"segment": "Segment"})
+    if "monetary_value" not in segments.columns and "monetary" in segments.columns:
+        segments = segments.rename(columns={"monetary": "monetary_value"})
     if "customers" not in segments.columns and "customer_id" in segments.columns:
         segments = (
             segments.groupby("Segment")
             .agg(customers=("customer_id", "count"), total_revenue=("monetary_value", "sum"))
             .reset_index()
         )
+    all_segments = pd.DataFrame({"Segment": SEGMENT_ORDER})
+    segments = all_segments.merge(segments, on="Segment", how="left")
+    numeric_columns = segments.select_dtypes(include="number").columns
+    segments[numeric_columns] = segments[numeric_columns].fillna(0)
     return segments
 
 
@@ -163,52 +174,74 @@ def export_results(
     return paths
 
 
-def sample_weekly_data() -> pd.DataFrame:
-    """Small local dataset for testing Role C without the API modules."""
-    weekly = pd.DataFrame(
-        {
-            "week": pd.to_datetime(["2025-01-06", "2025-01-13", "2025-01-20", "2025-01-27"]),
-            "revenue": [1840.50, 2135.20, 1988.00, 2460.75],
-            "orders": [18, 22, 20, 25],
-            "unique_customers": [14, 17, 16, 20],
-        }
+def load_week8_pipeline_module() -> Any:
+    """Lae peamine Week 8 pipeline moodulina, kuigi kaustanimes on sidekriips."""
+    module_path = WEEK8_DIR / "week8_api_pipeline.py"
+    spec = importlib.util.spec_from_file_location("week8_api_pipeline", module_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Ei saa laadida pipeline moodulit: {module_path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def build_results_from_supabase(analysis_date: str | None = DEFAULT_ANALYSIS_DATE) -> dict[str, Any]:
+    """Lae Supabase andmed ja teisenda need Roll C ekspordi sisendkujule."""
+    pipeline = load_week8_pipeline_module()
+    supabase = pipeline.get_supabase_client()
+    if supabase is None:
+        raise RuntimeError("Supabase seadistus puudub. Lisa SUPABASE_URL ja SUPABASE_ANON_KEY.")
+
+    sales = pipeline.fetch_table(supabase, "sales", date_column="sale_date", end_date=analysis_date)
+    customers = pipeline.fetch_table(supabase, "customers")
+    if sales.empty or customers.empty:
+        raise RuntimeError("Supabase API ei tagastanud sales/customers andmeid.")
+
+    clean_orders = pipeline.normalize_orders(sales, customers, analysis_date=analysis_date)
+    rfm = pipeline.calculate_rfm(clean_orders, reference_date=analysis_date)
+
+    weekly = (
+        clean_orders.resample("W-MON", on="sale_date", label="left", closed="left")
+        .agg(
+            revenue=("total_price", "sum"),
+            orders=("total_price", "count"),
+            unique_customers=("customer_id", "nunique"),
+        )
+        .reset_index()
+        .rename(columns={"sale_date": "week"})
     )
-    weekly["avg_order_value"] = (weekly["revenue"] / weekly["orders"]).round(2)
-    return weekly
+    weekly["avg_order_value"] = weekly["revenue"] / weekly["orders"]
+    weekly[["revenue", "avg_order_value"]] = weekly[["revenue", "avg_order_value"]].round(2)
 
-
-def sample_kpis(df_weekly: pd.DataFrame) -> dict[str, Any]:
-    """Arvuta näidisnädalate põhjal KPI väärtused."""
-    orders = int(df_weekly["orders"].sum())
-    revenue = float(df_weekly["revenue"].sum())
-    return {
-        "total_revenue": round(revenue, 2),
-        "orders": orders,
-        "unique_customers": int(df_weekly["unique_customers"].max()),
-        "avg_order_value": round(revenue / orders, 2) if orders else 0,
+    total_revenue = float(clean_orders["total_price"].sum())
+    orders = len(clean_orders)
+    kpis = {
+        "total_revenue": round(total_revenue, 2),
+        "orders": int(orders),
+        "unique_customers": int(clean_orders["customer_id"].nunique()),
+        "avg_order_value": round(total_revenue / orders, 2) if orders else 0.0,
     }
 
-
-def sample_segments() -> pd.DataFrame:
-    """Loo väike näidis RFM segmentide tabel graafiku testimiseks."""
-    return pd.DataFrame(
-        {
-            "Segment": ["VIP Champions", "Loyal", "Potential", "At Risk"],
-            "customers": [42, 88, 124, 36],
-            "total_revenue": [41500, 52200, 38400, 9100],
-        }
-    )
+    segment_summary = normalize_segment_summary(rfm)
+    return {"weekly": weekly, "kpis": kpis, "segment_summary": segment_summary, "rfm": rfm}
 
 
 def main() -> None:
     """Käivita Roll C iseseisev test ja kirjuta väljundfailide asukohad."""
-    weekly = sample_weekly_data()
-    kpis = sample_kpis(weekly)
-    segments = sample_segments()
-    results = {"weekly": weekly, "kpis": kpis, "segment_summary": segments}
+    parser = argparse.ArgumentParser(description="Week 8 individual Roll C export Supabase andmetest")
+    parser.add_argument(
+        "--date",
+        default=DEFAULT_ANALYSIS_DATE,
+        help="Valikuline analüüsi lõppkuupäev formaadis YYYY-MM-DD.",
+    )
+    args = parser.parse_args()
+
+    results = build_results_from_supabase(analysis_date=args.date)
     paths = export_results(results)
 
     print("Roll C väljundfailid loodud:")
+    print(f"RFM segmentide arv: {results['segment_summary']['Segment'].nunique()}")
     for name, path in paths.items():
         print(f"- {name}: {path}")
 

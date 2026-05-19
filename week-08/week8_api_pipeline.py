@@ -127,102 +127,6 @@ def fetch_table(
         return pd.DataFrame()
 
 
-def sample_data() -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Loo väike näidisandmestik viimase varuvariandina."""
-    orders = pd.DataFrame(
-        {
-            "sale_id": range(1, 21),
-            "customer_id": [
-                1001,
-                1002,
-                1003,
-                1001,
-                1002,
-                1004,
-                1003,
-                1001,
-                1005,
-                1004,
-                1002,
-                1003,
-                1005,
-                1001,
-                1006,
-                1004,
-                1002,
-                1007,
-                1003,
-                1005,
-            ],
-            "sale_date": pd.date_range("2024-01-15", periods=20, freq="10D"),
-            "total_price": [
-                89.99,
-                45.50,
-                120.00,
-                67.30,
-                55.00,
-                210.00,
-                33.50,
-                145.00,
-                78.00,
-                92.00,
-                160.00,
-                44.00,
-                88.50,
-                230.00,
-                37.00,
-                175.00,
-                110.00,
-                65.00,
-                95.00,
-                125.00,
-            ],
-            "city": [
-                "Tallinn",
-                "Tartu",
-                "Tallinn",
-                "Tallinn",
-                "Tartu",
-                "Parnu",
-                "Tallinn",
-                "Tallinn",
-                "Tartu",
-                "Parnu",
-                "Tartu",
-                "Tallinn",
-                "Tartu",
-                "Tallinn",
-                "Parnu",
-                "Parnu",
-                "Tartu",
-                "Tallinn",
-                "Tallinn",
-                "Tartu",
-            ],
-        }
-    )
-    customers = pd.DataFrame(
-        {
-            "customer_id": [1001, 1002, 1003, 1004, 1005, 1006, 1007],
-            "first_name": ["Juri", "Kati", "Maris", "Peeter", "Liina", "Andres", "Tiina"],
-            "last_name": ["Tamm", "Kask", "Sepp", "Rebane", "Ots", "Puu", "Kuusk"],
-            "email": [
-                "juri.tamm@example.com",
-                "kati.kask@example.com",
-                "",
-                "peeter.rebane@example.com",
-                "",
-                "",
-                "tiina.kuusk@example.com",
-            ],
-            "phone": ["+3725000001", "", "+3725000003", "+3725000004", "+3725000005", "", ""],
-            "city": ["Tallinn", "Tartu", "Tallinn", "Parnu", "Tartu", "Parnu", "Tallinn"],
-        }
-    )
-    logger.info("Näidisandmed loodud: %s tellimust, %s klienti", len(orders), len(customers))
-    return orders, customers
-
-
 def read_first_existing_csv(paths: list[Path], label: str) -> pd.DataFrame:
     """Loe esimene olemasolev fallback CSV fail."""
     for path in paths:
@@ -249,17 +153,16 @@ def fallback_csv_data() -> tuple[pd.DataFrame, pd.DataFrame] | None:
     return orders, customers
 
 
-def extract(use_sample: bool = False, analysis_date: str | None = ANALYSIS_END_DATE) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """EXTRACT: too müügi- ja kliendiandmed API-st või näidisandmetest."""
+def extract(analysis_date: str | None = ANALYSIS_END_DATE) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """EXTRACT: too müügi- ja kliendiandmed API-st või CSV fallbackist."""
     logger.info("[EXTRACT] Alustan")
-
-    if use_sample:
-        return sample_data()
 
     supabase = get_supabase_client()
     if supabase is None:
         fallback = fallback_csv_data()
-        return fallback if fallback is not None else sample_data()
+        if fallback is None:
+            raise RuntimeError("API ei ole seadistatud ja fallback CSV faile ei leitud.")
+        return fallback
 
     orders = fetch_table(supabase, "sales", date_column="sale_date", end_date=analysis_date)
     customers = fetch_table(supabase, "customers")
@@ -267,7 +170,9 @@ def extract(use_sample: bool = False, analysis_date: str | None = ANALYSIS_END_D
     if orders.empty or customers.empty:
         logger.warning("API andmed olid puudulikud. Proovin fallback CSV faile.")
         fallback = fallback_csv_data()
-        return fallback if fallback is not None else sample_data()
+        if fallback is None:
+            raise RuntimeError("API andmed olid puudulikud ja fallback CSV faile ei leitud.")
+        return fallback
 
     return orders, customers
 
@@ -277,7 +182,7 @@ def normalize_orders(
     customers: pd.DataFrame,
     analysis_date: str | None = ANALYSIS_END_DATE,
 ) -> pd.DataFrame:
-    """Ühtlusta veerud, et pipeline töötaks nii API kui näidisandmetega."""
+    """Ühtlusta veerud, et pipeline töötaks nii API kui CSV andmetega."""
     df = orders.copy()
     customer_df = customers.copy()
 
@@ -382,15 +287,25 @@ def weekly_sales_report(df: pd.DataFrame, report_date: str | None = None) -> dic
     }
 
 
+def score_column(series: pd.Series, labels: list[int]) -> pd.Series:
+    """Jaga väärtused kuni viide kvantiili ja teisenda need R/F/M skooriks."""
+    q = min(5, series.nunique())
+    if q < 2:
+        return pd.Series([max(labels)] * len(series), index=series.index, dtype="int64")
+    return pd.qcut(series.rank(method="first"), q=q, labels=labels[:q]).astype(int)
+
+
 def assign_segment(score: int) -> str:
     """Määra lihtsustatud RFM segment koondskoori põhjal."""
-    if score >= 8:
+    if score >= 13:
         return "VIP Champions"
-    if score >= 6:
-        return "Loyal Customers"
+    if score >= 10:
+        return "Loyal"
+    if score >= 7:
+        return "Potential"
     if score >= 4:
-        return "Potential Loyalists"
-    return "At Risk"
+        return "At Risk"
+    return "Lost"
 
 
 def calculate_rfm(df: pd.DataFrame, reference_date: str | None = ANALYSIS_END_DATE) -> pd.DataFrame:
@@ -427,22 +342,9 @@ def calculate_rfm(df: pd.DataFrame, reference_date: str | None = ANALYSIS_END_DA
         .merge(contacts, on="customer_id", how="left")
     )
 
-    unique_customers = len(rfm)
-    q = min(3, unique_customers)
-    if q < 2:
-        rfm["R_score"] = 3
-        rfm["F_score"] = 3
-        rfm["M_score"] = 3
-    else:
-        rfm["R_score"] = pd.qcut(
-            rfm["recency_days"].rank(method="first"), q=q, labels=range(q, 0, -1)
-        ).astype(int)
-        rfm["F_score"] = pd.qcut(
-            rfm["frequency"].rank(method="first"), q=q, labels=range(1, q + 1)
-        ).astype(int)
-        rfm["M_score"] = pd.qcut(
-            rfm["monetary"].rank(method="first"), q=q, labels=range(1, q + 1)
-        ).astype(int)
+    rfm["R_score"] = score_column(rfm["recency_days"], [5, 4, 3, 2, 1])
+    rfm["F_score"] = score_column(rfm["frequency"], [1, 2, 3, 4, 5])
+    rfm["M_score"] = score_column(rfm["monetary"], [1, 2, 3, 4, 5])
 
     # Koondskoor määrab, millisesse turundussegmenti klient kuulub.
     rfm["RFM_score"] = rfm["R_score"] + rfm["F_score"] + rfm["M_score"]
@@ -578,7 +480,6 @@ def print_summary(results: dict[str, pd.DataFrame]) -> None:
 
 
 def run_pipeline(
-    use_sample: bool = False,
     analysis_date: str | None = ANALYSIS_END_DATE,
 ) -> dict[str, pd.DataFrame]:
     """Käivita kogu ETL pipeline."""
@@ -590,7 +491,7 @@ def run_pipeline(
     else:
         logger.info("MARKO IGANÄDALANE RFM PIPELINE kuni %s", analysis_date)
 
-    orders, customers = extract(use_sample=use_sample, analysis_date=analysis_date)
+    orders, customers = extract(analysis_date=analysis_date)
     results = transform(orders, customers, analysis_date=analysis_date)
 
     if validate(results):
@@ -605,11 +506,6 @@ def run_pipeline(
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Week 8 API ja RFM ETL pipeline")
     parser.add_argument(
-        "--sample",
-        action="store_true",
-        help="Kasuta Supabase API asemel juhendi näidisandmeid.",
-    )
-    parser.add_argument(
         "--date",
         default=ANALYSIS_END_DATE,
         help=(
@@ -623,7 +519,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     try:
-        results = run_pipeline(use_sample=args.sample, analysis_date=args.date)
+        results = run_pipeline(analysis_date=args.date)
         print_summary(results)
     except Exception:
         logger.exception("Pipeline ebaõnnestus")
