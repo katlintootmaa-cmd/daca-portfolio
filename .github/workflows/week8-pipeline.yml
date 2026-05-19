@@ -4,11 +4,17 @@ on:
   push:
     paths:
       - "week-08/**"
+      - "SQL/**"
+      - "requirements.txt"
       - ".github/workflows/week8-pipeline.yml"
   pull_request:
     paths:
       - "week-08/**"
+      - "SQL/**"
+      - "requirements.txt"
       - ".github/workflows/week8-pipeline.yml"
+  schedule:
+    - cron: "0 6 * * 1"
   workflow_dispatch:
     inputs:
       analysis_date:
@@ -23,6 +29,9 @@ jobs:
 
     env:
       ANALYSIS_DATE: ${{ github.event.inputs.analysis_date || '2025-02-28' }}
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
     steps:
       - name: Check out repository
@@ -38,6 +47,14 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install pandas plotly python-dotenv supabase PyYAML
 
+      - name: Show data source mode
+        run: |
+          if [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_ANON_KEY" ]; then
+            echo "Supabase secrets are configured. The pipeline will try the API first."
+          else
+            echo "Supabase secrets are missing. The pipeline will use its fallback data path."
+          fi
+
       - name: Compile Week 8 Python files
         run: |
           python -m py_compile \
@@ -47,6 +64,16 @@ jobs:
             week-08/team/visualize_export.py \
             week-08/team/pipeline.py \
             week-08/individual/visualize_export.py
+
+      - name: Run individual Week 8 pipeline
+        run: |
+          mkdir -p week-08/output
+          python week-08/week8_api_pipeline.py --date "$ANALYSIS_DATE"
+
+      - name: Run individual Roll C export
+        run: |
+          mkdir -p week-08/individual/output
+          python week-08/individual/visualize_export.py
 
       - name: Run team pipeline
         working-directory: week-08/team
@@ -66,6 +93,10 @@ jobs:
         with:
           name: week8-pipeline-output
           path: |
+            ${{ github.workspace }}/week-08/output/
+            ${{ github.workspace }}/week-08/week8_pipeline.log
+            ${{ github.workspace }}/week-08/week8_pipeline_errors.log
+            ${{ github.workspace }}/week-08/individual/output/
             ${{ github.workspace }}/week-08/team/output/
             ${{ github.workspace }}/week-08/team/logs/
           if-no-files-found: warn

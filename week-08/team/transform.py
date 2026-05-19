@@ -122,9 +122,9 @@ def assign_segment(score: int) -> str:
     return "Lost"
 
 
-def calculate_rfm(df: pd.DataFrame, reference_date: str = "2025-02-28") -> pd.DataFrame:
+def calculate_rfm(df: pd.DataFrame, reference_date: str | None = None) -> pd.DataFrame:
     """Koonda andmed kliendi tasemele ning arvuta RFM skoorid ja segment."""
-    today = pd.to_datetime(reference_date)
+    today = pd.to_datetime(reference_date) if reference_date else df["sale_date"].max() + pd.Timedelta(days=1)
     rfm = (
         df.groupby("customer_id")
         .agg(

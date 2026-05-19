@@ -26,15 +26,16 @@ OUTPUT_DIR = ROOT / "output"
 LOG_FILE = ROOT / "week8_pipeline.log"
 ERROR_LOG_FILE = ROOT / "week8_pipeline_errors.log"
 
-# Analüüsi lõppkuupäev: hilisemaid müügiridu RFM arvutuses ei kasutata.
-ANALYSIS_END_DATE = "2025-02-28"
+# Vaikimisi kasutatakse Week 7 RFM tööga sama analüüsi lõppkuupäeva.
+# Kui tahad analüüsi teise kuupäevani piirata, anna CLI-s --date YYYY-MM-DD.
+ANALYSIS_END_DATE: str | None = "2025-02-28"
 
 # Kohalikud CSV failid, mida kasutatakse siis, kui API ei ole saadaval.
 FALLBACK_SALES_PATHS = [
     PROJECT_ROOT / "datasets" / "clean" / "sales.csv",
     ROOT / "datasets" / "clean" / "sales.csv",
-    PROJECT_ROOT / "SQL" / "sales_rows.csv",
     PROJECT_ROOT / "SQL" / "sales_supabase_import.csv",
+    PROJECT_ROOT / "SQL" / "sales_rows.csv",
 ]
 FALLBACK_CUSTOMER_PATHS = [
     PROJECT_ROOT / "datasets" / "clean" / "customers.csv",
@@ -248,7 +249,7 @@ def fallback_csv_data() -> tuple[pd.DataFrame, pd.DataFrame] | None:
     return orders, customers
 
 
-def extract(use_sample: bool = False, analysis_date: str = ANALYSIS_END_DATE) -> tuple[pd.DataFrame, pd.DataFrame]:
+def extract(use_sample: bool = False, analysis_date: str | None = ANALYSIS_END_DATE) -> tuple[pd.DataFrame, pd.DataFrame]:
     """EXTRACT: too müügi- ja kliendiandmed API-st või näidisandmetest."""
     logger.info("[EXTRACT] Alustan")
 
@@ -274,7 +275,7 @@ def extract(use_sample: bool = False, analysis_date: str = ANALYSIS_END_DATE) ->
 def normalize_orders(
     orders: pd.DataFrame,
     customers: pd.DataFrame,
-    analysis_date: str = ANALYSIS_END_DATE,
+    analysis_date: str | None = ANALYSIS_END_DATE,
 ) -> pd.DataFrame:
     """Ühtlusta veerud, et pipeline töötaks nii API kui näidisandmetega."""
     df = orders.copy()
@@ -335,15 +336,17 @@ def normalize_orders(
     df = df[df["total_price"] > 0]
     df["customer_id"] = pd.to_numeric(df["customer_id"], errors="coerce").astype("Int64")
     df = df.dropna(subset=["customer_id"])
-    cutoff = pd.to_datetime(analysis_date)
     before_cutoff = len(df)
-    df = df[df["sale_date"] <= cutoff].copy()
+    if analysis_date is not None:
+        cutoff = pd.to_datetime(analysis_date)
+        df = df[df["sale_date"] <= cutoff].copy()
     before_contact_filter = len(df)
     df = df[df["has_contact"]].copy()
+    period_label = f"andmebaasi algusest kuni {analysis_date}" if analysis_date else "kogu saadaolev periood"
 
     logger.info(
-        "[TRANSFORM] Periood andmebaasi algusest kuni %s: kuupäevafilter %s -> %s; kontaktifilter %s -> %s; tegelik vahemik %s kuni %s",
-        analysis_date,
+        "[TRANSFORM] Periood %s: kuupäevafilter %s -> %s; kontaktifilter %s -> %s; tegelik vahemik %s kuni %s",
+        period_label,
         before_cutoff,
         before_contact_filter,
         before_contact_filter,
@@ -462,7 +465,7 @@ def monthly_report(df: pd.DataFrame) -> pd.DataFrame:
 def transform(
     orders: pd.DataFrame,
     customers: pd.DataFrame,
-    analysis_date: str = ANALYSIS_END_DATE,
+    analysis_date: str | None = ANALYSIS_END_DATE,
 ) -> dict[str, pd.DataFrame]:
     """TRANSFORM: puhasta andmed ning loo raportid."""
     logger.info("[TRANSFORM] Alustan")
@@ -576,12 +579,16 @@ def print_summary(results: dict[str, pd.DataFrame]) -> None:
 
 def run_pipeline(
     use_sample: bool = False,
-    analysis_date: str = ANALYSIS_END_DATE,
+    analysis_date: str | None = ANALYSIS_END_DATE,
 ) -> dict[str, pd.DataFrame]:
     """Käivita kogu ETL pipeline."""
-    pd.to_datetime(analysis_date, format="%Y-%m-%d")
+    if analysis_date is not None:
+        pd.to_datetime(analysis_date, format="%Y-%m-%d")
     started_at = datetime.now()
-    logger.info("MARKO IGANÄDALANE RFM PIPELINE kuni %s", analysis_date)
+    if analysis_date is None:
+        logger.info("MARKO IGANÄDALANE RFM PIPELINE kogu saadaoleva perioodi kohta")
+    else:
+        logger.info("MARKO IGANÄDALANE RFM PIPELINE kuni %s", analysis_date)
 
     orders, customers = extract(use_sample=use_sample, analysis_date=analysis_date)
     results = transform(orders, customers, analysis_date=analysis_date)
@@ -605,7 +612,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--date",
         default=ANALYSIS_END_DATE,
-        help="Analüüsi lõppkuupäev formaadis YYYY-MM-DD. Näiteks: --date 2025-03-01",
+        help=(
+            "Valikuline analüüsi lõppkuupäev formaadis YYYY-MM-DD. "
+            "Kui puudub, kasutatakse kõiki müügiridu."
+        ),
     )
     return parser.parse_args()
 

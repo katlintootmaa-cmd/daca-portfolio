@@ -17,6 +17,7 @@ import plotly.graph_objects as go
 
 ROOT = Path(__file__).resolve().parent
 OUTPUT_DIR = ROOT / "output"
+SEGMENT_ORDER = ["VIP Champions", "Loyal", "Potential", "At Risk", "Lost"]
 
 
 def create_weekly_chart(df_weekly: pd.DataFrame) -> go.Figure:
@@ -78,6 +79,7 @@ def create_kpi_summary(kpis: dict[str, Any]) -> go.Figure:
 
 def create_segment_chart(df_segments: pd.DataFrame) -> go.Figure:
     """Create an optional RFM segment distribution chart."""
+    df_segments = normalize_segment_summary(df_segments)
     required_columns = {"Segment", "customers"}
     missing = required_columns - set(df_segments.columns)
     if missing:
@@ -91,19 +93,51 @@ def create_segment_chart(df_segments: pd.DataFrame) -> go.Figure:
         color="Segment",
         title="RFM segmentide jaotus",
         labels={"Segment": "Segment", "customers": "Klientide arv"},
+        category_orders={"Segment": SEGMENT_ORDER},
     )
     fig.update_layout(showlegend=False)
     fig.update_traces(textposition="outside")
     return fig
 
 
+def normalize_segment_summary(df_segments: pd.DataFrame) -> pd.DataFrame:
+    """Accept team/individual segment summary variants and return Roll C columns."""
+    segments = df_segments.copy()
+    if "Segment" not in segments.columns and "segment" in segments.columns:
+        segments = segments.rename(columns={"segment": "Segment"})
+    if "customers" not in segments.columns and "customer_id" in segments.columns:
+        segments = (
+            segments.groupby("Segment")
+            .agg(customers=("customer_id", "count"), total_revenue=("monetary_value", "sum"))
+            .reset_index()
+        )
+    return segments
+
+
+def unpack_pipeline_results(results: dict[str, Any]) -> tuple[pd.DataFrame, dict[str, Any], pd.DataFrame | None]:
+    """Read weekly, KPI and segment data from the team pipeline result dictionary."""
+    if "weekly" not in results or "kpis" not in results:
+        raise ValueError("Pipeline results must include 'weekly' and 'kpis'.")
+
+    segments = results.get("segment_summary")
+    if segments is None and "rfm" in results:
+        segments = normalize_segment_summary(results["rfm"])
+
+    return results["weekly"], results["kpis"], segments
+
+
 def export_results(
-    df_weekly: pd.DataFrame,
-    kpis: dict[str, Any],
+    df_weekly: pd.DataFrame | dict[str, Any],
+    kpis: dict[str, Any] | None = None,
     output_dir: str | Path = OUTPUT_DIR,
     df_segments: pd.DataFrame | None = None,
 ) -> dict[str, Path]:
     """Save CSV and HTML outputs with timestamped file names."""
+    if isinstance(df_weekly, dict):
+        df_weekly, kpis, df_segments = unpack_pipeline_results(df_weekly)
+    if kpis is None:
+        raise ValueError("KPI values are required unless pipeline results dict is provided.")
+
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -171,7 +205,8 @@ def main() -> None:
     weekly = sample_weekly_data()
     kpis = sample_kpis(weekly)
     segments = sample_segments()
-    paths = export_results(weekly, kpis, df_segments=segments)
+    results = {"weekly": weekly, "kpis": kpis, "segment_summary": segments}
+    paths = export_results(results)
 
     print("Roll C väljundfailid loodud:")
     for name, path in paths.items():

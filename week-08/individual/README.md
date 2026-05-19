@@ -13,7 +13,8 @@ Minu alaülesanne oli **Visualization + Saving**. Roll C eesmärk oli teha töö
 - `create_weekly_chart(df_weekly)` - loob nädalase tulu joondiagrammi.
 - `create_kpi_summary(kpis)` - loob KPI kokkuvõtte tabelina.
 - `create_segment_chart(df_segments)` - lisab RFM segmentide jaotuse graafiku.
-- `export_results(df_weekly, kpis, output_dir, df_segments)` - salvestab CSV ja HTML failid ajatempliga.
+- `export_results(results, output_dir)` - salvestab tiimi pipeline'i tulemuste põhjal CSV ja HTML failid ajatempliga.
+- `export_results(df_weekly, kpis, output_dir, df_segments)` - töötab ka vana iseseisva Roll C sisendkujuga.
 
 ## Käivitamine
 
@@ -26,6 +27,8 @@ Käivitamisel kasutab fail väikest näidisandmestikku ja loob väljundid kausta
 ```text
 week-08/individual/output/
 ```
+
+Moodul sobib ka Week 8 tiimi pipeline'i tulemuste ekspordiks, sest `export_results()` oskab vastu võtta sama `results` sõnastikku, kus on `weekly`, `kpis` ja `segment_summary`.
 
 ## Väljundid
 

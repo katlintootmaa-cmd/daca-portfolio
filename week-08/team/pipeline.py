@@ -123,15 +123,17 @@ def transform_data(sales: Any, customers: Any, products: Any, config: dict[str, 
     logger.info("[TRANSFORM] start")
     merged = merge_datasets(sales, customers, products)
     clean = clean_data(merged)
-    reference_date = config["pipeline"].get("reference_date", "2025-02-28")
-    cutoff = pd.to_datetime(reference_date)
     before_cutoff = len(clean)
-    clean = clean[clean["sale_date"] <= cutoff].copy()
+    reference_date = config["pipeline"].get("reference_date")
+    if reference_date:
+        cutoff = pd.to_datetime(reference_date)
+        clean = clean[clean["sale_date"] <= cutoff].copy()
     period_start = clean["sale_date"].min().date() if not clean.empty else "puudub"
     period_end = clean["sale_date"].max().date() if not clean.empty else "puudub"
+    period_label = f"andmebaasi algusest kuni {reference_date}" if reference_date else "kogu saadaolev periood"
     logger.info(
-        "[TRANSFORM] Periood andmebaasi algusest kuni %s: %s -> %s rida; tegelik vahemik %s kuni %s",
-        reference_date,
+        "[TRANSFORM] Periood %s: %s -> %s rida; tegelik vahemik %s kuni %s",
+        period_label,
         before_cutoff,
         len(clean),
         period_start,
@@ -198,7 +200,9 @@ def run_pipeline(analysis_date: str | None = None) -> dict[str, Any]:
         notify("SUCCESS", results["kpis"])
         logger.info("Pipeline complete %.2f seconds, files=%s", elapsed, len(paths))
         print(f"Pipeline valmis {elapsed:.2f} sekundiga. Väljundid: {output_dir}")
-        print(f"Analüüsi periood: andmebaasi algusest kuni {config['pipeline'].get('reference_date')}")
+        reference_date = config["pipeline"].get("reference_date")
+        period_label = f"andmebaasi algusest kuni {reference_date}" if reference_date else "kogu saadaolev periood"
+        print(f"Analüüsi periood: {period_label}")
         print(results["segment_summary"].to_string(index=False))
         return results
     except Exception:
@@ -212,7 +216,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Week 8 team API pipeline")
     parser.add_argument(
         "--date",
-        help="Analüüsi lõppkuupäev formaadis YYYY-MM-DD. Näiteks: --date 2025-03-01",
+        help="Valikuline analüüsi lõppkuupäev formaadis YYYY-MM-DD. Kui puudub, kasutatakse kõiki müügiridu.",
     )
     return parser.parse_args()
 
