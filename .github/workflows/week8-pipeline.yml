@@ -58,22 +58,12 @@ jobs:
       - name: Compile Week 8 Python files
         run: |
           python -m py_compile \
-            week-08/week8_api_pipeline.py \
+            week-08/combined_visuals.py \
             week-08/team/data_fetcher.py \
+            week-08/team/notifications.py \
             week-08/team/transform.py \
             week-08/team/visualize_export.py \
-            week-08/team/pipeline.py \
-            week-08/individual/visualize_export.py
-
-      - name: Run individual Week 8 pipeline
-        run: |
-          mkdir -p week-08/output
-          python week-08/week8_api_pipeline.py --date "$ANALYSIS_DATE"
-
-      - name: Run individual Roll C export
-        run: |
-          mkdir -p week-08/individual/output
-          python week-08/individual/visualize_export.py
+            week-08/team/pipeline.py
 
       - name: Run team pipeline
         working-directory: week-08/team
@@ -81,10 +71,15 @@ jobs:
           mkdir -p output logs
           python pipeline.py --date "$ANALYSIS_DATE"
 
+      - name: Build combined Week 8 dashboard
+        run: |
+          python week-08/combined_visuals.py
+
       - name: Show generated files
         if: always()
         run: |
           echo "Generated Week 8 files:"
+          find "${{ github.workspace }}/week-08" -maxdepth 2 -type f | sort
           find "${{ github.workspace }}/week-08/team" -maxdepth 2 -type f | sort
 
       - name: Upload pipeline outputs
@@ -93,10 +88,7 @@ jobs:
         with:
           name: week8-pipeline-output
           path: |
-            ${{ github.workspace }}/week-08/output/
-            ${{ github.workspace }}/week-08/week8_pipeline.log
-            ${{ github.workspace }}/week-08/week8_pipeline_errors.log
-            ${{ github.workspace }}/week-08/individual/output/
+            ${{ github.workspace }}/week-08/combined_visuals.html
             ${{ github.workspace }}/week-08/team/output/
             ${{ github.workspace }}/week-08/team/logs/
           if-no-files-found: warn

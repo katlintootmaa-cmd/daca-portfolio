@@ -12,8 +12,9 @@ import plotly.graph_objects as go
 
 
 ROOT = Path(__file__).resolve().parent
-TEAM_OUTPUT = ROOT / "team" / "output"
-INDIVIDUAL_OUTPUT = ROOT / "individual" / "output"
+WEEK_ROOT = ROOT.parent
+TEAM_OUTPUT = WEEK_ROOT / "team" / "output"
+INDIVIDUAL_OUTPUT = ROOT / "output"
 PIPELINE_OUTPUT = INDIVIDUAL_OUTPUT
 COMBINED_OUTPUT = ROOT / "combined_visuals.html"
 SEGMENT_ORDER = ["VIP Champions", "Loyal", "Potential", "At Risk", "Lost"]
