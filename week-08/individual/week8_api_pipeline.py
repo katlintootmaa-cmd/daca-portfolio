@@ -1,8 +1,11 @@
-"""Week 8 API pipeline.
+"""Week 8 API pipeline demo.
 
 See skript laeb UrbanStyle müügi- ja kliendiandmed Supabase API-st,
 kasutab vajadusel CSV fallbacki, puhastab andmed, arvutab KPI-d ja RFM
 segmendid ning salvestab raportid CSV/HTML failidena.
+
+Märkus: see fail on individuaalne demo-/arhiiviversioon.
+Põhiline hooldatav Week 8 pipeline asub failis week-08/team/pipeline.py.
 """
 
 from __future__ import annotations
@@ -21,10 +24,12 @@ from supabase import create_client
 
 
 ROOT = Path(__file__).resolve().parent
-PROJECT_ROOT = ROOT.parent
+WEEK_ROOT = ROOT.parent
+PROJECT_ROOT = WEEK_ROOT.parent
 OUTPUT_DIR = ROOT / "output"
-LOG_FILE = ROOT / "week8_pipeline.log"
-ERROR_LOG_FILE = ROOT / "week8_pipeline_errors.log"
+LOG_DIR = ROOT / "logs"
+LOG_FILE = LOG_DIR / "week8_pipeline.log"
+ERROR_LOG_FILE = LOG_DIR / "week8_pipeline_errors.log"
 
 # Vaikimisi kasutatakse Week 7 RFM tööga sama analüüsi lõppkuupäeva.
 # Kui tahad analüüsi teise kuupäevani piirata, anna CLI-s --date YYYY-MM-DD.
@@ -33,13 +38,13 @@ ANALYSIS_END_DATE: str | None = "2025-02-28"
 # Kohalikud CSV failid, mida kasutatakse siis, kui API ei ole saadaval.
 FALLBACK_SALES_PATHS = [
     PROJECT_ROOT / "datasets" / "clean" / "sales.csv",
-    ROOT / "datasets" / "clean" / "sales.csv",
+    WEEK_ROOT / "datasets" / "clean" / "sales.csv",
     PROJECT_ROOT / "SQL" / "sales_supabase_import.csv",
     PROJECT_ROOT / "SQL" / "sales_rows.csv",
 ]
 FALLBACK_CUSTOMER_PATHS = [
     PROJECT_ROOT / "datasets" / "clean" / "customers.csv",
-    ROOT / "datasets" / "clean" / "customers.csv",
+    WEEK_ROOT / "datasets" / "clean" / "customers.csv",
     PROJECT_ROOT / "SQL" / "customers.csv",
     PROJECT_ROOT / "SQL" / "customers_rows.csv",
 ]
@@ -47,6 +52,7 @@ FALLBACK_CUSTOMER_PATHS = [
 
 def setup_logging() -> logging.Logger:
     """Configureeri logimine nii terminali kui faili."""
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
     logger = logging.getLogger("week8_pipeline")
     logger.setLevel(logging.INFO)
     logger.handlers.clear()

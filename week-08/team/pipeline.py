@@ -19,11 +19,13 @@ import yaml
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from data_fetcher import create_supabase_client, fetch_customers, fetch_products, fetch_sales, sample_data
+from data_fetcher import create_supabase_client, csv_fallback_data, fetch_customers, fetch_products, fetch_sales, sample_data
 from notifications import send_pipeline_notification
 from transform import (
     build_business_interpretation,
+    calculate_city_report,
     calculate_kpis,
+    calculate_monthly_report,
     calculate_rfm,
     calculate_segment_summary,
     calculate_weekly_aggregates,
@@ -116,6 +118,10 @@ def extract(config: dict[str, Any]) -> tuple[Any, Any, Any]:
     except Exception:
         logger.exception("[EXTRACT] Supabase API ebaonnestus")
         if pipeline_config.get("use_sample_if_api_missing", True):
+            fallback = csv_fallback_data()
+            if fallback is not None:
+                logger.warning("[EXTRACT] Kasutan kohalikke CSV fallback andmeid")
+                return fallback
             logger.warning("[EXTRACT] Kasutan varu-naidisandmeid, et pipeline jookseks lopuni")
             return sample_data()
         raise
@@ -144,6 +150,8 @@ def transform_data(sales: Any, customers: Any, products: Any, config: dict[str, 
         period_end,
     )
     weekly = calculate_weekly_aggregates(clean)
+    monthly = calculate_monthly_report(clean)
+    city = calculate_city_report(clean)
     kpis = calculate_kpis(clean)
     rfm = calculate_rfm(clean, reference_date=reference_date)
     segment_summary = calculate_segment_summary(rfm)
@@ -152,6 +160,8 @@ def transform_data(sales: Any, customers: Any, products: Any, config: dict[str, 
     return {
         "clean_sales": clean,
         "weekly": weekly,
+        "monthly": monthly,
+        "city": city,
         "kpis": kpis,
         "rfm": rfm,
         "segment_summary": segment_summary,
@@ -167,8 +177,12 @@ def validate_results(results: dict[str, Any]) -> None:
         "clean_sales_not_empty": not results["clean_sales"].empty,
         "weekly_not_empty": not results["weekly"].empty,
         "rfm_not_empty": not results["rfm"].empty,
+        "monthly_not_empty": not results["monthly"].empty,
+        "city_not_empty": not results["city"].empty,
         "revenue_matches": round(results["clean_sales"]["total_price"].sum(), 2)
         == round(results["rfm"]["monetary_value"].sum(), 2),
+        "monthly_revenue_matches": round(results["clean_sales"]["total_price"].sum(), 2)
+        == round(results["monthly"]["revenue"].sum(), 2),
     }
     for name, ok in checks.items():
         logger.info("[VALIDATE] %s: %s", name, "OK" if ok else "PROBLEEM")

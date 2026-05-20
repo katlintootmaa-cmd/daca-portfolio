@@ -1,5 +1,11 @@
 # Nädal 8: Python API ja automatiseeritud andmepipeline
 
+## Praegune failistruktuuri otsus
+
+Põhiline hooldatav Week 8 pipeline on `week-08/team/pipeline.py`. See on modulaarne versioon, kus API päringud, transformatsioonid, eksport ja teavitused on eraldi failides.
+
+`week-08/individual/week8_api_pipeline.py` on jäetud individuaalseks demo-/arhiiviversiooniks. Seda saab kasutada õppimiseks ja varasema lahenduse näitamiseks, aga edasised töökindlad muudatused tuleks teha `team/` kausta moodulites.
+
 ## Mida ma õppisin
 
 Selle nädala iseseisvas töös õppisin, kuidas Pythoniga andmeid otse Supabase andmebaasist küsida. Varasemalt töötasin rohkem CSV-failide ja pandas DataFrame'idega, aga nüüd sain aru, miks API kasutamine on praktilisem: andmed tulevad otse allikast ja raport ei sõltu enam käsitsi alla laaditud failist.
@@ -49,23 +55,23 @@ Linnade järgi oli suurim käive Tallinnas:
 
 ## Failid
 
-- `week8_api_pipeline.py` - minu Week 8 Python API ja RFM pipeline.
+- `individual/week8_api_pipeline.py` - minu Week 8 Python API ja RFM pipeline.
 - `Python API ja automatiseeritud RFM pipeline.md` - detailsem töö kirjeldus.
-- `output/` - pipeline'i loodud CSV ja HTML väljundid.
-- `week8_pipeline.log` - logifail, kust on näha pipeline'i käivitamise sammud.
+- `individual/output/` - individuaalse pipeline'i loodud CSV ja HTML väljundid.
+- `individual/logs/week8_pipeline.log` - logifail, kust on näha individuaalse pipeline'i käivitamise sammud.
 
 ## Kuidas käivitada
 
 Supabase API-ga:
 
 ```bash
-python week-08/week8_api_pipeline.py
+python week-08/individual/week8_api_pipeline.py
 ```
 
 Näidisandmetega:
 
 ```bash
-python week-08/week8_api_pipeline.py --sample
+python week-08/individual/week8_api_pipeline.py --sample
 ```
 
 Koondleht kõigi Week 8 visuaalidega:

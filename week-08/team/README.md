@@ -2,6 +2,8 @@
 
 See kaust sisaldab Week 8 grupitöö juhendi järgi tehtud modulaarset pipeline'i. Lahendus muudab Week 7 RFM analüüsi API kaudu käivitatavaks ja automatiseeritavaks.
 
+See on projekti põhiline hooldatav pipeline. Fail `week-08/individual/week8_api_pipeline.py` on jäetud individuaalseks demo-/arhiiviversiooniks.
+
 ## Rollid ja failid
 
 - `data_fetcher.py` - Roll A: Supabase API päringud (`fetch_sales`, `fetch_customers`, `fetch_products`).
@@ -52,11 +54,15 @@ Kui API ühendus puudub või Supabase on maas, kasutab pipeline `config.yaml` se
 `output/` kausta tekivad ajatempliga failid:
 
 - `weekly_aggregates_*.csv`
+- `monthly_report_*.csv`
+- `city_report_*.csv`
 - `kpis_*.csv`
 - `rfm_segments_*.csv`
 - `rfm_segment_summary_*.csv`
 - `rfm_business_report_*.md`
 - `weekly_revenue_*.html`
+- `monthly_revenue_*.html`
+- `city_revenue_*.html`
 - `kpi_summary_*.html`
 - `rfm_segmentide_jaotus_*.html`
 - `rfm_segmentide_scatter_*.html`

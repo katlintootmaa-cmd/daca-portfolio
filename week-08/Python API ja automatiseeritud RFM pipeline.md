@@ -6,9 +6,9 @@ Selle iseseisva töö eesmärk oli muuta Week 7 RFM analüüs automatiseeritud E
 
 ## Failid
 
-- `week8_api_pipeline.py` - käivitatav Python pipeline.
-- `week8_pipeline.log` - logifail, mis tekib skripti käivitamisel.
-- `output/` - automaatselt loodud CSV ja Plotly HTML väljundid.
+- `individual/week8_api_pipeline.py` - käivitatav Python pipeline.
+- `individual/logs/week8_pipeline.log` - logifail, mis tekib skripti käivitamisel.
+- `individual/output/` - automaatselt loodud CSV ja Plotly HTML väljundid.
 
 ## Käivitamine
 

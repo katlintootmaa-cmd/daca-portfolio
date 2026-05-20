@@ -19,6 +19,27 @@ from supabase import create_client
 
 
 logger = logging.getLogger(__name__)
+ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = ROOT.parent.parent
+
+FALLBACK_SALES_PATHS = [
+    PROJECT_ROOT / "datasets" / "clean" / "sales.csv",
+    ROOT.parent / "datasets" / "clean" / "sales.csv",
+    PROJECT_ROOT / "SQL" / "sales_supabase_import.csv",
+    PROJECT_ROOT / "SQL" / "sales_rows.csv",
+]
+FALLBACK_CUSTOMER_PATHS = [
+    PROJECT_ROOT / "datasets" / "clean" / "customers.csv",
+    ROOT.parent / "datasets" / "clean" / "customers.csv",
+    PROJECT_ROOT / "SQL" / "customers.csv",
+    PROJECT_ROOT / "SQL" / "customers_rows.csv",
+]
+FALLBACK_PRODUCT_PATHS = [
+    PROJECT_ROOT / "datasets" / "clean" / "products.csv",
+    ROOT.parent / "datasets" / "clean" / "products.csv",
+    PROJECT_ROOT / "SQL" / "products.csv",
+    PROJECT_ROOT / "SQL" / "products_rows.csv",
+]
 
 
 def load_environment() -> None:
@@ -129,6 +150,29 @@ def fetch_products(
 ) -> pd.DataFrame:
     """Päri tooteandmed Supabase products tabelist."""
     return fetch_table(supabase, table_name, page_size=page_size, max_retries=max_retries)
+
+
+def read_first_existing_csv(paths: list[Path], label: str) -> pd.DataFrame:
+    """Loe esimene olemasolev kohalik CSV fallback fail."""
+    for path in paths:
+        if path.exists():
+            df = pd.read_csv(path)
+            logger.info("CSV fallback '%s': %s rida failist %s", label, len(df), path)
+            return df
+
+    logger.warning("CSV fallback '%s' puudub. Otsitud failid: %s", label, ", ".join(str(path) for path in paths))
+    return pd.DataFrame()
+
+
+def csv_fallback_data() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame] | None:
+    """Kasuta kohalikke CSV faile, kui API ei ole saadaval."""
+    sales = read_first_existing_csv(FALLBACK_SALES_PATHS, "sales")
+    customers = read_first_existing_csv(FALLBACK_CUSTOMER_PATHS, "customers")
+    products = read_first_existing_csv(FALLBACK_PRODUCT_PATHS, "products")
+
+    if sales.empty or customers.empty:
+        return None
+    return sales, customers, products
 
 
 def sample_data() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:

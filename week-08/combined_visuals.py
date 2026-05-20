@@ -14,7 +14,7 @@ import plotly.graph_objects as go
 ROOT = Path(__file__).resolve().parent
 TEAM_OUTPUT = ROOT / "team" / "output"
 INDIVIDUAL_OUTPUT = ROOT / "individual" / "output"
-PIPELINE_OUTPUT = ROOT / "output"
+PIPELINE_OUTPUT = INDIVIDUAL_OUTPUT
 COMBINED_OUTPUT = ROOT / "combined_visuals.html"
 SEGMENT_ORDER = ["VIP Champions", "Loyal", "Potential", "At Risk", "Lost"]
 
@@ -135,7 +135,7 @@ def rfm_scatter(rfm: pd.DataFrame, title: str) -> go.Figure:
     return fig
 
 
-def city_chart(cities: pd.DataFrame) -> go.Figure:
+def city_chart(cities: pd.DataFrame, title: str) -> go.Figure:
     """Create city revenue chart."""
     fig = px.bar(
         cities.sort_values("revenue", ascending=True),
@@ -143,7 +143,7 @@ def city_chart(cities: pd.DataFrame) -> go.Figure:
         y="city",
         orientation="h",
         text="revenue",
-        title="API pipeline: käive linnade lõikes",
+        title=title,
         labels={"revenue": "Tulu (EUR)", "city": "Linn"},
     )
     fig.update_traces(texttemplate="%{text:.0f} EUR", textposition="outside")
@@ -151,15 +151,16 @@ def city_chart(cities: pd.DataFrame) -> go.Figure:
     return fig
 
 
-def monthly_chart(monthly: pd.DataFrame) -> go.Figure:
+def monthly_chart(monthly: pd.DataFrame, title: str) -> go.Figure:
     """Create monthly revenue chart."""
+    month_column = "month" if "month" in monthly.columns else "sale_date"
     fig = px.line(
         monthly,
-        x="sale_date",
+        x=month_column,
         y="revenue",
         markers=True,
-        title="API pipeline: kuukäive",
-        labels={"sale_date": "Kuu", "revenue": "Tulu (EUR)"},
+        title=title,
+        labels={month_column: "Kuu", "revenue": "Tulu (EUR)"},
     )
     fig.update_traces(line={"width": 3})
     fig.update_layout(hovermode="x unified")
@@ -177,6 +178,8 @@ def build_figures() -> list[go.Figure]:
     figures: list[go.Figure] = []
 
     team_weekly = read_latest(TEAM_OUTPUT, "weekly_aggregates_*.csv")
+    team_monthly = read_latest(TEAM_OUTPUT, "monthly_report_*.csv")
+    team_city = read_latest(TEAM_OUTPUT, "city_report_*.csv")
     team_kpis = read_latest(TEAM_OUTPUT, "kpis_*.csv")
     team_segments = read_latest(TEAM_OUTPUT, "rfm_segment_summary_*.csv")
     team_rfm = read_latest(TEAM_OUTPUT, "rfm_segments_*.csv")
@@ -191,6 +194,8 @@ def build_figures() -> list[go.Figure]:
 
     add_if_data(figures, team_kpis, kpi_table, "Tiimitöö: KPI kokkuvõte")
     add_if_data(figures, team_weekly, weekly_chart, "Tiimitöö: nädalane tulu")
+    add_if_data(figures, team_monthly, monthly_chart, "Tiimitöö: kuukäive")
+    add_if_data(figures, team_city, city_chart, "Tiimitöö: käive linnade lõikes")
     add_if_data(figures, team_segments, segment_chart, "Tiimitöö: RFM segmentide jaotus")
     add_if_data(figures, team_rfm, rfm_scatter, "Tiimitöö: RFM kliendisegmendid")
     add_if_data(figures, team_rfm, top_customers_chart, "Tiimitöö: top 10 klienti")
@@ -199,8 +204,8 @@ def build_figures() -> list[go.Figure]:
     add_if_data(figures, individual_weekly, weekly_chart, "Individuaalne töö: nädalane tulu")
     add_if_data(figures, individual_segments, segment_chart, "Individuaalne töö: RFM segmentide jaotus")
 
-    add_if_data(figures, city, city_chart)
-    add_if_data(figures, monthly, monthly_chart)
+    add_if_data(figures, city, city_chart, "API demo: käive linnade lõikes")
+    add_if_data(figures, monthly, monthly_chart, "API demo: kuukäive")
     add_if_data(figures, pipeline_rfm, rfm_scatter, "API pipeline: RFM kliendisegmendid")
     add_if_data(figures, pipeline_rfm, top_customers_chart, "API pipeline: top 10 klienti")
 

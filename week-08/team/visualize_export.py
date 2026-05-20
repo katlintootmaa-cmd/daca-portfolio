@@ -32,6 +32,33 @@ def create_weekly_chart(df_weekly: pd.DataFrame) -> go.Figure:
     )
 
 
+def create_monthly_chart(df_monthly: pd.DataFrame) -> go.Figure:
+    """Loo kuukäibe joondiagramm."""
+    return px.line(
+        df_monthly,
+        x="month",
+        y="revenue",
+        markers=True,
+        title="Kuukäive",
+        labels={"month": "Kuu", "revenue": "Tulu (EUR)"},
+    )
+
+
+def create_city_chart(df_city: pd.DataFrame) -> go.Figure:
+    """Loo linnade kogutulu tulpdiagramm."""
+    fig = px.bar(
+        df_city.sort_values("revenue"),
+        x="revenue",
+        y="city",
+        orientation="h",
+        text="revenue",
+        title="Tulu linnade kaupa",
+        labels={"city": "Linn", "revenue": "Tulu (EUR)"},
+    )
+    fig.update_traces(texttemplate="%{text:.0f} EUR", textposition="outside")
+    return fig
+
+
 def create_kpi_summary(kpis: dict[str, Any]) -> go.Figure:
     """Loo KPI tabel total revenue, orders, customers ja avg order väärtustega."""
     return go.Figure(
@@ -113,6 +140,8 @@ def write_combined_dashboard(results: dict[str, Any], path: Path) -> None:
     figures = [
         create_kpi_summary(results["kpis"]),
         create_weekly_chart(results["weekly"]),
+        create_monthly_chart(results["monthly"]),
+        create_city_chart(results["city"]),
         create_segment_chart(results["segment_summary"]),
         create_rfm_scatter(results["rfm"]),
         create_top_vip_chart(results["rfm"]),
@@ -178,11 +207,15 @@ def export_results(results: dict[str, Any], output_dir: str | Path = "output") -
 
     paths = {
         "weekly_csv": output_path / f"weekly_aggregates_{date_str}.csv",
+        "monthly_csv": output_path / f"monthly_report_{date_str}.csv",
+        "city_csv": output_path / f"city_report_{date_str}.csv",
         "kpis_csv": output_path / f"kpis_{date_str}.csv",
         "rfm_csv": output_path / f"rfm_segments_{date_str}.csv",
         "segment_summary_csv": output_path / f"rfm_segment_summary_{date_str}.csv",
         "report_md": output_path / f"rfm_business_report_{date_str}.md",
         "weekly_chart": output_path / f"weekly_revenue_{date_str}.html",
+        "monthly_chart": output_path / f"monthly_revenue_{date_str}.html",
+        "city_chart": output_path / f"city_revenue_{date_str}.html",
         "kpi_chart": output_path / f"kpi_summary_{date_str}.html",
         "segment_chart": output_path / f"rfm_segmentide_jaotus_{date_str}.html",
         "rfm_scatter": output_path / f"rfm_segmentide_scatter_{date_str}.html",
@@ -191,12 +224,16 @@ def export_results(results: dict[str, Any], output_dir: str | Path = "output") -
     }
 
     results["weekly"].to_csv(paths["weekly_csv"], index=False, encoding="utf-8")
+    results["monthly"].to_csv(paths["monthly_csv"], index=False, encoding="utf-8")
+    results["city"].to_csv(paths["city_csv"], index=False, encoding="utf-8")
     pd.DataFrame([results["kpis"]]).to_csv(paths["kpis_csv"], index=False, encoding="utf-8")
     results["rfm"].to_csv(paths["rfm_csv"], index=False, encoding="utf-8")
     results["segment_summary"].to_csv(paths["segment_summary_csv"], index=False, encoding="utf-8")
     paths["report_md"].write_text(results["business_interpretation"], encoding="utf-8")
 
     create_weekly_chart(results["weekly"]).write_html(paths["weekly_chart"])
+    create_monthly_chart(results["monthly"]).write_html(paths["monthly_chart"])
+    create_city_chart(results["city"]).write_html(paths["city_chart"])
     create_kpi_summary(results["kpis"]).write_html(paths["kpi_chart"])
     create_segment_chart(results["segment_summary"]).write_html(paths["segment_chart"])
     create_rfm_scatter(results["rfm"]).write_html(paths["rfm_scatter"])

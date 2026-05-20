@@ -101,6 +101,41 @@ def calculate_kpis(df: pd.DataFrame) -> dict[str, Any]:
     }
 
 
+def calculate_city_report(df: pd.DataFrame) -> pd.DataFrame:
+    """Arvuta linnade kaupa tellimuste arv, kogutulu ja keskmine tellimus."""
+    city = (
+        df.groupby("city")
+        .agg(
+            orders=("sale_id", "count"),
+            revenue=("total_price", "sum"),
+            avg_order_value=("total_price", "mean"),
+            unique_customers=("customer_id", "nunique"),
+        )
+        .reset_index()
+        .sort_values("revenue", ascending=False)
+    )
+    city[["revenue", "avg_order_value"]] = city[["revenue", "avg_order_value"]].round(2)
+    return city
+
+
+def calculate_monthly_report(df: pd.DataFrame) -> pd.DataFrame:
+    """Arvuta kuude kaupa tulu, tellimuste arv ja unikaalsed kliendid."""
+    monthly = (
+        df.groupby(df["sale_date"].dt.to_period("M"))
+        .agg(
+            orders=("sale_id", "count"),
+            revenue=("total_price", "sum"),
+            unique_customers=("customer_id", "nunique"),
+        )
+        .reset_index()
+        .rename(columns={"sale_date": "month"})
+    )
+    monthly["month"] = monthly["month"].astype(str)
+    monthly["avg_order_value"] = monthly["revenue"] / monthly["orders"]
+    monthly[["revenue", "avg_order_value"]] = monthly[["revenue", "avg_order_value"]].round(2)
+    return monthly
+
+
 def _score_column(series: pd.Series, labels: list[int]) -> pd.Series:
     """Jaga väärtused kuni viide kvantiili ja teisenda need R/F/M skooriks."""
     q = min(5, series.nunique())
