@@ -62,6 +62,27 @@ Kui API ühendus puudub või Supabase on maas, kasutab pipeline `config.yaml` se
 - `rfm_segmentide_scatter_*.html`
 - `rfm_top_10_vip_*.html`
 
+## Edasijõudnute teavitus
+
+Pipeline saadab õnnestumise või ebaõnnestumise teavituse, kui `.env` failis on seadistatud vähemalt üks kanal:
+
+```text
+NOTIFY_WEBHOOK_URL=...
+```
+
+või SMTP email:
+
+```text
+SMTP_HOST=...
+SMTP_PORT=587
+SMTP_USER=...
+SMTP_PASSWORD=...
+SMTP_FROM=...
+NOTIFY_EMAIL_TO=marko@example.com
+```
+
+Teavitus sisaldab pipeline'i staatust, kestust, väljundkausta ning KPI numbreid: kogutulu, tellimuste arv, unikaalsed kliendid ja keskmine tellimus.
+
 ## RFM segmentide loogika
 
 - `13-15` punkti: `VIP Champions`

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import sys
 import time
 from pathlib import Path
 from typing import Any
@@ -16,7 +17,10 @@ from typing import Any
 import pandas as pd
 import yaml
 
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
 from data_fetcher import create_supabase_client, fetch_customers, fetch_products, fetch_sales, sample_data
+from notifications import send_pipeline_notification
 from transform import (
     build_business_interpretation,
     calculate_kpis,
@@ -172,14 +176,19 @@ def validate_results(results: dict[str, Any]) -> None:
         raise RuntimeError("Pipeline'i valideerimine ebaonnestus.")
 
 
-def notify(status: str, summary: dict[str, Any]) -> None:
-    """Logi lihtne teavitus pipeline'i õnnestumise või ebaõnnestumise kohta."""
-    logging.getLogger(__name__).info(
-        "[NOTIFY] %s | revenue=%s orders=%s customers=%s",
-        status,
-        summary.get("total_revenue"),
-        summary.get("orders"),
-        summary.get("unique_customers"),
+def notify(
+    status: str,
+    summary: dict[str, Any],
+    elapsed_seconds: float | None = None,
+    output_dir: Path | None = None,
+) -> None:
+    """Saada valikuline emaili või webhooki teavitus pipeline'i tulemusega."""
+    send_pipeline_notification(
+        status=status,
+        summary=summary,
+        pipeline_name="Week 8 tiimitöö pipeline",
+        elapsed_seconds=elapsed_seconds,
+        output_dir=str(output_dir) if output_dir else None,
     )
 
 
@@ -197,7 +206,7 @@ def run_pipeline(analysis_date: str | None = None) -> dict[str, Any]:
         output_dir = ROOT / config["pipeline"].get("output_dir", "output")
         paths = export_results(results, output_dir=output_dir)
         elapsed = time.perf_counter() - start_time
-        notify("SUCCESS", results["kpis"])
+        notify("SUCCESS", results["kpis"], elapsed_seconds=elapsed, output_dir=output_dir)
         logger.info("Pipeline complete %.2f seconds, files=%s", elapsed, len(paths))
         print(f"Pipeline valmis {elapsed:.2f} sekundiga. Väljundid: {output_dir}")
         reference_date = config["pipeline"].get("reference_date")
@@ -207,7 +216,7 @@ def run_pipeline(analysis_date: str | None = None) -> dict[str, Any]:
         return results
     except Exception:
         logger.exception("Pipeline failed")
-        notify("FAILED", {})
+        notify("FAILED", {}, elapsed_seconds=time.perf_counter() - start_time)
         raise
 
 

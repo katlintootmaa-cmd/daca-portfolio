@@ -17,6 +17,7 @@ from typing import Any
 import pandas as pd
 import plotly.express as px
 from dotenv import load_dotenv
+from notifications import send_pipeline_notification
 from supabase import create_client
 
 
@@ -439,6 +440,22 @@ def load(results: dict[str, pd.DataFrame]) -> None:
     logger.info("[LOAD] CSV ja HTML väljundid salvestatud kausta %s", OUTPUT_DIR)
 
 
+def notification_summary(results: dict[str, pd.DataFrame]) -> dict[str, Any]:
+    """Koosta emaili/webhooki teavituse jaoks lühike numbriline kokkuvõte."""
+    weekly = results["weekly"].iloc[0].to_dict()
+    city = results["city"].sort_values("revenue", ascending=False).iloc[0]
+    monthly = results["monthly"].sort_values("revenue", ascending=False).iloc[0]
+    return {
+        "total_revenue": weekly["total_revenue"],
+        "orders": weekly["total_orders"],
+        "unique_customers": weekly["unique_customers"],
+        "avg_order_value": weekly["avg_order"],
+        "rfm_segments": results["rfm"]["segment"].nunique(),
+        "top_city": f"{city['city']} ({city['revenue']:.2f} EUR)",
+        "best_month": f"{monthly['sale_date']} ({monthly['revenue']:.2f} EUR)",
+    }
+
+
 def print_summary(results: dict[str, pd.DataFrame]) -> None:
     """Prindi juhendi küsimustele sobiv kokkuvõte."""
     weekly = results["weekly"].iloc[0].to_dict()
@@ -499,7 +516,15 @@ def run_pipeline(
     else:
         raise RuntimeError("Valideerimine ebaõnnestus. LOAD etappi ei käivitatud.")
 
-    logger.info("Pipeline valmis %.1f sekundiga", (datetime.now() - started_at).total_seconds())
+    elapsed = (datetime.now() - started_at).total_seconds()
+    send_pipeline_notification(
+        status="SUCCESS",
+        summary=notification_summary(results),
+        pipeline_name="Week 8 individuaalne API pipeline",
+        elapsed_seconds=elapsed,
+        output_dir=str(OUTPUT_DIR),
+    )
+    logger.info("Pipeline valmis %.1f sekundiga", elapsed)
     return results
 
 
@@ -523,6 +548,11 @@ def main() -> None:
         print_summary(results)
     except Exception:
         logger.exception("Pipeline ebaõnnestus")
+        send_pipeline_notification(
+            status="FAILED",
+            summary={},
+            pipeline_name="Week 8 individuaalne API pipeline",
+        )
         raise
 
 

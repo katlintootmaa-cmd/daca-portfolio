@@ -68,6 +68,33 @@ Näidisandmetega:
 python week-08/week8_api_pipeline.py --sample
 ```
 
+Koondleht kõigi Week 8 visuaalidega:
+
+```bash
+python week-08/combined_visuals.py
+```
+
+See loob faili `week-08/combined_visuals.html`, kus tiimitöö, individuaalne töö ja API pipeline'i visuaalid on ühel lehel.
+
+Edasijõudnute teavitus emaili või Google Chat webhookiga:
+
+```text
+NOTIFY_WEBHOOK_URL=...
+```
+
+või SMTP email:
+
+```text
+SMTP_HOST=...
+SMTP_PORT=587
+SMTP_USER=...
+SMTP_PASSWORD=...
+SMTP_FROM=...
+NOTIFY_EMAIL_TO=marko@example.com
+```
+
+Kui teavituskanal on `.env` failis seadistatud, saadab pipeline õnnestumise teate koos kogutulu, tellimuste, klientide, keskmise tellimuse, RFM segmentide ning parima linna/kuu kokkuvõttega.
+
 ## Minu kokkuvõte
 
 Sain aru, kuidas API, pandas, funktsioonid, logimine ja visualiseerimine kokku üheks andmepipeline'iks ühendada. See on oluline samm edasi, sest sellist lahendust saab hiljem ajastada ja kasutada korduvate raportite tegemiseks ilma käsitsi CSV-faile eksportimata.
