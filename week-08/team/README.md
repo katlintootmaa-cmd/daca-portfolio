@@ -42,7 +42,7 @@ Kui API ühendus puudub või Supabase on maas, kasutab pipeline `config.yaml` se
 1. Pärib Supabase API-st müügi-, kliendi- ja tooteandmed.
 2. Kasutab kuupäevafiltrit kuni `2025-02-28`, et analüüs arvestaks andmeid kuni 2025. aasta veebruari lõpuni.
 3. Kasutab pagination'i, et kätte saada rohkem kui 1000 rida.
-4. Kasutab retry loogikat, kui API päring ebaõnnestub.
+4. Kasutab retry loogikat, kui API päring või pipeline'i eraldi etapp ebaõnnestub.
 5. Liidab andmestikud `customer_id` ja võimalusel `product_id` alusel.
 6. Puhastab duplikaadid, vigased kuupäevad, tühjad kliendid ja mittepositiivsed summad.
 7. Arvutab nädalased koondnäitajad ja KPI-d.
@@ -90,6 +90,8 @@ NOTIFY_EMAIL_TO=marko@example.com
 
 Teavitus sisaldab pipeline'i staatust, kestust, väljundkausta ning KPI numbreid: kogutulu, tellimuste arv, unikaalsed kliendid ja keskmine tellimus.
 Emaili puhul lisatakse manustena CSV raportid ja `team_dashboard_*.html` koondvisuaalidega.
+
+Retry seadistus tuleb `config.yaml` failist. `max_retries` määrab katsete arvu ning `retry_base_seconds` määrab exponential backoff algse ooteaja. Sama seadistus kehtib API päringutele ning pipeline'i etappidele `EXTRACT`, `TRANSFORM`, `VALIDATE` ja `EXPORT`.
 
 ## RFM segmentide loogika
 

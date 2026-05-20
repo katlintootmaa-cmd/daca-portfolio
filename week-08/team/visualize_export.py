@@ -22,14 +22,24 @@ SEGMENT_ORDER = ["VIP Champions", "Loyal", "Potential", "At Risk", "Lost"]
 
 def create_weekly_chart(df_weekly: pd.DataFrame) -> go.Figure:
     """Loo nädalase tulu joondiagramm."""
-    return px.line(
+    fig = px.line(
         df_weekly,
         x="week",
         y="revenue",
         markers=True,
         title="Nädalane tulu",
         labels={"week": "Nädal", "revenue": "Tulu (EUR)"},
+        custom_data=["week_label", "orders", "unique_customers"],
     )
+    fig.update_traces(
+        hovertemplate=(
+            "Nädal=%{customdata[0]}<br>"
+            "Tulu (EUR)=%{y:.2f}<br>"
+            "Tellimusi=%{customdata[1]}<br>"
+            "Unikaalseid kliente=%{customdata[2]}<extra></extra>"
+        )
+    )
+    return fig
 
 
 def create_monthly_chart(df_monthly: pd.DataFrame) -> go.Figure:

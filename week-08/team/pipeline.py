@@ -12,7 +12,7 @@ import logging
 import sys
 import time
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 import pandas as pd
 import yaml
@@ -48,6 +48,7 @@ def load_config() -> dict[str, Any]:
             "pipeline": {
                 "page_size": 1000,
                 "max_retries": 3,
+                "retry_base_seconds": 1,
                 "reference_date": "2025-02-28",
                 "output_dir": "output",
                 "use_sample_if_api_missing": True,
@@ -82,6 +83,34 @@ def setup_logging() -> None:
     )
 
 
+def run_step_with_retry(step_name: str, config: dict[str, Any], operation: Callable[[], Any]) -> Any:
+    """Käivita pipeline'i etapp eraldi retry ja exponential backoff loogikaga."""
+    logger = logging.getLogger(__name__)
+    pipeline_config = config.get("pipeline", {})
+    max_retries = int(pipeline_config.get("max_retries", 3))
+    retry_base_seconds = float(pipeline_config.get("retry_base_seconds", 1))
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            return operation()
+        except Exception as exc:
+            if attempt == max_retries:
+                logger.exception("[%s] failed after %s attempts", step_name, max_retries)
+                raise
+            wait_seconds = retry_base_seconds * (2 ** (attempt - 1))
+            logger.warning(
+                "[%s] katse %s/%s ebaonnestus: %s. Proovin uuesti %.1f s parast",
+                step_name,
+                attempt,
+                max_retries,
+                exc,
+                wait_seconds,
+            )
+            time.sleep(wait_seconds)
+
+    raise RuntimeError(f"{step_name} etapp ebaonnestus.")
+
+
 def extract(config: dict[str, Any]) -> tuple[Any, Any, Any]:
     """Lae API-st sales/customers/products või kasuta varuandmeid."""
     logger = logging.getLogger(__name__)
@@ -99,18 +128,21 @@ def extract(config: dict[str, Any]) -> tuple[Any, Any, Any]:
             end_date=date_filter.get("end_date"),
             page_size=pipeline_config.get("page_size", 1000),
             max_retries=pipeline_config.get("max_retries", 3),
+            retry_base_seconds=pipeline_config.get("retry_base_seconds", 1),
             table_name=table_config.get("sales", "sales"),
         )
         customers = fetch_customers(
             supabase,
             page_size=pipeline_config.get("page_size", 1000),
             max_retries=pipeline_config.get("max_retries", 3),
+            retry_base_seconds=pipeline_config.get("retry_base_seconds", 1),
             table_name=table_config.get("customers", "customers"),
         )
         products = fetch_products(
             supabase,
             page_size=pipeline_config.get("page_size", 1000),
             max_retries=pipeline_config.get("max_retries", 3),
+            retry_base_seconds=pipeline_config.get("retry_base_seconds", 1),
             table_name=table_config.get("products", "products"),
         )
         logger.info("[EXTRACT] done: sales=%s customers=%s products=%s", len(sales), len(customers), len(products))
@@ -237,11 +269,11 @@ def run_pipeline(analysis_date: str | None = None) -> dict[str, Any]:
 
     try:
         logger.info("Pipeline started")
-        sales, customers, products = extract(config)
-        results = transform_data(sales, customers, products, config)
-        validate_results(results)
+        sales, customers, products = run_step_with_retry("EXTRACT", config, lambda: extract(config))
+        results = run_step_with_retry("TRANSFORM", config, lambda: transform_data(sales, customers, products, config))
+        run_step_with_retry("VALIDATE", config, lambda: validate_results(results))
         output_dir = ROOT / config["pipeline"].get("output_dir", "output")
-        paths = export_results(results, output_dir=output_dir)
+        paths = run_step_with_retry("EXPORT", config, lambda: export_results(results, output_dir=output_dir))
         elapsed = time.perf_counter() - start_time
         notify(
             "SUCCESS",

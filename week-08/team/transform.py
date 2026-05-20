@@ -84,6 +84,10 @@ def calculate_weekly_aggregates(df: pd.DataFrame) -> pd.DataFrame:
         .reset_index()
         .rename(columns={"sale_date": "week"})
     )
+    iso_calendar = weekly["week"].dt.isocalendar()
+    weekly["week_year"] = iso_calendar["year"].astype(int)
+    weekly["week_number"] = iso_calendar["week"].astype(int)
+    weekly["week_label"] = weekly["week_year"].astype(str) + " nädal " + weekly["week_number"].astype(str)
     weekly["avg_order_value"] = weekly["revenue"] / weekly["orders"]
     weekly[["revenue", "avg_order_value"]] = weekly[["revenue", "avg_order_value"]].round(2)
     return weekly

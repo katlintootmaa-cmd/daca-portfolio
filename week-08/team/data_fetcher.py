@@ -68,6 +68,7 @@ def fetch_table(
     table_name: str,
     page_size: int = 1000,
     max_retries: int = 3,
+    retry_base_seconds: float = 1,
     date_column: str | None = None,
     start_date: str | None = None,
     end_date: str | None = None,
@@ -95,7 +96,7 @@ def fetch_table(
             except Exception as exc:
                 if attempt == max_retries:
                     raise RuntimeError(f"API paring tabelile '{table_name}' ebaonnestus: {exc}") from exc
-                wait_seconds = 2 ** (attempt - 1)
+                wait_seconds = retry_base_seconds * (2 ** (attempt - 1))
                 logger.warning(
                     "%s: katse %s/%s ebaonnestus, proovin uuesti %s s parast",
                     table_name,
@@ -118,6 +119,7 @@ def fetch_sales(
     end_date: str | None = None,
     page_size: int = 1000,
     max_retries: int = 3,
+    retry_base_seconds: float = 1,
     table_name: str = "sales",
 ) -> pd.DataFrame:
     """Päri müügiandmed, vajadusel kuupäevavahemiku filtriga."""
@@ -126,6 +128,7 @@ def fetch_sales(
         table_name,
         page_size=page_size,
         max_retries=max_retries,
+        retry_base_seconds=retry_base_seconds,
         date_column="sale_date",
         start_date=start_date,
         end_date=end_date,
@@ -136,20 +139,34 @@ def fetch_customers(
     supabase: Any,
     page_size: int = 1000,
     max_retries: int = 3,
+    retry_base_seconds: float = 1,
     table_name: str = "customers",
 ) -> pd.DataFrame:
     """Päri kliendiandmed Supabase customers tabelist."""
-    return fetch_table(supabase, table_name, page_size=page_size, max_retries=max_retries)
+    return fetch_table(
+        supabase,
+        table_name,
+        page_size=page_size,
+        max_retries=max_retries,
+        retry_base_seconds=retry_base_seconds,
+    )
 
 
 def fetch_products(
     supabase: Any,
     page_size: int = 1000,
     max_retries: int = 3,
+    retry_base_seconds: float = 1,
     table_name: str = "products",
 ) -> pd.DataFrame:
     """Päri tooteandmed Supabase products tabelist."""
-    return fetch_table(supabase, table_name, page_size=page_size, max_retries=max_retries)
+    return fetch_table(
+        supabase,
+        table_name,
+        page_size=page_size,
+        max_retries=max_retries,
+        retry_base_seconds=retry_base_seconds,
+    )
 
 
 def read_first_existing_csv(paths: list[Path], label: str) -> pd.DataFrame:
