@@ -120,10 +120,11 @@ def create_data_quality_table(data_quality: pd.DataFrame) -> go.Figure:
 def create_campaign_plan_table(campaign_plan: pd.DataFrame) -> go.Figure:
     """Create a campaign plan table."""
     columns = ["Segment", "goal", "message", "channel", "offer", "primary_metric"]
+    headers = ["Segment", "Eesmärk", "Sõnum", "Kanal", "Pakkumine", "Peamine mõõdik"]
     return go.Figure(
         data=[
             go.Table(
-                header={"values": columns, "fill_color": "#dbeafe", "align": "left"},
+                header={"values": headers, "fill_color": "#dbeafe", "align": "left"},
                 cells={"values": [campaign_plan[column] for column in columns], "align": "left"},
             )
         ]
@@ -133,10 +134,11 @@ def create_campaign_plan_table(campaign_plan: pd.DataFrame) -> go.Figure:
 def create_ab_test_table(ab_test_plan: pd.DataFrame) -> go.Figure:
     """Create an A/B test plan table."""
     columns = ["test_name", "hypothesis", "split", "test_period", "primary_metric", "secondary_metric"]
+    headers = ["Testi nimi", "Hüpotees", "Jaotus", "Testiperiood", "Peamine mõõdik", "Teisene mõõdik"]
     return go.Figure(
         data=[
             go.Table(
-                header={"values": columns, "fill_color": "#fef3c7", "align": "left"},
+                header={"values": headers, "fill_color": "#fef3c7", "align": "left"},
                 cells={"values": [ab_test_plan[column] for column in columns], "align": "left"},
             )
         ]
@@ -235,11 +237,12 @@ def create_empty_figure(title: str) -> go.Figure:
     return fig
 
 
-def _html_table(df: pd.DataFrame, max_rows: int = 8) -> str:
+def _html_table(df: pd.DataFrame, max_rows: int = 8, headers: dict[str, str] | None = None) -> str:
     """Render a compact dataframe as HTML."""
     if df.empty:
         return "<p>Andmed puuduvad.</p>"
-    return df.head(max_rows).to_html(index=False, classes="mini-table", border=0)
+    table = df.head(max_rows).rename(columns=headers or {})
+    return table.to_html(index=False, classes="mini-table", border=0)
 
 
 def _markdown_table(df: pd.DataFrame, max_rows: int | None = None) -> str:
@@ -292,16 +295,12 @@ def write_combined_dashboard(results: dict[str, Any], path: Path) -> None:
     """Save all team figures into one HTML dashboard."""
     figures = [
         create_kpi_summary(results["kpis"]),
-        create_data_quality_table(results["data_quality"]),
         create_weekly_chart(results["weekly"]),
         create_monthly_chart(results["monthly"]),
         create_city_chart(results["city"]),
-        create_channel_chart(results["channel"]),
         create_segment_chart(results["segment_summary"]),
         create_rfm_scatter(results["rfm"]),
         create_top_vip_chart(results["rfm"]),
-        create_cohort_chart(results["cohort_retention"]),
-        create_category_profile_chart(results["segment_category_profile"]),
         create_campaign_plan_table(results["campaign_plan"]),
         create_ab_test_table(results["ab_test_plan"]),
     ]
@@ -393,11 +392,36 @@ def write_combined_dashboard(results: dict[str, Any], path: Path) -> None:
     {_executive_summary(results)}
     <section class="chart">
       <h2>Kampaaniaplaan</h2>
-      {_html_table(results["campaign_plan"], max_rows=10)}
+      {_html_table(
+        results["campaign_plan"],
+        max_rows=10,
+        headers={
+          "Segment": "Segment",
+          "goal": "Eesmärk",
+          "message": "Sõnum",
+          "channel": "Kanal",
+          "offer": "Pakkumine",
+          "primary_metric": "Peamine mõõdik",
+          "customers": "Kliente",
+          "total_revenue": "Kogukäive",
+          "revenue_share_pct": "Käibe osakaal %",
+        },
+      )}
     </section>
     <section class="chart">
       <h2>A/B testide plaan</h2>
-      {_html_table(results["ab_test_plan"], max_rows=10)}
+      {_html_table(
+        results["ab_test_plan"],
+        max_rows=10,
+        headers={
+          "test_name": "Testi nimi",
+          "hypothesis": "Hüpotees",
+          "split": "Jaotus",
+          "test_period": "Testiperiood",
+          "primary_metric": "Peamine mõõdik",
+          "secondary_metric": "Teisene mõõdik",
+        },
+      )}
     </section>
     {"".join(sections)}
   </main>
