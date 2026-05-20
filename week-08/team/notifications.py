@@ -38,6 +38,8 @@ def format_summary(summary: dict[str, Any]) -> str:
         lines.append(f"Suurim linn: {summary['top_city']}")
     if "best_month" in summary:
         lines.append(f"Parim kuu: {summary['best_month']}")
+    if "data_source" in summary:
+        lines.append(f"Andmeallikas: {summary['data_source']}")
     return "\n".join(lines) if lines else "Kokkuvõtvad numbrid puuduvad."
 
 

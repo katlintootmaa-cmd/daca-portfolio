@@ -138,3 +138,17 @@ python week-08/individual/week8_api_pipeline.py --date 2025-03-01
 ## Kokkuvote
 
 See tookaik teeb RFM analyysi korratavaks. Andmed laetakse API kaudu, puhastatakse kindlate reeglite alusel, tulemused kontrollitakse ning raportid salvestatakse automaatselt. Sellist lahendust saab hiljem kasutada korduvate nadalaste raportite loomiseks voi ajastada automaatselt kaivituma.
+
+## Edasiarendus tiimitöö pipeline'is
+
+Tiimitöö versioonis `week-08/team/pipeline.py` laiendati sama töövoogu marketingi parimate praktikatega:
+
+- andmekvaliteedi raport enne ja pärast puhastamist;
+- kanalianalüüs ja tootekategooria profiil RFM segmentide lõikes;
+- cohort retention esimese ostukuu põhjal;
+- lihtsustatud 6 kuu CLV hinnang;
+- konkreetne kampaaniaplaan igale RFM segmendile;
+- A/B testimise plaan kontrollgrupi ja mõõdikutega;
+- stabiilsed `*_latest` väljundfailid, et viimast dashboardi oleks lihtne avada.
+
+Need lisad muudavad pipeline'i tehnilisest automatiseerimisest turunduse otsustustööriistaks: raport ei ütle ainult, mis juhtus, vaid pakub ka järgmise kampaania, mõõtmise viisi ja edukriteeriumi.

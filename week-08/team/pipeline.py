@@ -22,12 +22,18 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 from data_fetcher import create_supabase_client, csv_fallback_data, fetch_customers, fetch_products, fetch_sales, sample_data
 from notifications import send_pipeline_notification
 from transform import (
+    build_ab_test_plan,
     build_business_interpretation,
+    build_marketing_campaign_plan,
+    calculate_channel_report,
     calculate_city_report,
+    calculate_cohort_retention,
+    calculate_data_quality_report,
     calculate_kpis,
     calculate_monthly_report,
     calculate_rfm,
     calculate_segment_summary,
+    calculate_segment_category_profile,
     calculate_weekly_aggregates,
     clean_data,
     merge_datasets,
@@ -111,7 +117,7 @@ def run_step_with_retry(step_name: str, config: dict[str, Any], operation: Calla
     raise RuntimeError(f"{step_name} etapp ebaonnestus.")
 
 
-def extract(config: dict[str, Any]) -> tuple[Any, Any, Any]:
+def extract(config: dict[str, Any]) -> tuple[Any, Any, Any, str]:
     """Lae API-st sales/customers/products või kasuta varuandmeid."""
     logger = logging.getLogger(__name__)
     logger.info("[EXTRACT] start")
@@ -146,25 +152,26 @@ def extract(config: dict[str, Any]) -> tuple[Any, Any, Any]:
             table_name=table_config.get("products", "products"),
         )
         logger.info("[EXTRACT] done: sales=%s customers=%s products=%s", len(sales), len(customers), len(products))
-        return sales, customers, products
+        return sales, customers, products, "supabase_api"
     except Exception:
         logger.exception("[EXTRACT] Supabase API ebaonnestus")
         if pipeline_config.get("use_sample_if_api_missing", True):
             fallback = csv_fallback_data()
             if fallback is not None:
                 logger.warning("[EXTRACT] Kasutan kohalikke CSV fallback andmeid")
-                return fallback
+                return (*fallback, "csv_fallback")
             logger.warning("[EXTRACT] Kasutan varu-naidisandmeid, et pipeline jookseks lopuni")
-            return sample_data()
+            return (*sample_data(), "sample_data")
         raise
 
 
-def transform_data(sales: Any, customers: Any, products: Any, config: dict[str, Any]) -> dict[str, Any]:
+def transform_data(sales: Any, customers: Any, products: Any, config: dict[str, Any], data_source: str = "unknown") -> dict[str, Any]:
     """Puhasta, filtreeri ja teisenda andmed raportite jaoks sobivaks."""
     logger = logging.getLogger(__name__)
     logger.info("[TRANSFORM] start")
     merged = merge_datasets(sales, customers, products)
     clean = clean_data(merged)
+    data_quality = calculate_data_quality_report(merged, clean)
     before_cutoff = len(clean)
     reference_date = config["pipeline"].get("reference_date")
     if reference_date:
@@ -184,19 +191,31 @@ def transform_data(sales: Any, customers: Any, products: Any, config: dict[str, 
     weekly = calculate_weekly_aggregates(clean)
     monthly = calculate_monthly_report(clean)
     city = calculate_city_report(clean)
+    channel = calculate_channel_report(clean)
     kpis = calculate_kpis(clean)
+    cohort_retention = calculate_cohort_retention(clean)
     rfm = calculate_rfm(clean, reference_date=reference_date)
     segment_summary = calculate_segment_summary(rfm)
+    segment_category_profile = calculate_segment_category_profile(clean, rfm)
+    campaign_plan = build_marketing_campaign_plan(segment_summary)
+    ab_test_plan = build_ab_test_plan()
     interpretation = build_business_interpretation(rfm)
     logger.info("[TRANSFORM] done: rows=%s customers=%s", len(clean), kpis["unique_customers"])
     return {
+        "data_source": data_source,
         "clean_sales": clean,
+        "data_quality": data_quality,
         "weekly": weekly,
         "monthly": monthly,
         "city": city,
+        "channel": channel,
         "kpis": kpis,
+        "cohort_retention": cohort_retention,
         "rfm": rfm,
         "segment_summary": segment_summary,
+        "segment_category_profile": segment_category_profile,
+        "campaign_plan": campaign_plan,
+        "ab_test_plan": ab_test_plan,
         "business_interpretation": interpretation,
     }
 
@@ -211,6 +230,9 @@ def validate_results(results: dict[str, Any]) -> None:
         "rfm_not_empty": not results["rfm"].empty,
         "monthly_not_empty": not results["monthly"].empty,
         "city_not_empty": not results["city"].empty,
+        "data_quality_not_empty": not results["data_quality"].empty,
+        "campaign_plan_not_empty": not results["campaign_plan"].empty,
+        "cohort_retention_not_empty": not results["cohort_retention"].empty,
         "revenue_matches": round(results["clean_sales"]["total_price"].sum(), 2)
         == round(results["rfm"]["monetary_value"].sum(), 2),
         "monthly_revenue_matches": round(results["clean_sales"]["total_price"].sum(), 2)
@@ -231,6 +253,7 @@ def notification_summary(results: dict[str, Any]) -> dict[str, Any]:
     if not segment_summary.empty:
         top_segment = segment_summary.sort_values("customers", ascending=False).iloc[0]
         summary["top_segment"] = f"{top_segment['Segment']} ({int(top_segment['customers'])} klienti)"
+    summary["data_source"] = results.get("data_source", "unknown")
     return summary
 
 
@@ -269,8 +292,12 @@ def run_pipeline(analysis_date: str | None = None) -> dict[str, Any]:
 
     try:
         logger.info("Pipeline started")
-        sales, customers, products = run_step_with_retry("EXTRACT", config, lambda: extract(config))
-        results = run_step_with_retry("TRANSFORM", config, lambda: transform_data(sales, customers, products, config))
+        sales, customers, products, data_source = run_step_with_retry("EXTRACT", config, lambda: extract(config))
+        results = run_step_with_retry(
+            "TRANSFORM",
+            config,
+            lambda: transform_data(sales, customers, products, config, data_source=data_source),
+        )
         run_step_with_retry("VALIDATE", config, lambda: validate_results(results))
         output_dir = ROOT / config["pipeline"].get("output_dir", "output")
         paths = run_step_with_retry("EXPORT", config, lambda: export_results(results, output_dir=output_dir))

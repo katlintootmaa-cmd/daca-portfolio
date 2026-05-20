@@ -1,12 +1,9 @@
-"""Roll C: Visualization + Saving.
-
-See moodul loob töödeldud andmetest Plotly graafikud ja salvestab
-tulemused CSV, HTML ja Markdown failidena output kausta.
-"""
+"""Roll C: visualization and export for the Week 8 marketing pipeline."""
 
 from __future__ import annotations
 
 import logging
+import shutil
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -21,19 +18,19 @@ SEGMENT_ORDER = ["VIP Champions", "Loyal", "Potential", "At Risk", "Lost"]
 
 
 def create_weekly_chart(df_weekly: pd.DataFrame) -> go.Figure:
-    """Loo nädalase tulu joondiagramm."""
+    """Create a weekly revenue line chart."""
     fig = px.line(
         df_weekly,
         x="week",
         y="revenue",
         markers=True,
-        title="Nädalane tulu",
-        labels={"week": "Nädal", "revenue": "Tulu (EUR)"},
+        title="Nadalane tulu",
+        labels={"week": "Nadal", "revenue": "Tulu (EUR)"},
         custom_data=["week_label", "orders", "unique_customers"],
     )
     fig.update_traces(
         hovertemplate=(
-            "Nädal=%{customdata[0]}<br>"
+            "Nadal=%{customdata[0]}<br>"
             "Tulu (EUR)=%{y:.2f}<br>"
             "Tellimusi=%{customdata[1]}<br>"
             "Unikaalseid kliente=%{customdata[2]}<extra></extra>"
@@ -43,19 +40,19 @@ def create_weekly_chart(df_weekly: pd.DataFrame) -> go.Figure:
 
 
 def create_monthly_chart(df_monthly: pd.DataFrame) -> go.Figure:
-    """Loo kuukäibe joondiagramm."""
+    """Create a monthly revenue line chart."""
     return px.line(
         df_monthly,
         x="month",
         y="revenue",
         markers=True,
-        title="Kuukäive",
+        title="Kuukaive",
         labels={"month": "Kuu", "revenue": "Tulu (EUR)"},
     )
 
 
 def create_city_chart(df_city: pd.DataFrame) -> go.Figure:
-    """Loo linnade kogutulu tulpdiagramm."""
+    """Create a city revenue bar chart."""
     fig = px.bar(
         df_city.sort_values("revenue"),
         x="revenue",
@@ -69,22 +66,50 @@ def create_city_chart(df_city: pd.DataFrame) -> go.Figure:
     return fig
 
 
+def create_channel_chart(df_channel: pd.DataFrame) -> go.Figure:
+    """Create a revenue by channel bar chart."""
+    if df_channel.empty:
+        return create_empty_figure("Kanaliandmed puuduvad")
+    fig = px.bar(
+        df_channel,
+        x="channel",
+        y="revenue",
+        text="revenue",
+        title="Tulu kanali kaupa",
+        labels={"channel": "Kanal", "revenue": "Tulu (EUR)"},
+    )
+    fig.update_traces(texttemplate="%{text:.0f} EUR", textposition="outside")
+    return fig
+
+
 def create_kpi_summary(kpis: dict[str, Any]) -> go.Figure:
-    """Loo KPI tabel total revenue, orders, customers ja avg order väärtustega."""
+    """Create a KPI table."""
+    labels = ["Total revenue", "Orders", "Unique customers", "Avg order value", "Revenue per customer"]
+    values = [
+        f"{kpis['total_revenue']:.2f} EUR",
+        kpis["orders"],
+        kpis["unique_customers"],
+        f"{kpis['avg_order_value']:.2f} EUR",
+        f"{kpis.get('revenue_per_customer', 0):.2f} EUR",
+    ]
     return go.Figure(
         data=[
             go.Table(
-                header={"values": ["KPI", "Väärtus"], "fill_color": "#d9ead3", "align": "left"},
+                header={"values": ["KPI", "Vaartus"], "fill_color": "#d9ead3", "align": "left"},
+                cells={"values": [labels, values], "align": "left"},
+            )
+        ]
+    )
+
+
+def create_data_quality_table(data_quality: pd.DataFrame) -> go.Figure:
+    """Create a data quality table."""
+    return go.Figure(
+        data=[
+            go.Table(
+                header={"values": ["Metric", "Value", "Description"], "fill_color": "#e5e7eb", "align": "left"},
                 cells={
-                    "values": [
-                        ["Total revenue", "Orders", "Unique customers", "Avg order value"],
-                        [
-                            f"{kpis['total_revenue']:.2f} EUR",
-                            kpis["orders"],
-                            kpis["unique_customers"],
-                            f"{kpis['avg_order_value']:.2f} EUR",
-                        ],
-                    ],
+                    "values": [data_quality["metric"], data_quality["value"], data_quality["description"]],
                     "align": "left",
                 },
             )
@@ -92,8 +117,34 @@ def create_kpi_summary(kpis: dict[str, Any]) -> go.Figure:
     )
 
 
+def create_campaign_plan_table(campaign_plan: pd.DataFrame) -> go.Figure:
+    """Create a campaign plan table."""
+    columns = ["Segment", "goal", "message", "channel", "offer", "primary_metric"]
+    return go.Figure(
+        data=[
+            go.Table(
+                header={"values": columns, "fill_color": "#dbeafe", "align": "left"},
+                cells={"values": [campaign_plan[column] for column in columns], "align": "left"},
+            )
+        ]
+    )
+
+
+def create_ab_test_table(ab_test_plan: pd.DataFrame) -> go.Figure:
+    """Create an A/B test plan table."""
+    columns = ["test_name", "hypothesis", "split", "test_period", "primary_metric", "secondary_metric"]
+    return go.Figure(
+        data=[
+            go.Table(
+                header={"values": columns, "fill_color": "#fef3c7", "align": "left"},
+                cells={"values": [ab_test_plan[column] for column in columns], "align": "left"},
+            )
+        ]
+    )
+
+
 def create_segment_chart(segment_summary: pd.DataFrame) -> go.Figure:
-    """Loo tulpdiagramm RFM segmentide klientide arvust."""
+    """Create an RFM segment distribution chart."""
     fig = px.bar(
         segment_summary.sort_values("customers", ascending=False),
         x="Segment",
@@ -109,26 +160,27 @@ def create_segment_chart(segment_summary: pd.DataFrame) -> go.Figure:
 
 
 def create_rfm_scatter(rfm: pd.DataFrame) -> go.Figure:
-    """Loo RFM hajuvusdiagramm recency, monetary ja frequency näitajatega."""
+    """Create an RFM scatter plot without exposing direct contact data."""
     return px.scatter(
         rfm,
         x="recency_days",
         y="monetary_value",
         color="Segment",
         size="frequency",
-        hover_data=["customer_name", "email", "frequency", "RFM_Score"],
-        title="UrbanStyle kliendisegmendid RFM analüüsi põhjal",
+        hover_data=["customer_name", "city", "frequency", "RFM_Score", "estimated_clv_6m"],
+        title="UrbanStyle kliendisegmendid RFM analuusi pohjal",
         labels={
-            "recency_days": "Päevi viimasest ostust",
+            "recency_days": "Paevi viimasest ostust",
             "monetary_value": "Kogukulutus (EUR)",
             "frequency": "Ostude arv",
+            "estimated_clv_6m": "6 kuu CLV hinnang",
         },
         category_orders={"Segment": SEGMENT_ORDER},
     )
 
 
 def create_top_vip_chart(rfm: pd.DataFrame) -> go.Figure:
-    """Loo top 10 VIP kliendi tulpdiagramm kogukulutuse järgi."""
+    """Create a top VIP customers chart by spending."""
     top_vip = rfm[rfm["Segment"] == "VIP Champions"].nlargest(10, "monetary_value").copy()
     if top_vip.empty:
         top_vip = rfm.nlargest(10, "monetary_value").copy()
@@ -138,23 +190,120 @@ def create_top_vip_chart(rfm: pd.DataFrame) -> go.Figure:
         y="customer_name",
         orientation="h",
         text="monetary_value",
-        title="Top 10 VIP klienti kogukulutuse järgi",
+        title="Top 10 VIP klienti kogukulutuse jargi",
         labels={"monetary_value": "Kogukulutus (EUR)", "customer_name": "Klient"},
     )
     fig.update_traces(texttemplate="%{text:.0f} EUR", textposition="outside")
     return fig
 
 
+def create_cohort_chart(cohort_retention: pd.DataFrame) -> go.Figure:
+    """Create a cohort retention heatmap."""
+    if cohort_retention.empty:
+        return create_empty_figure("Cohort retention puudub")
+    matrix = cohort_retention.pivot(index="cohort_month", columns="cohort_index", values="retention_rate_pct").fillna(0)
+    return px.imshow(
+        matrix,
+        aspect="auto",
+        text_auto=".0f",
+        color_continuous_scale="YlGnBu",
+        title="Cohort retention esimese ostukuu pohjal (%)",
+        labels={"x": "Kuud esimesest ostust", "y": "Esimese ostu kuu", "color": "Retention %"},
+    )
+
+
+def create_category_profile_chart(segment_category_profile: pd.DataFrame) -> go.Figure:
+    """Create a category profile chart by segment."""
+    if segment_category_profile.empty:
+        return create_empty_figure("Tootekategooria profiil puudub")
+    top_profile = segment_category_profile.groupby("Segment", group_keys=False).head(3)
+    return px.bar(
+        top_profile,
+        x="Segment",
+        y="revenue",
+        color="category",
+        title="Top kategooriad RFM segmentide loikes",
+        labels={"revenue": "Tulu (EUR)", "category": "Kategooria"},
+        category_orders={"Segment": SEGMENT_ORDER},
+    )
+
+
+def create_empty_figure(title: str) -> go.Figure:
+    """Return a small placeholder figure for optional missing reports."""
+    fig = go.Figure()
+    fig.update_layout(title=title, xaxis={"visible": False}, yaxis={"visible": False})
+    return fig
+
+
+def _html_table(df: pd.DataFrame, max_rows: int = 8) -> str:
+    """Render a compact dataframe as HTML."""
+    if df.empty:
+        return "<p>Andmed puuduvad.</p>"
+    return df.head(max_rows).to_html(index=False, classes="mini-table", border=0)
+
+
+def _markdown_table(df: pd.DataFrame, max_rows: int | None = None) -> str:
+    """Render a dataframe as a small Markdown table without extra dependencies."""
+    table = df.head(max_rows) if max_rows else df
+    if table.empty:
+        return "Andmed puuduvad."
+    columns = [str(column) for column in table.columns]
+    rows = [[str(value) for value in row] for row in table.to_numpy()]
+    header = "| " + " | ".join(columns) + " |"
+    divider = "| " + " | ".join(["---"] * len(columns)) + " |"
+    body = ["| " + " | ".join(row) + " |" for row in rows]
+    return "\n".join([header, divider, *body])
+
+
+def _executive_summary(results: dict[str, Any]) -> str:
+    """Build the dashboard's executive summary cards."""
+    kpis = results["kpis"]
+    segment_summary = results["segment_summary"]
+    vip = segment_summary[segment_summary["Segment"] == "VIP Champions"]
+    at_risk = segment_summary[segment_summary["Segment"] == "At Risk"]
+    vip_text = "puudub"
+    at_risk_text = "puudub"
+    if not vip.empty:
+        row = vip.iloc[0]
+        vip_text = f"{int(row['customers'])} klienti, {row['revenue_share_pct']:.1f}% kaibest"
+    if not at_risk.empty:
+        row = at_risk.iloc[0]
+        at_risk_text = f"{int(row['customers'])} klienti, {row['revenue_share_pct']:.1f}% kaibest"
+    source = results.get("data_source", "unknown")
+    source_note = ""
+    if source != "supabase_api":
+        source_note = f'<p class="warning">Hoiatus: raport kasutab andmeallikat "{source}", mitte live Supabase API tulemust.</p>'
+    return f"""
+    <section class="summary">
+      <div><span>Kogukaive</span><strong>{kpis['total_revenue']:.2f} EUR</strong></div>
+      <div><span>Tellimused</span><strong>{kpis['orders']}</strong></div>
+      <div><span>VIP Champions</span><strong>{vip_text}</strong></div>
+      <div><span>At Risk</span><strong>{at_risk_text}</strong></div>
+    </section>
+    {source_note}
+    <section class="insight">
+      <h2>Otsus Markole</h2>
+      <p>Hoia VIP kliente lojaalsusprogrammiga, tee At Risk segmendile kontrollgrupiga win-back kampaania ning kasuta Loyal ja Potential segmentides cross-selli.</p>
+    </section>
+    """
+
+
 def write_combined_dashboard(results: dict[str, Any], path: Path) -> None:
-    """Salvesta tiimitöö graafikud ühte HTML faili."""
+    """Save all team figures into one HTML dashboard."""
     figures = [
         create_kpi_summary(results["kpis"]),
+        create_data_quality_table(results["data_quality"]),
         create_weekly_chart(results["weekly"]),
         create_monthly_chart(results["monthly"]),
         create_city_chart(results["city"]),
+        create_channel_chart(results["channel"]),
         create_segment_chart(results["segment_summary"]),
         create_rfm_scatter(results["rfm"]),
         create_top_vip_chart(results["rfm"]),
+        create_cohort_chart(results["cohort_retention"]),
+        create_category_profile_chart(results["segment_category_profile"]),
+        create_campaign_plan_table(results["campaign_plan"]),
+        create_ab_test_table(results["ab_test_plan"]),
     ]
     sections = [
         f'<section class="chart">{figure.to_html(full_html=False, include_plotlyjs=index == 0)}</section>'
@@ -165,11 +314,11 @@ def write_combined_dashboard(results: dict[str, Any], path: Path) -> None:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Week 8 tiimitöö koondvisuaalid</title>
+  <title>Week 8 tiimitoo koondvisuaalid</title>
   <style>
     body {{
       margin: 0;
-      background: #f4f6f9;
+      background: #f5f7fb;
       color: #1f2937;
       font-family: Arial, sans-serif;
     }}
@@ -187,20 +336,69 @@ def write_combined_dashboard(results: dict[str, Any], path: Path) -> None:
       margin: 0;
       font-size: 30px;
     }}
+    h2 {{
+      margin: 0 0 8px;
+      font-size: 18px;
+    }}
+    .summary {{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+    }}
+    .summary div,
+    .insight,
     .chart {{
       background: #ffffff;
       border: 1px solid #d9e2ec;
       border-radius: 8px;
-      padding: 12px;
+      padding: 14px;
       overflow: hidden;
+    }}
+    .summary span {{
+      display: block;
+      color: #64748b;
+      font-size: 13px;
+    }}
+    .summary strong {{
+      display: block;
+      margin-top: 6px;
+      font-size: 20px;
+    }}
+    .warning {{
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      margin: 0;
+      padding: 12px 14px;
+    }}
+    .mini-table {{
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      font-size: 13px;
+    }}
+    .mini-table th,
+    .mini-table td {{
+      border-bottom: 1px solid #e5e7eb;
+      padding: 8px;
+      text-align: left;
     }}
   </style>
 </head>
 <body>
   <header>
-    <h1>Week 8 tiimitöö koondvisuaalid</h1>
+    <h1>Week 8 tiimitoo koondvisuaalid</h1>
   </header>
   <main>
+    {_executive_summary(results)}
+    <section class="chart">
+      <h2>Kampaaniaplaan</h2>
+      {_html_table(results["campaign_plan"], max_rows=10)}
+    </section>
+    <section class="chart">
+      <h2>A/B testide plaan</h2>
+      {_html_table(results["ab_test_plan"], max_rows=10)}
+    </section>
     {"".join(sections)}
   </main>
 </body>
@@ -209,8 +407,49 @@ def write_combined_dashboard(results: dict[str, Any], path: Path) -> None:
     path.write_text(html, encoding="utf-8")
 
 
+def _append_report_tables(results: dict[str, Any]) -> str:
+    """Append key marketing tables to the Markdown business report."""
+    parts = [
+        "\n## Andmekvaliteet\n",
+        _markdown_table(results["data_quality"]),
+        "\n## Kampaaniaplaan segmentide kaupa\n",
+        _markdown_table(results["campaign_plan"]),
+        "\n## A/B testimise plaan\n",
+        _markdown_table(results["ab_test_plan"]),
+    ]
+    if not results["cohort_retention"].empty:
+        cohort_preview = results["cohort_retention"].query("cohort_index <= 3").head(12)
+        parts.extend(["\n## Cohort retention esimese 3 kuu loikes\n", _markdown_table(cohort_preview)])
+    return "\n".join(parts)
+
+
+def _write_latest_copies(paths: dict[str, Path], output_path: Path) -> None:
+    """Copy timestamped outputs to stable *_latest filenames."""
+    latest_names = {
+        "weekly_csv": "weekly_aggregates_latest.csv",
+        "monthly_csv": "monthly_report_latest.csv",
+        "city_csv": "city_report_latest.csv",
+        "channel_csv": "channel_report_latest.csv",
+        "kpis_csv": "kpis_latest.csv",
+        "data_quality_csv": "data_quality_latest.csv",
+        "cohort_retention_csv": "cohort_retention_latest.csv",
+        "rfm_csv": "rfm_segments_latest.csv",
+        "segment_summary_csv": "rfm_segment_summary_latest.csv",
+        "campaign_plan_csv": "marketing_campaign_plan_latest.csv",
+        "ab_test_plan_csv": "ab_test_plan_latest.csv",
+        "report_md": "rfm_business_report_latest.md",
+        "combined_dashboard": "team_dashboard_latest.html",
+    }
+    for key, latest_name in latest_names.items():
+        source = paths.get(key)
+        if source and source.exists():
+            latest_path = output_path / latest_name
+            shutil.copyfile(source, latest_path)
+            paths[f"{key}_latest"] = latest_path
+
+
 def export_results(results: dict[str, Any], output_dir: str | Path = "output") -> dict[str, Path]:
-    """Salvesta kõik raportid ja graafikud ajatempliga failinimedega."""
+    """Save all reports and charts with timestamped names and latest aliases."""
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
     date_str = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -219,36 +458,59 @@ def export_results(results: dict[str, Any], output_dir: str | Path = "output") -
         "weekly_csv": output_path / f"weekly_aggregates_{date_str}.csv",
         "monthly_csv": output_path / f"monthly_report_{date_str}.csv",
         "city_csv": output_path / f"city_report_{date_str}.csv",
+        "channel_csv": output_path / f"channel_report_{date_str}.csv",
         "kpis_csv": output_path / f"kpis_{date_str}.csv",
+        "data_quality_csv": output_path / f"data_quality_{date_str}.csv",
+        "cohort_retention_csv": output_path / f"cohort_retention_{date_str}.csv",
+        "segment_category_profile_csv": output_path / f"segment_category_profile_{date_str}.csv",
+        "campaign_plan_csv": output_path / f"marketing_campaign_plan_{date_str}.csv",
+        "ab_test_plan_csv": output_path / f"ab_test_plan_{date_str}.csv",
         "rfm_csv": output_path / f"rfm_segments_{date_str}.csv",
         "segment_summary_csv": output_path / f"rfm_segment_summary_{date_str}.csv",
         "report_md": output_path / f"rfm_business_report_{date_str}.md",
         "weekly_chart": output_path / f"weekly_revenue_{date_str}.html",
         "monthly_chart": output_path / f"monthly_revenue_{date_str}.html",
         "city_chart": output_path / f"city_revenue_{date_str}.html",
+        "channel_chart": output_path / f"channel_revenue_{date_str}.html",
         "kpi_chart": output_path / f"kpi_summary_{date_str}.html",
         "segment_chart": output_path / f"rfm_segmentide_jaotus_{date_str}.html",
         "rfm_scatter": output_path / f"rfm_segmentide_scatter_{date_str}.html",
         "top_vip_chart": output_path / f"rfm_top_10_vip_{date_str}.html",
+        "cohort_chart": output_path / f"cohort_retention_{date_str}.html",
+        "category_profile_chart": output_path / f"segment_category_profile_{date_str}.html",
+        "campaign_plan_chart": output_path / f"marketing_campaign_plan_{date_str}.html",
+        "ab_test_plan_chart": output_path / f"ab_test_plan_{date_str}.html",
         "combined_dashboard": output_path / f"team_dashboard_{date_str}.html",
     }
 
     results["weekly"].to_csv(paths["weekly_csv"], index=False, encoding="utf-8")
     results["monthly"].to_csv(paths["monthly_csv"], index=False, encoding="utf-8")
     results["city"].to_csv(paths["city_csv"], index=False, encoding="utf-8")
+    results["channel"].to_csv(paths["channel_csv"], index=False, encoding="utf-8")
     pd.DataFrame([results["kpis"]]).to_csv(paths["kpis_csv"], index=False, encoding="utf-8")
+    results["data_quality"].to_csv(paths["data_quality_csv"], index=False, encoding="utf-8")
+    results["cohort_retention"].to_csv(paths["cohort_retention_csv"], index=False, encoding="utf-8")
+    results["segment_category_profile"].to_csv(paths["segment_category_profile_csv"], index=False, encoding="utf-8")
+    results["campaign_plan"].to_csv(paths["campaign_plan_csv"], index=False, encoding="utf-8")
+    results["ab_test_plan"].to_csv(paths["ab_test_plan_csv"], index=False, encoding="utf-8")
     results["rfm"].to_csv(paths["rfm_csv"], index=False, encoding="utf-8")
     results["segment_summary"].to_csv(paths["segment_summary_csv"], index=False, encoding="utf-8")
-    paths["report_md"].write_text(results["business_interpretation"], encoding="utf-8")
+    paths["report_md"].write_text(results["business_interpretation"] + _append_report_tables(results), encoding="utf-8")
 
     create_weekly_chart(results["weekly"]).write_html(paths["weekly_chart"])
     create_monthly_chart(results["monthly"]).write_html(paths["monthly_chart"])
     create_city_chart(results["city"]).write_html(paths["city_chart"])
+    create_channel_chart(results["channel"]).write_html(paths["channel_chart"])
     create_kpi_summary(results["kpis"]).write_html(paths["kpi_chart"])
     create_segment_chart(results["segment_summary"]).write_html(paths["segment_chart"])
     create_rfm_scatter(results["rfm"]).write_html(paths["rfm_scatter"])
     create_top_vip_chart(results["rfm"]).write_html(paths["top_vip_chart"])
+    create_cohort_chart(results["cohort_retention"]).write_html(paths["cohort_chart"])
+    create_category_profile_chart(results["segment_category_profile"]).write_html(paths["category_profile_chart"])
+    create_campaign_plan_table(results["campaign_plan"]).write_html(paths["campaign_plan_chart"])
+    create_ab_test_table(results["ab_test_plan"]).write_html(paths["ab_test_plan_chart"])
     write_combined_dashboard(results, paths["combined_dashboard"])
+    _write_latest_copies(paths, output_path)
 
-    logger.info("Väljundfailid salvestatud kausta %s", output_path)
+    logger.info("Valjundfailid salvestatud kausta %s", output_path)
     return paths
