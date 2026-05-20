@@ -276,9 +276,10 @@ def _executive_summary(results: dict[str, Any]) -> str:
     source_note = ""
     if source != "supabase_api":
         source_note = f'<p class="warning">Hoiatus: raport kasutab andmeallikat "{source}", mitte live Supabase API tulemust.</p>'
+    revenue_millions = kpis["total_revenue"] / 1_000_000
     return f"""
     <section class="summary">
-      <div><span>Kogukaive</span><strong>{kpis['total_revenue']:.2f} EUR</strong></div>
+      <div><span>Kogukaive</span><strong>{revenue_millions:.1f} mln EUR</strong></div>
       <div><span>Tellimused</span><strong>{kpis['orders']}</strong></div>
       <div><span>VIP Champions</span><strong>{vip_text}</strong></div>
       <div><span>At Risk</span><strong>{at_risk_text}</strong></div>
@@ -301,8 +302,6 @@ def write_combined_dashboard(results: dict[str, Any], path: Path) -> None:
         create_segment_chart(results["segment_summary"]),
         create_rfm_scatter(results["rfm"]),
         create_top_vip_chart(results["rfm"]),
-        create_campaign_plan_table(results["campaign_plan"]),
-        create_ab_test_table(results["ab_test_plan"]),
     ]
     sections = [
         f'<section class="chart">{figure.to_html(full_html=False, include_plotlyjs=index == 0)}</section>'
@@ -381,6 +380,10 @@ def write_combined_dashboard(results: dict[str, Any], path: Path) -> None:
       border-bottom: 1px solid #e5e7eb;
       padding: 8px;
       text-align: left;
+    }}
+    main > section.chart:nth-of-type(3),
+    main > section.chart:nth-of-type(4) {{
+      display: none;
     }}
   </style>
 </head>
