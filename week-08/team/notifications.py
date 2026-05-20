@@ -1,4 +1,4 @@
-"""Optional email and webhook notifications for Week 8 pipelines."""
+"""Valikulised e-posti ja webhooki teavitused 8. nädala pipeline'idele."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 def format_summary(summary: dict[str, Any]) -> str:
-    """Build a short human-readable KPI summary."""
+    """Koosta lühike ja loetav KPI kokkuvõte."""
     lines = []
     if "total_revenue" in summary:
         lines.append(f"Kogutulu: {float(summary['total_revenue']):.2f} EUR")
@@ -48,7 +48,7 @@ def build_message(
     elapsed_seconds: float | None = None,
     output_dir: str | None = None,
 ) -> str:
-    """Create the notification body."""
+    """Loo teavituse sisu."""
     status_label = "õnnestus" if status.upper() == "SUCCESS" else "ebaõnnestus"
     lines = [f"{pipeline_name} {status_label}."]
     if elapsed_seconds is not None:
@@ -61,7 +61,7 @@ def build_message(
 
 
 def send_webhook(message: str) -> bool:
-    """Send a simple JSON text notification to Google Chat or another webhook."""
+    """Saada lihtne JSON-tekstiteavitus Google Chati või teise webhooki."""
     webhook_url = os.getenv("NOTIFY_WEBHOOK_URL") or os.getenv("GOOGLE_CHAT_WEBHOOK_URL")
     if not webhook_url:
         return False
@@ -79,7 +79,7 @@ def send_webhook(message: str) -> bool:
 
 
 def send_email(subject: str, message: str, attachments: list[Path] | None = None) -> bool:
-    """Send an email notification when SMTP settings are present."""
+    """Saada e-posti teavitus, kui SMTP seaded on olemas."""
     host = os.getenv("SMTP_HOST")
     to_addresses = [item.strip() for item in os.getenv("NOTIFY_EMAIL_TO", "").split(",") if item.strip()]
     if not host or not to_addresses:
@@ -133,7 +133,7 @@ def send_pipeline_notification(
     output_dir: str | None = None,
     attachments: list[str | Path] | None = None,
 ) -> None:
-    """Send configured notifications and always keep the pipeline running."""
+    """Saada seadistatud teavitused ja hoia pipeline alati töös."""
     load_dotenv()
     message = build_message(status, summary, pipeline_name, elapsed_seconds, output_dir)
     attachment_paths = [Path(path) for path in attachments or []]
