@@ -176,11 +176,33 @@ def validate_results(results: dict[str, Any]) -> None:
         raise RuntimeError("Pipeline'i valideerimine ebaonnestus.")
 
 
+def notification_summary(results: dict[str, Any]) -> dict[str, Any]:
+    """Koosta tiimitöö teavituse jaoks KPI ja RFM lühikokkuvõte."""
+    summary = dict(results["kpis"])
+    rfm = results["rfm"]
+    segment_summary = results["segment_summary"]
+    summary["rfm_segments"] = int(rfm["Segment"].nunique()) if not rfm.empty else 0
+    if not segment_summary.empty:
+        top_segment = segment_summary.sort_values("customers", ascending=False).iloc[0]
+        summary["top_segment"] = f"{top_segment['Segment']} ({int(top_segment['customers'])} klienti)"
+    return summary
+
+
+def notification_attachments(paths: dict[str, Path]) -> list[Path]:
+    """Vali emaili manusteks CSV raportid ja koondvisuaalide HTML."""
+    attachments = [path for path in paths.values() if path.suffix.lower() == ".csv"]
+    combined_dashboard = paths.get("combined_dashboard")
+    if combined_dashboard is not None:
+        attachments.append(combined_dashboard)
+    return attachments
+
+
 def notify(
     status: str,
     summary: dict[str, Any],
     elapsed_seconds: float | None = None,
     output_dir: Path | None = None,
+    attachments: list[Path] | None = None,
 ) -> None:
     """Saada valikuline emaili või webhooki teavitus pipeline'i tulemusega."""
     send_pipeline_notification(
@@ -189,6 +211,7 @@ def notify(
         pipeline_name="Week 8 tiimitöö pipeline",
         elapsed_seconds=elapsed_seconds,
         output_dir=str(output_dir) if output_dir else None,
+        attachments=attachments,
     )
 
 
@@ -206,7 +229,13 @@ def run_pipeline(analysis_date: str | None = None) -> dict[str, Any]:
         output_dir = ROOT / config["pipeline"].get("output_dir", "output")
         paths = export_results(results, output_dir=output_dir)
         elapsed = time.perf_counter() - start_time
-        notify("SUCCESS", results["kpis"], elapsed_seconds=elapsed, output_dir=output_dir)
+        notify(
+            "SUCCESS",
+            notification_summary(results),
+            elapsed_seconds=elapsed,
+            output_dir=output_dir,
+            attachments=notification_attachments(paths),
+        )
         logger.info("Pipeline complete %.2f seconds, files=%s", elapsed, len(paths))
         print(f"Pipeline valmis {elapsed:.2f} sekundiga. Väljundid: {output_dir}")
         reference_date = config["pipeline"].get("reference_date")

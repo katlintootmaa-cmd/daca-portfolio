@@ -61,6 +61,7 @@ Kui API ühendus puudub või Supabase on maas, kasutab pipeline `config.yaml` se
 - `rfm_segmentide_jaotus_*.html`
 - `rfm_segmentide_scatter_*.html`
 - `rfm_top_10_vip_*.html`
+- `team_dashboard_*.html`
 
 ## Edasijõudnute teavitus
 
@@ -82,6 +83,7 @@ NOTIFY_EMAIL_TO=marko@example.com
 ```
 
 Teavitus sisaldab pipeline'i staatust, kestust, väljundkausta ning KPI numbreid: kogutulu, tellimuste arv, unikaalsed kliendid ja keskmine tellimus.
+Emaili puhul lisatakse manustena CSV raportid ja `team_dashboard_*.html` koondvisuaalidega.
 
 ## RFM segmentide loogika
 

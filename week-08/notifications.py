@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import json
 import logging
+import mimetypes
 import os
 import smtplib
 import ssl
 from email.message import EmailMessage
+from pathlib import Path
 from typing import Any
 from urllib import request
 
@@ -30,6 +32,8 @@ def format_summary(summary: dict[str, Any]) -> str:
         lines.append(f"Keskmine tellimus: {float(summary['avg_order_value']):.2f} EUR")
     if "rfm_segments" in summary:
         lines.append(f"RFM segmente: {summary['rfm_segments']}")
+    if "top_segment" in summary:
+        lines.append(f"Suurim segment: {summary['top_segment']}")
     if "top_city" in summary:
         lines.append(f"Suurim linn: {summary['top_city']}")
     if "best_month" in summary:
@@ -74,7 +78,7 @@ def send_webhook(message: str) -> bool:
     return True
 
 
-def send_email(subject: str, message: str) -> bool:
+def send_email(subject: str, message: str, attachments: list[Path] | None = None) -> bool:
     """Send an email notification when SMTP settings are present."""
     host = os.getenv("SMTP_HOST")
     to_addresses = [item.strip() for item in os.getenv("NOTIFY_EMAIL_TO", "").split(",") if item.strip()]
@@ -97,6 +101,19 @@ def send_email(subject: str, message: str) -> bool:
     email["To"] = ", ".join(to_addresses)
     email.set_content(message)
 
+    for attachment in attachments or []:
+        if not attachment.exists() or not attachment.is_file():
+            logger.warning("[NOTIFY] Manust ei leitud: %s", attachment)
+            continue
+        content_type, _ = mimetypes.guess_type(attachment)
+        maintype, subtype = (content_type or "application/octet-stream").split("/", 1)
+        email.add_attachment(
+            attachment.read_bytes(),
+            maintype=maintype,
+            subtype=subtype,
+            filename=attachment.name,
+        )
+
     context = ssl.create_default_context()
     with smtplib.SMTP(host, port, timeout=15) as smtp:
         if use_tls:
@@ -114,10 +131,12 @@ def send_pipeline_notification(
     pipeline_name: str,
     elapsed_seconds: float | None = None,
     output_dir: str | None = None,
+    attachments: list[str | Path] | None = None,
 ) -> None:
     """Send configured notifications and always keep the pipeline running."""
     load_dotenv()
     message = build_message(status, summary, pipeline_name, elapsed_seconds, output_dir)
+    attachment_paths = [Path(path) for path in attachments or []]
     sent_any = False
 
     try:
@@ -127,7 +146,7 @@ def send_pipeline_notification(
 
     try:
         subject = f"{pipeline_name}: {status.upper()}"
-        sent_any = send_email(subject, message) or sent_any
+        sent_any = send_email(subject, message, attachment_paths) or sent_any
     except Exception as exc:
         logger.warning("[NOTIFY] Emaili saatmine ebaõnnestus: %s", exc)
 

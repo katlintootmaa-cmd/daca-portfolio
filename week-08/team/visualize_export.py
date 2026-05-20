@@ -108,6 +108,68 @@ def create_top_vip_chart(rfm: pd.DataFrame) -> go.Figure:
     return fig
 
 
+def write_combined_dashboard(results: dict[str, Any], path: Path) -> None:
+    """Salvesta tiimitöö graafikud ühte HTML faili."""
+    figures = [
+        create_kpi_summary(results["kpis"]),
+        create_weekly_chart(results["weekly"]),
+        create_segment_chart(results["segment_summary"]),
+        create_rfm_scatter(results["rfm"]),
+        create_top_vip_chart(results["rfm"]),
+    ]
+    sections = [
+        f'<section class="chart">{figure.to_html(full_html=False, include_plotlyjs=index == 0)}</section>'
+        for index, figure in enumerate(figures)
+    ]
+    html = f"""<!doctype html>
+<html lang="et">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Week 8 tiimitöö koondvisuaalid</title>
+  <style>
+    body {{
+      margin: 0;
+      background: #f4f6f9;
+      color: #1f2937;
+      font-family: Arial, sans-serif;
+    }}
+    header {{
+      padding: 28px 32px 12px;
+      background: #ffffff;
+      border-bottom: 1px solid #d9e2ec;
+    }}
+    main {{
+      display: grid;
+      gap: 18px;
+      padding: 22px 32px 36px;
+    }}
+    h1 {{
+      margin: 0;
+      font-size: 30px;
+    }}
+    .chart {{
+      background: #ffffff;
+      border: 1px solid #d9e2ec;
+      border-radius: 8px;
+      padding: 12px;
+      overflow: hidden;
+    }}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Week 8 tiimitöö koondvisuaalid</h1>
+  </header>
+  <main>
+    {"".join(sections)}
+  </main>
+</body>
+</html>
+"""
+    path.write_text(html, encoding="utf-8")
+
+
 def export_results(results: dict[str, Any], output_dir: str | Path = "output") -> dict[str, Path]:
     """Salvesta kõik raportid ja graafikud ajatempliga failinimedega."""
     output_path = Path(output_dir)
@@ -125,6 +187,7 @@ def export_results(results: dict[str, Any], output_dir: str | Path = "output") -
         "segment_chart": output_path / f"rfm_segmentide_jaotus_{date_str}.html",
         "rfm_scatter": output_path / f"rfm_segmentide_scatter_{date_str}.html",
         "top_vip_chart": output_path / f"rfm_top_10_vip_{date_str}.html",
+        "combined_dashboard": output_path / f"team_dashboard_{date_str}.html",
     }
 
     results["weekly"].to_csv(paths["weekly_csv"], index=False, encoding="utf-8")
@@ -138,6 +201,7 @@ def export_results(results: dict[str, Any], output_dir: str | Path = "output") -
     create_segment_chart(results["segment_summary"]).write_html(paths["segment_chart"])
     create_rfm_scatter(results["rfm"]).write_html(paths["rfm_scatter"])
     create_top_vip_chart(results["rfm"]).write_html(paths["top_vip_chart"])
+    write_combined_dashboard(results, paths["combined_dashboard"])
 
     logger.info("Väljundfailid salvestatud kausta %s", output_path)
     return paths
