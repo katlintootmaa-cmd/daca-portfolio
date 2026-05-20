@@ -4,15 +4,9 @@ on:
   push:
     paths:
       - "week-08/team/**"
-      - "SQL/**"
-      - "requirements.txt"
-      - ".github/workflows/week8-pipeline.yml"
   pull_request:
     paths:
       - "week-08/team/**"
-      - "SQL/**"
-      - "requirements.txt"
-      - ".github/workflows/week8-pipeline.yml"
   schedule:
     - cron: "0 6 * * 1"
   workflow_dispatch:
