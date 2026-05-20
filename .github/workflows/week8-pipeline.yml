@@ -3,13 +3,13 @@ name: Week 8 Pipeline
 on:
   push:
     paths:
-      - "week-08/**"
+      - "week-08/team/**"
       - "SQL/**"
       - "requirements.txt"
       - ".github/workflows/week8-pipeline.yml"
   pull_request:
     paths:
-      - "week-08/**"
+      - "week-08/team/**"
       - "SQL/**"
       - "requirements.txt"
       - ".github/workflows/week8-pipeline.yml"
@@ -58,7 +58,6 @@ jobs:
       - name: Compile Week 8 Python files
         run: |
           python -m py_compile \
-            week-08/combined_visuals.py \
             week-08/team/data_fetcher.py \
             week-08/team/notifications.py \
             week-08/team/transform.py \
@@ -71,15 +70,10 @@ jobs:
           mkdir -p output logs
           python pipeline.py --date "$ANALYSIS_DATE"
 
-      - name: Build combined Week 8 dashboard
-        run: |
-          python week-08/combined_visuals.py
-
       - name: Show generated files
         if: always()
         run: |
           echo "Generated Week 8 files:"
-          find "${{ github.workspace }}/week-08" -maxdepth 2 -type f | sort
           find "${{ github.workspace }}/week-08/team" -maxdepth 2 -type f | sort
 
       - name: Upload pipeline outputs
@@ -88,7 +82,6 @@ jobs:
         with:
           name: week8-pipeline-output
           path: |
-            ${{ github.workspace }}/week-08/combined_visuals.html
             ${{ github.workspace }}/week-08/team/output/
             ${{ github.workspace }}/week-08/team/logs/
           if-no-files-found: warn
