@@ -255,12 +255,12 @@ def notification_summary(results: dict[str, Any]) -> dict[str, Any]:
 
 
 def notification_attachments(paths: dict[str, Path]) -> list[Path]:
-    """Vali emaili manusteks CSV raportid ja koondvisuaalide HTML."""
-    attachments = [path for path in paths.values() if path.suffix.lower() == ".csv"]
-    combined_dashboard = paths.get("combined_dashboard")
-    if combined_dashboard is not None:
-        attachments.append(combined_dashboard)
-    return attachments
+    """Vali emaili manusteks ainult timestampiga HTML visuaalid."""
+    return [
+        path
+        for key, path in paths.items()
+        if path.suffix.lower() == ".html" and not key.endswith("_latest")
+    ]
 
 
 def notify(

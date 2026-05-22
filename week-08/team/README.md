@@ -8,7 +8,7 @@ Fail `week-08/individual/week8_api_pipeline.py` on jäetud individuaalseks demo-
 
 - `data_fetcher.py` - Roll A: Supabase API päringud (`fetch_sales`, `fetch_customers`, `fetch_products`), pagination, retry ja fallback.
 - `transform.py` - Roll B: puhastamine, ühendamine, KPI-d, RFM, cohort retention ja kampaaniaplaan.
-- `visualize_export.py` - Roll C: Plotly graafikud, executive dashboard ja CSV/HTML/Markdown eksport.
+- `visualize_export.py` - Roll C: Plotly graafikud, executive dashboard ja HTML visuaalide eksport.
 - `pipeline.py` - Roll D: orkestreerib kogu protsessi `extract -> transform -> validate -> export -> notify`.
 - `notifications.py` - valikulised webhooki ja emaili teavitused.
 - `config.yaml` - kuupäevafiltrid, tabelinimed, retry, output kaust ja RFM võrdluskuupäev.
@@ -54,24 +54,11 @@ Kui API ühendus puudub või Supabase on maas, kasutab pipeline `config.yaml` se
 7. Arvutab nädala-, kuu-, linna- ja kanaliraportid.
 8. Arvutab KPI-d, RFM segmentatsiooni ja cohort retentioni.
 9. Koostab segmentide tootekategooria profiili ja kampaaniaplaani.
-10. Ekspordib CSV failid, Plotly HTML graafikud, koonddashboardi ja äriraporti.
+10. Ekspordib Plotly HTML graafikud ja koonddashboardi.
 
 ## Väljundid
 
-`output/` kausta tekivad ajatempliga failid:
-
-- `weekly_aggregates_*.csv`
-- `monthly_report_*.csv`
-- `city_report_*.csv`
-- `channel_report_*.csv`
-- `kpis_*.csv`
-- `data_quality_*.csv`
-- `cohort_retention_*.csv`
-- `segment_category_profile_*.csv`
-- `marketing_campaign_plan_*.csv`
-- `rfm_segments_*.csv`
-- `rfm_segment_summary_*.csv`
-- `rfm_business_report_*.md`
+`output/` kausta tekivad ainult ajatempliga HTML visuaalid:
 - `weekly_revenue_*.html`
 - `monthly_revenue_*.html`
 - `city_revenue_*.html`
@@ -85,7 +72,7 @@ Kui API ühendus puudub või Supabase on maas, kasutab pipeline `config.yaml` se
 - `rfm_top_10_vip_*.html`
 - `team_dashboard_*.html`
 
-Olulisematele väljunditele tehakse ka stabiilsed `*_latest` koopiad, näiteks `team_dashboard_latest.html`, `rfm_business_report_latest.md` ja `marketing_campaign_plan_latest.csv`.
+HTML visuaalidele tehakse ka stabiilsed `*_latest` koopiad, näiteks `team_dashboard_latest.html`, `weekly_revenue_latest.html` ja `kpi_summary_latest.html`.
 
 ## RFM segmentide loogika
 
@@ -121,7 +108,7 @@ SMTP_FROM=...
 NOTIFY_EMAIL_TO=marko@example.com
 ```
 
-Teavitus sisaldab pipeline'i staatust, kestust, väljundkausta, andmeallikat ning KPI numbreid.
+Teavitus sisaldab pipeline'i staatust, kestust, väljundkausta, andmeallikat ning KPI tabelit.
 
 ## Testid
 

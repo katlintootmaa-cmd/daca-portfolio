@@ -230,19 +230,6 @@ def _html_table(df: pd.DataFrame, max_rows: int = 8, headers: dict[str, str] | N
     return table.to_html(index=False, classes="mini-table", border=0)
 
 
-def _markdown_table(df: pd.DataFrame, max_rows: int | None = None) -> str:
-    """Render a dataframe as a small Markdown table without extra dependencies."""
-    table = df.head(max_rows) if max_rows else df
-    if table.empty:
-        return "Andmed puuduvad."
-    columns = [str(column) for column in table.columns]
-    rows = [[str(value) for value in row] for row in table.to_numpy()]
-    header = "| " + " | ".join(columns) + " |"
-    divider = "| " + " | ".join(["---"] * len(columns)) + " |"
-    body = ["| " + " | ".join(row) + " |" for row in rows]
-    return "\n".join([header, divider, *body])
-
-
 def _executive_summary(results: dict[str, Any]) -> str:
     """Build the dashboard's executive summary cards."""
     kpis = results["kpis"]
@@ -403,34 +390,20 @@ def write_combined_dashboard(results: dict[str, Any], path: Path) -> None:
     path.write_text(html, encoding="utf-8")
 
 
-def _append_report_tables(results: dict[str, Any]) -> str:
-    """Append key marketing tables to the Markdown business report."""
-    parts = [
-        "\n## Andmekvaliteet\n",
-        _markdown_table(results["data_quality"]),
-        "\n## Kampaaniaplaan segmentide kaupa\n",
-        _markdown_table(results["campaign_plan"]),
-    ]
-    if not results["cohort_retention"].empty:
-        cohort_preview = results["cohort_retention"].query("cohort_index <= 3").head(12)
-        parts.extend(["\n## Cohort retention esimese 3 kuu loikes\n", _markdown_table(cohort_preview)])
-    return "\n".join(parts)
-
-
 def _write_latest_copies(paths: dict[str, Path], output_path: Path) -> None:
     """Copy timestamped outputs to stable *_latest filenames."""
     latest_names = {
-        "weekly_csv": "weekly_aggregates_latest.csv",
-        "monthly_csv": "monthly_report_latest.csv",
-        "city_csv": "city_report_latest.csv",
-        "channel_csv": "channel_report_latest.csv",
-        "kpis_csv": "kpis_latest.csv",
-        "data_quality_csv": "data_quality_latest.csv",
-        "cohort_retention_csv": "cohort_retention_latest.csv",
-        "rfm_csv": "rfm_segments_latest.csv",
-        "segment_summary_csv": "rfm_segment_summary_latest.csv",
-        "campaign_plan_csv": "marketing_campaign_plan_latest.csv",
-        "report_md": "rfm_business_report_latest.md",
+        "weekly_chart": "weekly_revenue_latest.html",
+        "monthly_chart": "monthly_revenue_latest.html",
+        "city_chart": "city_revenue_latest.html",
+        "channel_chart": "channel_revenue_latest.html",
+        "kpi_chart": "kpi_summary_latest.html",
+        "segment_chart": "rfm_segmentide_jaotus_latest.html",
+        "rfm_scatter": "rfm_segmentide_scatter_latest.html",
+        "top_vip_chart": "rfm_top_10_vip_latest.html",
+        "cohort_chart": "cohort_retention_latest.html",
+        "category_profile_chart": "segment_category_profile_latest.html",
+        "campaign_plan_chart": "marketing_campaign_plan_latest.html",
         "combined_dashboard": "team_dashboard_latest.html",
     }
     for key, latest_name in latest_names.items():
@@ -442,24 +415,12 @@ def _write_latest_copies(paths: dict[str, Path], output_path: Path) -> None:
 
 
 def export_results(results: dict[str, Any], output_dir: str | Path = "output") -> dict[str, Path]:
-    """Save all reports and charts with timestamped names and latest aliases."""
+    """Save visual HTML reports with timestamped names and latest aliases."""
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
     date_str = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     paths = {
-        "weekly_csv": output_path / f"weekly_aggregates_{date_str}.csv",
-        "monthly_csv": output_path / f"monthly_report_{date_str}.csv",
-        "city_csv": output_path / f"city_report_{date_str}.csv",
-        "channel_csv": output_path / f"channel_report_{date_str}.csv",
-        "kpis_csv": output_path / f"kpis_{date_str}.csv",
-        "data_quality_csv": output_path / f"data_quality_{date_str}.csv",
-        "cohort_retention_csv": output_path / f"cohort_retention_{date_str}.csv",
-        "segment_category_profile_csv": output_path / f"segment_category_profile_{date_str}.csv",
-        "campaign_plan_csv": output_path / f"marketing_campaign_plan_{date_str}.csv",
-        "rfm_csv": output_path / f"rfm_segments_{date_str}.csv",
-        "segment_summary_csv": output_path / f"rfm_segment_summary_{date_str}.csv",
-        "report_md": output_path / f"rfm_business_report_{date_str}.md",
         "weekly_chart": output_path / f"weekly_revenue_{date_str}.html",
         "monthly_chart": output_path / f"monthly_revenue_{date_str}.html",
         "city_chart": output_path / f"city_revenue_{date_str}.html",
@@ -473,19 +434,6 @@ def export_results(results: dict[str, Any], output_dir: str | Path = "output") -
         "campaign_plan_chart": output_path / f"marketing_campaign_plan_{date_str}.html",
         "combined_dashboard": output_path / f"team_dashboard_{date_str}.html",
     }
-
-    results["weekly"].to_csv(paths["weekly_csv"], index=False, encoding="utf-8")
-    results["monthly"].to_csv(paths["monthly_csv"], index=False, encoding="utf-8")
-    results["city"].to_csv(paths["city_csv"], index=False, encoding="utf-8")
-    results["channel"].to_csv(paths["channel_csv"], index=False, encoding="utf-8")
-    pd.DataFrame([results["kpis"]]).to_csv(paths["kpis_csv"], index=False, encoding="utf-8")
-    results["data_quality"].to_csv(paths["data_quality_csv"], index=False, encoding="utf-8")
-    results["cohort_retention"].to_csv(paths["cohort_retention_csv"], index=False, encoding="utf-8")
-    results["segment_category_profile"].to_csv(paths["segment_category_profile_csv"], index=False, encoding="utf-8")
-    results["campaign_plan"].to_csv(paths["campaign_plan_csv"], index=False, encoding="utf-8")
-    results["rfm"].to_csv(paths["rfm_csv"], index=False, encoding="utf-8")
-    results["segment_summary"].to_csv(paths["segment_summary_csv"], index=False, encoding="utf-8")
-    paths["report_md"].write_text(results["business_interpretation"] + _append_report_tables(results), encoding="utf-8")
 
     create_weekly_chart(results["weekly"]).write_html(paths["weekly_chart"])
     create_monthly_chart(results["monthly"]).write_html(paths["monthly_chart"])
