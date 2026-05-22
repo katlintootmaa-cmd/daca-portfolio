@@ -298,7 +298,6 @@ def write_combined_dashboard(results: dict[str, Any], path: Path) -> None:
         create_kpi_summary(results["kpis"]),
         create_weekly_chart(results["weekly"]),
         create_monthly_chart(results["monthly"]),
-        create_city_chart(results["city"]),
         create_segment_chart(results["segment_summary"]),
         create_rfm_scatter(results["rfm"]),
         create_top_vip_chart(results["rfm"]),
