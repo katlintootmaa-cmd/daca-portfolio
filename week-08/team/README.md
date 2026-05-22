@@ -7,12 +7,12 @@ Fail `week-08/individual/week8_api_pipeline.py` on jäetud individuaalseks demo-
 ## Rollid ja failid
 
 - `data_fetcher.py` - Roll A: Supabase API päringud (`fetch_sales`, `fetch_customers`, `fetch_products`), pagination, retry ja fallback.
-- `transform.py` - Roll B: puhastamine, ühendamine, KPI-d, RFM, CLV, cohort retention, kampaaniaplaan ja A/B testiplaan.
+- `transform.py` - Roll B: puhastamine, ühendamine, KPI-d, RFM, cohort retention ja kampaaniaplaan.
 - `visualize_export.py` - Roll C: Plotly graafikud, executive dashboard ja CSV/HTML/Markdown eksport.
 - `pipeline.py` - Roll D: orkestreerib kogu protsessi `extract -> transform -> validate -> export -> notify`.
 - `notifications.py` - valikulised webhooki ja emaili teavitused.
 - `config.yaml` - kuupäevafiltrid, tabelinimed, retry, output kaust ja RFM võrdluskuupäev.
-- `tests/` - väikesed automaattestid RFM ja marketing-analüütika loogikale.
+- `tests/` - väikesed kontrollid RFM ja marketing-analüütika loogikale.
 
 ## Käivitamine
 
@@ -52,8 +52,8 @@ Kui API ühendus puudub või Supabase on maas, kasutab pipeline `config.yaml` se
 5. Liidab andmestikud `customer_id` ja võimalusel `product_id` alusel.
 6. Puhastab duplikaadid, vigased kuupäevad, tühjad kliendid ja mittepositiivsed summad.
 7. Arvutab nädala-, kuu-, linna- ja kanaliraportid.
-8. Arvutab KPI-d, RFM segmentatsiooni, lihtsustatud 6 kuu CLV ja cohort retentioni.
-9. Koostab segmentide tootekategooria profiili, kampaaniaplaani ja A/B testiplaani.
+8. Arvutab KPI-d, RFM segmentatsiooni ja cohort retentioni.
+9. Koostab segmentide tootekategooria profiili ja kampaaniaplaani.
 10. Ekspordib CSV failid, Plotly HTML graafikud, koonddashboardi ja äriraporti.
 
 ## Väljundid
@@ -69,7 +69,6 @@ Kui API ühendus puudub või Supabase on maas, kasutab pipeline `config.yaml` se
 - `cohort_retention_*.csv`
 - `segment_category_profile_*.csv`
 - `marketing_campaign_plan_*.csv`
-- `ab_test_plan_*.csv`
 - `rfm_segments_*.csv`
 - `rfm_segment_summary_*.csv`
 - `rfm_business_report_*.md`
@@ -81,13 +80,12 @@ Kui API ühendus puudub või Supabase on maas, kasutab pipeline `config.yaml` se
 - `cohort_retention_*.html`
 - `segment_category_profile_*.html`
 - `marketing_campaign_plan_*.html`
-- `ab_test_plan_*.html`
 - `rfm_segmentide_jaotus_*.html`
 - `rfm_segmentide_scatter_*.html`
 - `rfm_top_10_vip_*.html`
 - `team_dashboard_*.html`
 
-Olulisematele väljunditele tehakse ka stabiilsed `*_latest` koopiad, näiteks `team_dashboard_latest.html`, `rfm_business_report_latest.md`, `marketing_campaign_plan_latest.csv` ja `ab_test_plan_latest.csv`.
+Olulisematele väljunditele tehakse ka stabiilsed `*_latest` koopiad, näiteks `team_dashboard_latest.html`, `rfm_business_report_latest.md` ja `marketing_campaign_plan_latest.csv`.
 
 ## RFM segmentide loogika
 
@@ -101,8 +99,7 @@ Olulisematele väljunditele tehakse ka stabiilsed `*_latest` koopiad, näiteks `
 
 - RFM segmentatsiooni kasutatakse koos kampaaniaplaaniga: igal segmendil on eesmärk, sõnum, kanal, pakkumine ja mõõdik.
 - Cohort retention näitab, kas probleem on uute klientide hoidmine või vanade klientide kadumine.
-- Lihtsustatud 6 kuu CLV aitab hinnata, millistesse segmentidesse tasub rohkem turunduseelarvet panna.
-- A/B testiplaan lisab kontrollgrupi, testiperioodi ning esmase ja teisese mõõdiku, et kampaania mõju oleks mõõdetav.
+- Kampaaniaplaan seob iga RFM segmendi eesmärgi, sõnumi, kanali, pakkumise ja mõõdikuga.
 - Dashboard ei kuva enam kliendi emaili ega telefoni RFM hover-infona; kontaktandmed jäävad CSV-sse sisemiseks kasutuseks.
 
 ## Teavitused

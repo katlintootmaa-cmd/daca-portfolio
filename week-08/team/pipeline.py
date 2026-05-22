@@ -22,7 +22,6 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 from data_fetcher import create_supabase_client, csv_fallback_data, fetch_customers, fetch_products, fetch_sales, sample_data
 from notifications import send_pipeline_notification
 from transform import (
-    build_ab_test_plan,
     build_business_interpretation,
     build_marketing_campaign_plan,
     calculate_channel_report,
@@ -105,7 +104,7 @@ def run_step_with_retry(step_name: str, config: dict[str, Any], operation: Calla
                 raise
             wait_seconds = retry_base_seconds * (2 ** (attempt - 1))
             logger.warning(
-                "[%s] katse %s/%s ebaonnestus: %s. Proovin uuesti %.1f s parast",
+                "[%s] katse %s/%s ebaõnnestus: %s. Proovin uuesti %.1f s pärast",
                 step_name,
                 attempt,
                 max_retries,
@@ -114,7 +113,7 @@ def run_step_with_retry(step_name: str, config: dict[str, Any], operation: Calla
             )
             time.sleep(wait_seconds)
 
-    raise RuntimeError(f"{step_name} etapp ebaonnestus.")
+    raise RuntimeError(f"{step_name} etapp ebaõnnestus.")
 
 
 def extract(config: dict[str, Any]) -> tuple[Any, Any, Any, str]:
@@ -154,13 +153,13 @@ def extract(config: dict[str, Any]) -> tuple[Any, Any, Any, str]:
         logger.info("[EXTRACT] done: sales=%s customers=%s products=%s", len(sales), len(customers), len(products))
         return sales, customers, products, "supabase_api"
     except Exception:
-        logger.exception("[EXTRACT] Supabase API ebaonnestus")
+        logger.exception("[EXTRACT] Supabase API ebaõnnestus")
         if pipeline_config.get("use_sample_if_api_missing", True):
             fallback = csv_fallback_data()
             if fallback is not None:
                 logger.warning("[EXTRACT] Kasutan kohalikke CSV fallback andmeid")
                 return (*fallback, "csv_fallback")
-            logger.warning("[EXTRACT] Kasutan varu-naidisandmeid, et pipeline jookseks lopuni")
+            logger.warning("[EXTRACT] Kasutan varu-näidisandmeid, et pipeline jookseks lõpuni")
             return (*sample_data(), "sample_data")
         raise
 
@@ -198,7 +197,6 @@ def transform_data(sales: Any, customers: Any, products: Any, config: dict[str, 
     segment_summary = calculate_segment_summary(rfm)
     segment_category_profile = calculate_segment_category_profile(clean, rfm)
     campaign_plan = build_marketing_campaign_plan(segment_summary)
-    ab_test_plan = build_ab_test_plan()
     interpretation = build_business_interpretation(rfm)
     logger.info("[TRANSFORM] done: rows=%s customers=%s", len(clean), kpis["unique_customers"])
     return {
@@ -215,7 +213,6 @@ def transform_data(sales: Any, customers: Any, products: Any, config: dict[str, 
         "segment_summary": segment_summary,
         "segment_category_profile": segment_category_profile,
         "campaign_plan": campaign_plan,
-        "ab_test_plan": ab_test_plan,
         "business_interpretation": interpretation,
     }
 
@@ -241,7 +238,7 @@ def validate_results(results: dict[str, Any]) -> None:
     for name, ok in checks.items():
         logger.info("[VALIDATE] %s: %s", name, "OK" if ok else "PROBLEEM")
     if not all(checks.values()):
-        raise RuntimeError("Pipeline'i valideerimine ebaonnestus.")
+        raise RuntimeError("Pipeline'i valideerimine ebaõnnestus.")
 
 
 def notification_summary(results: dict[str, Any]) -> dict[str, Any]:

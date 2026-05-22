@@ -12,7 +12,6 @@ if str(TEAM_DIR) not in sys.path:
 
 from transform import (  # noqa: E402
     assign_segment,
-    build_ab_test_plan,
     build_marketing_campaign_plan,
     calculate_cohort_retention,
     calculate_data_quality_report,
@@ -49,12 +48,11 @@ def test_assign_segment_boundaries() -> None:
     assert assign_segment(3) == "Lost"
 
 
-def test_rfm_adds_clv_and_summary_matches_revenue() -> None:
+def test_rfm_summary_matches_revenue() -> None:
     sales = sample_clean_sales()
     rfm = calculate_rfm(sales, reference_date="2025-03-31")
     summary = calculate_segment_summary(rfm)
 
-    assert "estimated_clv_6m" in rfm.columns
     assert "first_purchase_date" in rfm.columns
     assert round(rfm["monetary_value"].sum(), 2) == round(sales["total_price"].sum(), 2)
     assert round(summary["total_revenue"].sum(), 2) == round(sales["total_price"].sum(), 2)
@@ -77,14 +75,13 @@ def test_data_quality_report_counts_basic_issues() -> None:
     assert metrics["non_positive_revenue"] == 2
 
 
-def test_cohort_retention_and_campaign_plans_are_actionable() -> None:
+def test_cohort_retention_and_campaign_plan_are_actionable() -> None:
     sales = sample_clean_sales()
     rfm = calculate_rfm(sales, reference_date="2025-03-31")
     segment_summary = calculate_segment_summary(rfm)
     cohort = calculate_cohort_retention(sales)
     campaign_plan = build_marketing_campaign_plan(segment_summary)
-    ab_plan = build_ab_test_plan()
 
     assert {"cohort_month", "cohort_index", "retention_rate_pct"}.issubset(cohort.columns)
     assert set(campaign_plan["Segment"]) == {"VIP Champions", "Loyal", "Potential", "At Risk", "Lost"}
-    assert {"primary_metric", "secondary_metric"}.issubset(ab_plan.columns)
+    assert "primary_metric" in campaign_plan.columns

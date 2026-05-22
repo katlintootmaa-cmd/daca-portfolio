@@ -46,7 +46,7 @@ def create_monthly_chart(df_monthly: pd.DataFrame) -> go.Figure:
         x="month",
         y="revenue",
         markers=True,
-        title="Kuukaive",
+        title="Kuukäive",
         labels={"month": "Kuu", "revenue": "Tulu (EUR)"},
     )
 
@@ -131,20 +131,6 @@ def create_campaign_plan_table(campaign_plan: pd.DataFrame) -> go.Figure:
     )
 
 
-def create_ab_test_table(ab_test_plan: pd.DataFrame) -> go.Figure:
-    """Create an A/B test plan table."""
-    columns = ["test_name", "hypothesis", "split", "test_period", "primary_metric", "secondary_metric"]
-    headers = ["Testi nimi", "Hüpotees", "Jaotus", "Testiperiood", "Peamine mõõdik", "Teisene mõõdik"]
-    return go.Figure(
-        data=[
-            go.Table(
-                header={"values": headers, "fill_color": "#fef3c7", "align": "left"},
-                cells={"values": [ab_test_plan[column] for column in columns], "align": "left"},
-            )
-        ]
-    )
-
-
 def create_segment_chart(segment_summary: pd.DataFrame) -> go.Figure:
     """Create an RFM segment distribution chart."""
     fig = px.bar(
@@ -169,13 +155,12 @@ def create_rfm_scatter(rfm: pd.DataFrame) -> go.Figure:
         y="monetary_value",
         color="Segment",
         size="frequency",
-        hover_data=["customer_name", "city", "frequency", "RFM_Score", "estimated_clv_6m"],
-        title="UrbanStyle kliendisegmendid RFM analuusi pohjal",
+        hover_data=["customer_name", "city", "frequency", "RFM_Score"],
+        title="UrbanStyle kliendisegmendid RFM analüüsi põhjal",
         labels={
             "recency_days": "Paevi viimasest ostust",
             "monetary_value": "Kogukulutus (EUR)",
             "frequency": "Ostude arv",
-            "estimated_clv_6m": "6 kuu CLV hinnang",
         },
         category_orders={"Segment": SEGMENT_ORDER},
     )
@@ -192,7 +177,7 @@ def create_top_vip_chart(rfm: pd.DataFrame) -> go.Figure:
         y="customer_name",
         orientation="h",
         text="monetary_value",
-        title="Top 10 VIP klienti kogukulutuse jargi",
+        title="Top 10 VIP klienti kogukulutuse järgi",
         labels={"monetary_value": "Kogukulutus (EUR)", "customer_name": "Klient"},
     )
     fig.update_traces(texttemplate="%{text:.0f} EUR", textposition="outside")
@@ -209,7 +194,7 @@ def create_cohort_chart(cohort_retention: pd.DataFrame) -> go.Figure:
         aspect="auto",
         text_auto=".0f",
         color_continuous_scale="YlGnBu",
-        title="Cohort retention esimese ostukuu pohjal (%)",
+        title="Cohort retention esimese ostukuu põhjal (%)",
         labels={"x": "Kuud esimesest ostust", "y": "Esimese ostu kuu", "color": "Retention %"},
     )
 
@@ -268,10 +253,10 @@ def _executive_summary(results: dict[str, Any]) -> str:
     at_risk_text = "puudub"
     if not vip.empty:
         row = vip.iloc[0]
-        vip_text = f"{int(row['customers'])} klienti, {row['revenue_share_pct']:.1f}% kaibest"
+        vip_text = f"{int(row['customers'])} klienti, {row['revenue_share_pct']:.1f}% käibest"
     if not at_risk.empty:
         row = at_risk.iloc[0]
-        at_risk_text = f"{int(row['customers'])} klienti, {row['revenue_share_pct']:.1f}% kaibest"
+        at_risk_text = f"{int(row['customers'])} klienti, {row['revenue_share_pct']:.1f}% käibest"
     source = results.get("data_source", "unknown")
     source_note = ""
     if source != "supabase_api":
@@ -279,7 +264,7 @@ def _executive_summary(results: dict[str, Any]) -> str:
     revenue_millions = kpis["total_revenue"] / 1_000_000
     return f"""
     <section class="summary">
-      <div><span>Kogukaive</span><strong>{revenue_millions:.1f} mln EUR</strong></div>
+      <div><span>Kogukäive</span><strong>{revenue_millions:.1f} mln EUR</strong></div>
       <div><span>Tellimused</span><strong>{kpis['orders']}</strong></div>
       <div><span>VIP Champions</span><strong>{vip_text}</strong></div>
       <div><span>At Risk</span><strong>{at_risk_text}</strong></div>
@@ -287,7 +272,7 @@ def _executive_summary(results: dict[str, Any]) -> str:
     {source_note}
     <section class="insight">
       <h2>Otsus Markole</h2>
-      <p>Hoia VIP kliente lojaalsusprogrammiga, tee At Risk segmendile kontrollgrupiga win-back kampaania ning kasuta Loyal ja Potential segmentides cross-selli.</p>
+      <p>Hoia VIP kliente lojaalsusprogrammiga, tee At Risk segmendile win-back kampaania ning kasuta Loyal ja Potential segmentides cross-selli.</p>
     </section>
     """
 
@@ -410,21 +395,6 @@ def write_combined_dashboard(results: dict[str, Any], path: Path) -> None:
         },
       )}
     </section>
-    <section class="chart">
-      <h2>A/B testide plaan</h2>
-      {_html_table(
-        results["ab_test_plan"],
-        max_rows=10,
-        headers={
-          "test_name": "Testi nimi",
-          "hypothesis": "Hüpotees",
-          "split": "Jaotus",
-          "test_period": "Testiperiood",
-          "primary_metric": "Peamine mõõdik",
-          "secondary_metric": "Teisene mõõdik",
-        },
-      )}
-    </section>
     {"".join(sections)}
   </main>
 </body>
@@ -440,8 +410,6 @@ def _append_report_tables(results: dict[str, Any]) -> str:
         _markdown_table(results["data_quality"]),
         "\n## Kampaaniaplaan segmentide kaupa\n",
         _markdown_table(results["campaign_plan"]),
-        "\n## A/B testimise plaan\n",
-        _markdown_table(results["ab_test_plan"]),
     ]
     if not results["cohort_retention"].empty:
         cohort_preview = results["cohort_retention"].query("cohort_index <= 3").head(12)
@@ -462,7 +430,6 @@ def _write_latest_copies(paths: dict[str, Path], output_path: Path) -> None:
         "rfm_csv": "rfm_segments_latest.csv",
         "segment_summary_csv": "rfm_segment_summary_latest.csv",
         "campaign_plan_csv": "marketing_campaign_plan_latest.csv",
-        "ab_test_plan_csv": "ab_test_plan_latest.csv",
         "report_md": "rfm_business_report_latest.md",
         "combined_dashboard": "team_dashboard_latest.html",
     }
@@ -490,7 +457,6 @@ def export_results(results: dict[str, Any], output_dir: str | Path = "output") -
         "cohort_retention_csv": output_path / f"cohort_retention_{date_str}.csv",
         "segment_category_profile_csv": output_path / f"segment_category_profile_{date_str}.csv",
         "campaign_plan_csv": output_path / f"marketing_campaign_plan_{date_str}.csv",
-        "ab_test_plan_csv": output_path / f"ab_test_plan_{date_str}.csv",
         "rfm_csv": output_path / f"rfm_segments_{date_str}.csv",
         "segment_summary_csv": output_path / f"rfm_segment_summary_{date_str}.csv",
         "report_md": output_path / f"rfm_business_report_{date_str}.md",
@@ -505,7 +471,6 @@ def export_results(results: dict[str, Any], output_dir: str | Path = "output") -
         "cohort_chart": output_path / f"cohort_retention_{date_str}.html",
         "category_profile_chart": output_path / f"segment_category_profile_{date_str}.html",
         "campaign_plan_chart": output_path / f"marketing_campaign_plan_{date_str}.html",
-        "ab_test_plan_chart": output_path / f"ab_test_plan_{date_str}.html",
         "combined_dashboard": output_path / f"team_dashboard_{date_str}.html",
     }
 
@@ -518,7 +483,6 @@ def export_results(results: dict[str, Any], output_dir: str | Path = "output") -
     results["cohort_retention"].to_csv(paths["cohort_retention_csv"], index=False, encoding="utf-8")
     results["segment_category_profile"].to_csv(paths["segment_category_profile_csv"], index=False, encoding="utf-8")
     results["campaign_plan"].to_csv(paths["campaign_plan_csv"], index=False, encoding="utf-8")
-    results["ab_test_plan"].to_csv(paths["ab_test_plan_csv"], index=False, encoding="utf-8")
     results["rfm"].to_csv(paths["rfm_csv"], index=False, encoding="utf-8")
     results["segment_summary"].to_csv(paths["segment_summary_csv"], index=False, encoding="utf-8")
     paths["report_md"].write_text(results["business_interpretation"] + _append_report_tables(results), encoding="utf-8")
@@ -534,9 +498,8 @@ def export_results(results: dict[str, Any], output_dir: str | Path = "output") -
     create_cohort_chart(results["cohort_retention"]).write_html(paths["cohort_chart"])
     create_category_profile_chart(results["segment_category_profile"]).write_html(paths["category_profile_chart"])
     create_campaign_plan_table(results["campaign_plan"]).write_html(paths["campaign_plan_chart"])
-    create_ab_test_table(results["ab_test_plan"]).write_html(paths["ab_test_plan_chart"])
     write_combined_dashboard(results, paths["combined_dashboard"])
     _write_latest_copies(paths, output_path)
 
-    logger.info("Valjundfailid salvestatud kausta %s", output_path)
+    logger.info("Väljundfailid salvestatud kausta %s", output_path)
     return paths

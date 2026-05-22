@@ -83,7 +83,7 @@ def calculate_weekly_aggregates(df: pd.DataFrame) -> pd.DataFrame:
     iso_calendar = weekly["week"].dt.isocalendar()
     weekly["week_year"] = iso_calendar["year"].astype(int)
     weekly["week_number"] = iso_calendar["week"].astype(int)
-    weekly["week_label"] = weekly["week_year"].astype(str) + " nadal " + weekly["week_number"].astype(str)
+    weekly["week_label"] = weekly["week_year"].astype(str) + " nädal " + weekly["week_number"].astype(str)
     weekly["avg_order_value"] = weekly["revenue"] / weekly["orders"]
     weekly[["revenue", "avg_order_value"]] = weekly[["revenue", "avg_order_value"]].round(2)
     return weekly
@@ -113,12 +113,12 @@ def calculate_data_quality_report(raw: pd.DataFrame, clean: pd.DataFrame) -> pd.
     )
     checks = [
         ("rows_before_cleaning", len(raw), "Sisendridade arv enne puhastamist"),
-        ("rows_after_cleaning", len(clean), "Ridade arv parast puhastamist"),
+        ("rows_after_cleaning", len(clean), "Ridade arv pärast puhastamist"),
         ("rows_removed", len(raw) - len(clean), "Puhastamisel eemaldatud read"),
-        ("duplicate_rows", int(raw.duplicated().sum()) if not raw.empty else 0, "Taielikud duplikaatread"),
+        ("duplicate_rows", int(raw.duplicated().sum()) if not raw.empty else 0, "Täielikud duplikaatread"),
         ("missing_customer_id", int(raw["customer_id"].isna().sum()) if "customer_id" in raw.columns else 0, "Puuduva customer_id-ga read"),
-        ("invalid_sale_date", int(raw_sale_date.isna().sum()), "Puuduvad voi vigased kuupaevad"),
-        ("non_positive_revenue", int((raw_total_price <= 0).sum()), "Nullist vaiksema voi vordse summaga read"),
+        ("invalid_sale_date", int(raw_sale_date.isna().sum()), "Puuduvad või vigased kuupäevad"),
+        ("non_positive_revenue", int((raw_total_price <= 0).sum()), "Nullist väiksema või võrdse summaga read"),
         ("missing_contact_clean", int((~clean["has_contact"]).sum()) if "has_contact" in clean.columns else 0, "Puhastes andmetes kontaktita read"),
     ]
     return pd.DataFrame(checks, columns=["metric", "value", "description"])
@@ -249,8 +249,6 @@ def calculate_rfm(df: pd.DataFrame, reference_date: str | None = None) -> pd.Dat
     rfm["recency_days"] = (today - rfm["last_purchase_date"]).dt.days
     rfm["customer_lifespan_days"] = (rfm["last_purchase_date"] - rfm["first_purchase_date"]).dt.days.clip(lower=0)
     rfm["avg_order_value"] = rfm["monetary_value"] / rfm["frequency"]
-    active_months = (rfm["customer_lifespan_days"] / 30).clip(lower=1)
-    rfm["estimated_clv_6m"] = (rfm["monetary_value"] / active_months * 6).round(2)
     rfm["R_score"] = _score_column(rfm["recency_days"], [5, 4, 3, 2, 1])
     rfm["F_score"] = _score_column(rfm["frequency"], [1, 2, 3, 4, 5])
     rfm["M_score"] = _score_column(rfm["monetary_value"], [1, 2, 3, 4, 5])
@@ -276,7 +274,6 @@ def calculate_segment_summary(rfm: pd.DataFrame) -> pd.DataFrame:
             avg_frequency=("frequency", "mean"),
             total_revenue=("monetary_value", "sum"),
             avg_monetary_value=("monetary_value", "mean"),
-            estimated_clv_6m=("estimated_clv_6m", "sum"),
             reachable_customers=("has_contact", "sum"),
         )
         .reset_index()
@@ -308,24 +305,14 @@ def build_marketing_campaign_plan(segment_summary: pd.DataFrame) -> pd.DataFrame
     rows = [
         ("VIP Champions", "Hoida parimaid kliente", "Early access ja personaalsed VIP pakkumised", "Email + SMS", "VIP preview / tasuta tarne", "Repeat purchase rate"),
         ("Loyal", "Kasvatada ostukorvi", "Cross-sell ja komplektpakkumised", "Email", "Bundle offer", "Avg order value"),
-        ("Potential", "Muuta teine ost harjumuseks", "Jargmise ostu stiimul", "Email", "-10% jargmisele ostule", "Second purchase conversion"),
-        ("At Risk", "Voita klient tagasi enne kadumist", "Piiratud ajaga win-back sonum", "Email + SMS", "Isiklik sooduskood", "Reactivation rate"),
-        ("Lost", "Testida odavat taasaktiveerimist", "Viimane tagasituleku pakkumine", "Email", "Tugevam uhekordne soodustus", "Campaign ROI"),
+        ("Potential", "Muuta teine ost harjumuseks", "Järgmise ostu stiimul", "Email", "-10% järgmisele ostule", "Second purchase conversion"),
+        ("At Risk", "Võita klient tagasi enne kadumist", "Piiratud ajaga win-back sõnum", "Email + SMS", "Isiklik sooduskood", "Reactivation rate"),
+        ("Lost", "Proovida odavat taasaktiveerimist", "Viimane tagasituleku pakkumine", "Email", "Tugevam ühekordne soodustus", "Campaign ROI"),
     ]
     plan = pd.DataFrame(rows, columns=["Segment", "goal", "message", "channel", "offer", "primary_metric"])
     if not segment_summary.empty:
         plan = plan.merge(segment_summary[["Segment", "customers", "total_revenue", "revenue_share_pct"]], on="Segment", how="left")
     return plan
-
-
-def build_ab_test_plan() -> pd.DataFrame:
-    """Describe a minimum viable controlled campaign measurement plan."""
-    rows = [
-        ("At Risk win-back", "At Risk klientidele saadetud pakkumine kasvatab 30 paeva taasostu", "80% pakkumine, 20% kontroll", "30 paeva", "Reactivation rate", "Revenue per customer"),
-        ("Loyal cross-sell", "Komplektpakkumine kasvatab keskmist ostukorvi", "50% cross-sell sonum, 50% tavaparane kiri", "14 paeva", "Avg order value", "Conversion rate"),
-        ("Potential second purchase", "Jargmise ostu stiimul kasvatab teise ostu toenaosust", "80% pakkumine, 20% kontroll", "30 paeva", "Second purchase conversion", "Gross revenue"),
-    ]
-    return pd.DataFrame(rows, columns=["test_name", "hypothesis", "split", "test_period", "primary_metric", "secondary_metric"])
 
 
 def build_business_interpretation(rfm: pd.DataFrame) -> str:
@@ -339,23 +326,21 @@ def build_business_interpretation(rfm: pd.DataFrame) -> str:
     at_risk_revenue = rfm.loc[rfm["Segment"] == "At Risk", "monetary_value"].sum()
     vip_share = vip_revenue / total_revenue * 100 if total_revenue else 0
     at_risk_share = at_risk_revenue / total_revenue * 100 if total_revenue else 0
-    estimated_clv = rfm["estimated_clv_6m"].sum()
 
     return f"""# Week 8 tiimitoo API RFM raport
 
-UrbanStyle andmestikus on {total_customers} analuusitavat klienti, kellest {vip_customers} kuuluvad VIP Champions segmenti.
-VIP kliendid annavad {vip_share:.1f}% kogukaibest.
+UrbanStyle andmestikus on {total_customers} analüüsitavat klienti, kellest {vip_customers} kuuluvad VIP Champions segmenti.
+VIP kliendid annavad {vip_share:.1f}% kogukäibest.
 At Risk segmendis on {at_risk_customers} klienti ja Lost segmendis {lost_customers} klienti.
-At Risk segment annab veel {at_risk_share:.1f}% kaibest.
-Lihtsustatud 6 kuu CLV hinnang kogu kliendibaasile on {estimated_clv:,.0f} EUR.
+At Risk segment annab veel {at_risk_share:.1f}% käibest.
 
 ## Soovitused Markole
 
-1. VIP Champions: kaivita early access programm, personaalsed pakkumised ja VIP sooduskoodid.
+1. VIP Champions: käivita early access programm, personaalsed pakkumised ja VIP sooduskoodid.
 2. At Risk: saada win-back pakkumine enne, kui kliendid liiguvad Lost segmenti.
 3. Potential ja Loyal: kasvata neid lojaalsusprogrammi ja cross-sell pakkumistega VIP segmendiks.
 
 ## Mootmise plaan
 
-Turundustegevusi tasub kaivitada kontrollgrupiga. Vordle kampaania saanutega 30 paeva jooksul taasostu, kaivet kliendi kohta ja keskmist ostukorvi.
+Jälgi kampaania tulemusi 30 päeva jooksul: taasostu määr, käive kliendi kohta ja keskmine ostukorv.
 """

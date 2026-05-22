@@ -58,7 +58,7 @@ def create_supabase_client() -> Any:
     key = os.getenv("SUPABASE_ANON_KEY") or os.getenv("SUPABASE_KEY")
 
     if not url or not key:
-        raise ValueError("Puudub SUPABASE_URL voi SUPABASE_ANON_KEY/SUPABASE_KEY .env failis.")
+        raise ValueError("Puudub SUPABASE_URL või SUPABASE_ANON_KEY/SUPABASE_KEY .env failis.")
 
     return create_client(url, key)
 
@@ -95,10 +95,10 @@ def fetch_table(
                 break
             except Exception as exc:
                 if attempt == max_retries:
-                    raise RuntimeError(f"API paring tabelile '{table_name}' ebaonnestus: {exc}") from exc
+                    raise RuntimeError(f"API päring tabelile '{table_name}' ebaõnnestus: {exc}") from exc
                 wait_seconds = retry_base_seconds * (2 ** (attempt - 1))
                 logger.warning(
-                    "%s: katse %s/%s ebaonnestus, proovin uuesti %s s parast",
+                    "%s: katse %s/%s ebaõnnestus, proovin uuesti %s s pärast",
                     table_name,
                     attempt,
                     max_retries,
