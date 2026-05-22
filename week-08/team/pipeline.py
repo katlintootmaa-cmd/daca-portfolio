@@ -11,6 +11,7 @@ import argparse
 import logging
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any, Callable
 
@@ -57,6 +58,7 @@ def load_config() -> dict[str, Any]:
                 "reference_date": "2025-02-28",
                 "output_dir": "output",
                 "use_sample_if_api_missing": True,
+                "enable_notifications": False,
             },
         }
     return yaml.safe_load(CONFIG_FILE.read_text(encoding="utf-8"))
@@ -127,29 +129,35 @@ def extract(config: dict[str, Any]) -> tuple[Any, Any, Any, str]:
 
     try:
         supabase = create_supabase_client()
-        sales = fetch_sales(
-            supabase,
-            start_date=date_filter.get("start_date"),
-            end_date=date_filter.get("end_date"),
-            page_size=pipeline_config.get("page_size", 1000),
-            max_retries=pipeline_config.get("max_retries", 3),
-            retry_base_seconds=pipeline_config.get("retry_base_seconds", 1),
-            table_name=table_config.get("sales", "sales"),
-        )
-        customers = fetch_customers(
-            supabase,
-            page_size=pipeline_config.get("page_size", 1000),
-            max_retries=pipeline_config.get("max_retries", 3),
-            retry_base_seconds=pipeline_config.get("retry_base_seconds", 1),
-            table_name=table_config.get("customers", "customers"),
-        )
-        products = fetch_products(
-            supabase,
-            page_size=pipeline_config.get("page_size", 1000),
-            max_retries=pipeline_config.get("max_retries", 3),
-            retry_base_seconds=pipeline_config.get("retry_base_seconds", 1),
-            table_name=table_config.get("products", "products"),
-        )
+        common_options = {
+            "page_size": pipeline_config.get("page_size", 1000),
+            "max_retries": pipeline_config.get("max_retries", 3),
+            "retry_base_seconds": pipeline_config.get("retry_base_seconds", 1),
+        }
+        with ThreadPoolExecutor(max_workers=3) as executor:
+            sales_future = executor.submit(
+                fetch_sales,
+                supabase,
+                start_date=date_filter.get("start_date"),
+                end_date=date_filter.get("end_date"),
+                table_name=table_config.get("sales", "sales"),
+                **common_options,
+            )
+            customers_future = executor.submit(
+                fetch_customers,
+                supabase,
+                table_name=table_config.get("customers", "customers"),
+                **common_options,
+            )
+            products_future = executor.submit(
+                fetch_products,
+                supabase,
+                table_name=table_config.get("products", "products"),
+                **common_options,
+            )
+            sales = sales_future.result()
+            customers = customers_future.result()
+            products = products_future.result()
         logger.info("[EXTRACT] done: sales=%s customers=%s products=%s", len(sales), len(customers), len(products))
         return sales, customers, products, "supabase_api"
     except Exception:
@@ -281,6 +289,11 @@ def notify(
     )
 
 
+def notifications_enabled(config: dict[str, Any]) -> bool:
+    """Return whether slow external notification channels should be used."""
+    return bool(config.get("pipeline", {}).get("enable_notifications", False))
+
+
 def run_pipeline(analysis_date: str | None = None) -> dict[str, Any]:
     """Käivita kogu Week 8 tiimitöö pipeline algusest lõpuni."""
     logger = logging.getLogger(__name__)
@@ -299,13 +312,14 @@ def run_pipeline(analysis_date: str | None = None) -> dict[str, Any]:
         output_dir = ROOT / config["pipeline"].get("output_dir", "output")
         paths = run_step_with_retry("EXPORT", config, lambda: export_results(results, output_dir=output_dir))
         elapsed = time.perf_counter() - start_time
-        notify(
-            "SUCCESS",
-            notification_summary(results),
-            elapsed_seconds=elapsed,
-            output_dir=output_dir,
-            attachments=notification_attachments(paths),
-        )
+        if notifications_enabled(config):
+            notify(
+                "SUCCESS",
+                notification_summary(results),
+                elapsed_seconds=elapsed,
+                output_dir=output_dir,
+                attachments=notification_attachments(paths),
+            )
         logger.info("Pipeline complete %.2f seconds, files=%s", elapsed, len(paths))
         print(f"Pipeline valmis {elapsed:.2f} sekundiga. Väljundid: {output_dir}")
         reference_date = config["pipeline"].get("reference_date")
@@ -315,7 +329,8 @@ def run_pipeline(analysis_date: str | None = None) -> dict[str, Any]:
         return results
     except Exception:
         logger.exception("Pipeline failed")
-        notify("FAILED", {}, elapsed_seconds=time.perf_counter() - start_time)
+        if notifications_enabled(config):
+            notify("FAILED", {}, elapsed_seconds=time.perf_counter() - start_time)
         raise
 
 

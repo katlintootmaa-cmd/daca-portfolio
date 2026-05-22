@@ -8,9 +8,10 @@ date_filter:
   end_date: "2025-02-28"
 
 pipeline:
-  page_size: 1000
-  max_retries: 3
-  retry_base_seconds: 1
+  page_size: 10000
+  max_retries: 1
+  retry_base_seconds: 0.2
   reference_date: "2025-02-28"
   output_dir: output
   use_sample_if_api_missing: true
+  enable_notifications: false

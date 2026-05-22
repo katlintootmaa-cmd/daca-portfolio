@@ -275,7 +275,7 @@ def write_combined_dashboard(results: dict[str, Any], path: Path) -> None:
         create_top_vip_chart(results["rfm"]),
     ]
     sections = [
-        f'<section class="chart">{figure.to_html(full_html=False, include_plotlyjs=index == 0)}</section>'
+        f'<section class="chart">{figure.to_html(full_html=False, include_plotlyjs="cdn" if index == 0 else False)}</section>'
         for index, figure in enumerate(figures)
     ]
     html = f"""<!doctype html>
@@ -435,17 +435,18 @@ def export_results(results: dict[str, Any], output_dir: str | Path = "output") -
         "combined_dashboard": output_path / f"team_dashboard_{date_str}.html",
     }
 
-    create_weekly_chart(results["weekly"]).write_html(paths["weekly_chart"])
-    create_monthly_chart(results["monthly"]).write_html(paths["monthly_chart"])
-    create_city_chart(results["city"]).write_html(paths["city_chart"])
-    create_channel_chart(results["channel"]).write_html(paths["channel_chart"])
-    create_kpi_summary(results["kpis"]).write_html(paths["kpi_chart"])
-    create_segment_chart(results["segment_summary"]).write_html(paths["segment_chart"])
-    create_rfm_scatter(results["rfm"]).write_html(paths["rfm_scatter"])
-    create_top_vip_chart(results["rfm"]).write_html(paths["top_vip_chart"])
-    create_cohort_chart(results["cohort_retention"]).write_html(paths["cohort_chart"])
-    create_category_profile_chart(results["segment_category_profile"]).write_html(paths["category_profile_chart"])
-    create_campaign_plan_table(results["campaign_plan"]).write_html(paths["campaign_plan_chart"])
+    html_options = {"include_plotlyjs": "cdn", "full_html": True}
+    create_weekly_chart(results["weekly"]).write_html(paths["weekly_chart"], **html_options)
+    create_monthly_chart(results["monthly"]).write_html(paths["monthly_chart"], **html_options)
+    create_city_chart(results["city"]).write_html(paths["city_chart"], **html_options)
+    create_channel_chart(results["channel"]).write_html(paths["channel_chart"], **html_options)
+    create_kpi_summary(results["kpis"]).write_html(paths["kpi_chart"], **html_options)
+    create_segment_chart(results["segment_summary"]).write_html(paths["segment_chart"], **html_options)
+    create_rfm_scatter(results["rfm"]).write_html(paths["rfm_scatter"], **html_options)
+    create_top_vip_chart(results["rfm"]).write_html(paths["top_vip_chart"], **html_options)
+    create_cohort_chart(results["cohort_retention"]).write_html(paths["cohort_chart"], **html_options)
+    create_category_profile_chart(results["segment_category_profile"]).write_html(paths["category_profile_chart"], **html_options)
+    create_campaign_plan_table(results["campaign_plan"]).write_html(paths["campaign_plan_chart"], **html_options)
     write_combined_dashboard(results, paths["combined_dashboard"])
     _write_latest_copies(paths, output_path)
 
