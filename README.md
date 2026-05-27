@@ -15,3 +15,5 @@ Soovin teha karjääripööret ning alustada andmeanalüütikuna.
 | 3 | SQL JOINs | Läbitud |
 | 4 | SQL Aggregation | Läbitud |
 | 5-6 | Visualiseerimine | Läbitud |
+| 7-8 | Python | Läbitud |
+| 9-10 | Portfoolio + Karjäär | Käimas |
