@@ -96,3 +96,9 @@ Rühma tulemus: Business Analyst intervjuu peab hindama suhtlemist, probleemi ra
 
 - Vaadatakse: kas kandidaat küsib täpsustavaid küsimusi, loob hüpoteese, eristab sümptomeid ja põhjuseid ning suhtleb selgelt.
 - Küsitakse: "Müük kasvab, aga kasum langeb. Kust alustad?", "Kuidas lahendad olukorra, kus osapooled tahavad eri asju?", "Kuidas dokumenteerid kokkulepitud nõuded?"
+
+## Tugev vs nõrk kandidaat
+
+**Tugev kandidaat:** oskab ebamäärase äriprobleemi muuta konkreetseks analüüsiülesandeks, küsib täpsustavaid küsimusi ja mõistab sidusrühmade vajadusi. Tema portfoolios või varasemas kogemuses on näide, kus ta kirjeldas ärivajaduse, kogus nõuded, kasutas andmeid ja jõudis praktilise soovituseni. Intervjuul suudab ta selgelt põhjendada, millist otsust analüüs toetab.
+
+**Nõrk kandidaat:** räägib üldiselt, et talle meeldib andmetega töötada, aga ei oska selgitada, millist äriprobleemi ta lahendaks. Ta ei küsi piisavalt täpsustavaid küsimusi, ei erista sümptomeid ja põhjuseid ning tema CV või LinkedIn ei näita sidet äriprotsesside, nõuete kogumise või otsustamise toetamisega.

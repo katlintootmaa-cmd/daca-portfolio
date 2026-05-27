@@ -96,3 +96,9 @@ Rühma tulemus: Marketing Analyst intervjuu peab hindama kampaanialoogikat, andm
 
 - Vaadatakse: kas kandidaat uurib kogu ostuteekonda, mitte ainult kampaania klikke, ning pakub kontrollitavaid järgmisi samme.
 - Küsitakse: "Klikke on palju, müüki vähe. Mis võib olla põhjus?", "Kuidas kontrollid, kas probleem on sihtrühmas või pakkumises?", "Millise soovituse annaksid turundusjuhile?"
+
+## Tugev vs nõrk kandidaat
+
+**Tugev kandidaat:** mõistab kampaaniate, kliendisegmentide ja müügitulemuste seost. Ta oskab arvutada konversiooni, ROI-d või CAC-i ning selgitada, milline kanal või sihtrühm loob päriselt väärtust. Portfoolios on näiteks kampaaniaanalüüs või kliendisegmenteerimine, mille lõpus on praktiline turundussoovitus.
+
+**Nõrk kandidaat:** keskendub ainult klikkidele, vaatamistele või üldisele turundusjutule, aga ei seo tulemusi müügi ega ärimõjuga. Ta ei oska eristada kampaania nähtavust ja tegelikku tasuvust ning tema CV või LinkedIn ei too välja konkreetseid turundusmõõdikuid, tulemusi ega tööriistu.

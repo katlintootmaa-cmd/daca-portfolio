@@ -96,3 +96,9 @@ Rühma tulemus: Product Analyst intervjuu peab hindama hüpoteeside loomist, mõ
 
 - Vaadatakse: kas kandidaat püstitab hüpoteese, valib sobivad mõõdikud, arvestab kasutajateekonda ja pakub testitavaid samme.
 - Küsitakse: "Ostukorvi lisatakse palju, aga oste lõpetatakse vähe. Kuidas uurid?", "Milliseid event'e vajad?", "Kuidas esitad soovituse arendustiimile?"
+
+## Tugev vs nõrk kandidaat
+
+**Tugev kandidaat:** mõistab kasutajateekonda, oskab valida product metrics mõõdikuid ja seob analüüsi konkreetse tooteotsusega. Ta püstitab hüpoteese, kasutab funnel'i või sündmuste andmeid ning pakub testitavaid järgmisi samme. Portfoolios on näiteks ostuteekonna, retention'i või A/B testi analüüs koos selge soovitusega product managerile.
+
+**Nõrk kandidaat:** vaatab ainult üldiseid numbreid ega seo neid kasutajakäitumise või tooteparandusega. Ta ei oska öelda, milliseid event'e oleks vaja, milline mõõdik näitab probleemi tõsidust või kuidas soovituse mõju hiljem mõõta. LinkedIn ja portfoolio ei näita product analytics'i kogemust ega koostööd tootetiimiga.

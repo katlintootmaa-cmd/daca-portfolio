@@ -96,3 +96,9 @@ Rühma tulemus: Data Analyst intervjuu peab hindama nii tehnilist oskust kui ka 
 
 - Vaadatakse: kas intervjuu sisaldab portfooliot, SQL-i, andmete tõlgendamist, suhtlemist ja STAR-küsimusi.
 - Küsitakse: "Kuidas lahendaksid müügilanguse analüüsi?", "Millise SQL-päringu kirjutaksid kliendisegmentide leidmiseks?", "Räägi olukorrast, kus pidid keerulist tulemust lihtsalt selgitama."
+
+## Tugev vs nõrk kandidaat
+
+**Tugev kandidaat:** oskab SQL-i ja Pythonit kasutada päris äriküsimuse lahendamiseks, kontrollib tulemuste loogikat ja selgitab järeldusi mitte-tehnilisele kuulajale. Tema portfoolios on 2-3 selgelt dokumenteeritud projekti, näiteks müügiandmete analüüs, kliendisegmenteerimine või dashboard koos soovitustega. CV-s ja LinkedInis on oskused seotud konkreetsete näidetega, näiteks "analüüsisin müügiandmeid ja leidsin kõige kasumlikumad kliendisegmendid".
+
+**Nõrk kandidaat:** loetleb tööriistu, aga ei näita, kuidas ta neid kasutas. Portfoolios on failid ilma README, järelduste või ärilise selgituseta. Intervjuul vastab ta tehnilistele küsimustele pealiskaudselt, ei kontrolli tulemusi ja ei oska selgitada, kuidas analüüs UrbanStyle'i otsuseid toetaks.

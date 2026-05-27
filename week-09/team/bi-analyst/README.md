@@ -96,3 +96,9 @@ Rühma tulemus: BI Analyst intervjuu peab hindama visualiseerimist, KPI-loogikat
 
 - Vaadatakse: kas kandidaat oskab dashboardi kaitsta, mõõdikuid põhjendada ja kasutaja vajadustest lähtuda.
 - Küsitakse: "Miks valisid selle visualiseeringu?", "Kuidas näitaksid müügi ja kasumi muutust?", "Mida teeksid, kui juht tahab ühele lehele liiga palju infot?"
+
+## Tugev vs nõrk kandidaat
+
+**Tugev kandidaat:** oskab luua dashboarde, mis on selged, kasutatavad ja seotud juhtimisotsustega. Ta põhjendab KPI-de valikut, kontrollib andmete usaldusväärsust ja mõtleb kasutaja vajadusele. Tema portfoolios on näiteks Power BI, Tableau, Plotly või Streamlit dashboard, mille README selgitab sihtrühma, mõõdikuid ja otsuseid, mida dashboard toetab.
+
+**Nõrk kandidaat:** keskendub ainult ilusatele graafikutele, aga ei selgita, kellele dashboard on mõeldud või millist otsust see aitab teha. Ta ei oska põhjendada mõõdikuid, jätab andmekvaliteedi kontrollimata ja tema CV või LinkedIn ei näita konkreetseid raportite ega dashboardide näiteid.

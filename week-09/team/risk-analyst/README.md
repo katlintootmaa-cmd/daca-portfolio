@@ -96,3 +96,9 @@ Rühma tulemus: Risk Analyst intervjuu peab hindama kriitilist mõtlemist, täps
 
 - Vaadatakse: kas kandidaat küsib perioodi, kategooria, tarnija, kampaaniate, andmekvaliteedi ja mõju kohta ning pakub kontrollitavaid samme.
 - Küsitakse: "Tagastused kasvasid järsult. Mis võib olla põhjus?", "Kuidas kontrollid, kas see on normaalne hooajalisus?", "Millise hoiatuse või kontrolli looksid tulevikuks?"
+
+## Tugev vs nõrk kandidaat
+
+**Tugev kandidaat:** on täpne, kriitiline ja kontrollib andmeid enne järelduste tegemist. Ta oskab leida duplikaate, puuduvaid väärtusi, anomaaliaid ja ebaloogilisi mustreid ning hindab riski võimalikku mõju ärile. Portfoolios on näiteks tagastuste, varude erinevuste või makseprobleemide analüüs koos soovitatud kontrollimeetmega.
+
+**Nõrk kandidaat:** võtab andmeid liiga kiiresti tõena ega kontrolli, kas tulemus võib olla andmeviga, hooajalisus või päris risk. Ta kirjeldab probleemi, aga ei hinda mõju ega paku ennetavat kontrolli. CV-s ja intervjuul jääb puudu täpsuse, vastutuse ja riskimõtlemise näidetest.
