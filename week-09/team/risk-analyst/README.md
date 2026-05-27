@@ -1,8 +1,24 @@
-# Rühmatöö rollile: Risk Analyst
+# Värbamisjuhend rollile: Risk Analyst
 
 ## Rolli fookus
 
 Risk Analyst aitab UrbanStyle'il märgata ja vähendada äririske. Need võivad olla seotud varude, maksete, tagastuste, pettuste, tarnete, andmekvaliteedi või finantsmõjuga. Roll nõuab täpsust, kriitilist mõtlemist ja oskust leida ebatavalisi mustreid.
+
+## Juhendi kasutamine
+
+Seda juhendit saab kasutada Risk Analyst kandidaadi hindamisel kogu värbamisprotsessi jooksul: töökuulutuse koostamisel, CV ja LinkedIni ülevaatamisel, portfoolio hindamisel, riskijuhtumi ettevalmistamisel, intervjuu läbiviimisel ja lõpliku otsuse tegemisel.
+
+Iga kandidaadi puhul tuleks hinnata kolme põhiküsimust:
+
+- kas kandidaat kontrollib andmete kvaliteeti enne järelduste tegemist;
+- kas ta oskab eristada andmeviga, hooajalisust ja päris äririski;
+- kas ta suudab pakkuda praktilise kontrolli või ennetava meetme.
+
+Soovituslik otsus:
+
+- **Sobib järgmisesse vooru**, kui kandidaat leiab andmestikust kõrvalekaldeid, kontrollib põhjuseid ja hindab riski mõju.
+- **Vajab lisakontrolli**, kui kandidaat märkab probleeme, aga ei oska veel mõju või kontrollimeedet selgelt sõnastada.
+- **Ei sobi hetkel**, kui kandidaat võtab andmeid pimesi tõena ega kontrolli, kas tulemus võib olla viga.
 
 ## 4-liikmelise rühma tööjaotus
 
@@ -114,6 +130,17 @@ Rühma tulemus: Risk Analyst intervjuu peab hindama kriitilist mõtlemist, täps
 - Koostöö ja õppimisvõime: kas ta kaasab protsessiomanikke ning pakub praktilisi kontrollimeetmeid.
 
 ## Tugev vs nõrk kandidaat
+
+## Hindamisskaala kokkuvõte
+
+| Valdkond | 1 - vajab arendamist | 2 - sobiv tase | 3 - tugev tase |
+| --- | --- | --- | --- |
+| Andmekontroll | Ei kontrolli kvaliteeti | Leiab duplikaadid ja puuduvad väärtused | Kontrollib mustreid mitme nurga alt |
+| Riskimõtlemine | Kirjeldab ainult kõrvalekallet | Hindab võimalikku mõju | Eristab vea, hooajalisuse ja päris riski |
+| Tehniline oskus | SQL või analüüs jääb ebakindlaks | Kasutab lihtsaid kontrolle ja kokkuvõtteid | Loob korduskasutatava kontrolli või raporti |
+| Kommunikatsioon | Selgitab riski ebaselgelt | Sõnastab probleemi rahulikult | Pakub ennetava tegevuse ja vastutaja |
+
+Kandidaat on tugev soovitus, kui andmekontroll ja riskimõtlemine on vähemalt tasemel 2 ning kandidaat pakub konkreetse kontrollimeetme.
 
 **Tugev kandidaat:** on täpne, kriitiline ja kontrollib andmeid enne järelduste tegemist. Ta oskab leida duplikaate, puuduvaid väärtusi, anomaaliaid ja ebaloogilisi mustreid ning hindab riski võimalikku mõju ärile. Portfoolios on näiteks tagastuste, varude erinevuste või makseprobleemide analüüs koos soovitatud kontrollimeetmega.
 

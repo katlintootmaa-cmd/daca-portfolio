@@ -1,8 +1,24 @@
-# Rühmatöö rollile: BI Analyst
+# Värbamisjuhend rollile: BI Analyst
 
 ## Rolli fookus
 
 BI Analyst ehk ärianalüütika spetsialist keskendub dashboardidele, raportitele ja juhtimisinfo kättesaadavaks tegemisele. UrbanStyle'is aitaks BI Analyst luua vaateid müügile, klientidele, toodetele, varudele ja kampaaniate tulemustele.
+
+## Juhendi kasutamine
+
+Seda juhendit saab kasutada BI Analyst kandidaadi hindamisel kogu värbamisprotsessi jooksul: töökuulutuse koostamisel, CV ja LinkedIni ülevaatamisel, dashboardide portfoolio hindamisel, praktilise ülesande ettevalmistamisel, intervjuu läbiviimisel ja lõpliku otsuse tegemisel.
+
+Iga kandidaadi puhul tuleks hinnata kolme põhiküsimust:
+
+- kas kandidaat oskab luua usaldusväärseid ja kasutatavaid dashboarde;
+- kas ta mõistab KPI-de ärilist tähendust;
+- kas ta oskab teha koostööd juhtide ja ärikasutajatega.
+
+Soovituslik otsus:
+
+- **Sobib järgmisesse vooru**, kui kandidaat oskab põhjendada KPI-de valikut, näitab vähemalt ühte kasutatavat dashboardi ja kontrollib andmete usaldusväärsust.
+- **Vajab lisakontrolli**, kui visuaalne pool on tugev, aga mõõdikute loogika või kasutajavaade jääb nõrgaks.
+- **Ei sobi hetkel**, kui kandidaat keskendub ainult graafikute välimusele ega oska öelda, millist otsust dashboard toetab.
 
 ## 4-liikmelise rühma tööjaotus
 
@@ -114,6 +130,17 @@ Rühma tulemus: BI Analyst intervjuu peab hindama visualiseerimist, KPI-loogikat
 - Koostöö ja õppimisvõime: kas ta küsib tagasisidet ning parandab raportit kasutajate vajaduste põhjal.
 
 ## Tugev vs nõrk kandidaat
+
+## Hindamisskaala kokkuvõte
+
+| Valdkond | 1 - vajab arendamist | 2 - sobiv tase | 3 - tugev tase |
+| --- | --- | --- | --- |
+| Tehniline oskus | Ei tunne andmemudeli ega BI tööriista loogikat | Koostab lihtsa dashboardi | Loob usaldusväärse ja hooldatava raporti |
+| KPI-mõtlemine | Valib mõõdikuid juhuslikult | Seob KPI-d otsusega | Põhjendab mõõdikuid ja piiranguid |
+| Kasutatavus | Dashboard on segane | Dashboard on loetav ja filtritega | Dashboard sobib konkreetsele kasutajale |
+| Suhtlus | Ei oska valikuid selgitada | Selgitab raportit arusaadavalt | Kogub tagasisidet ja parandab lahendust |
+
+Kandidaat on tugev soovitus, kui ta saab vähemalt taseme 2 igas valdkonnas ja KPI-mõtlemine või kasutatavus on tasemel 3.
 
 **Tugev kandidaat:** oskab luua dashboarde, mis on selged, kasutatavad ja seotud juhtimisotsustega. Ta põhjendab KPI-de valikut, kontrollib andmete usaldusväärsust ja mõtleb kasutaja vajadusele. Tema portfoolios on näiteks Power BI, Tableau, Plotly või Streamlit dashboard, mille README selgitab sihtrühma, mõõdikuid ja otsuseid, mida dashboard toetab.
 

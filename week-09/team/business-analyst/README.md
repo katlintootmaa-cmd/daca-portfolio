@@ -1,8 +1,24 @@
-# Rühmatöö rollile: Business Analyst
+# Värbamisjuhend rollile: Business Analyst
 
 ## Rolli fookus
 
 Business Analyst aitab UrbanStyle'il mõista ärivajadusi, sõnastada probleeme ja tõlkida need analüüsiülesanneteks. Roll on vähem puhtalt tehniline kui Data Analyst, kuid vajab väga head ärilist mõtlemist, suhtlemist ja andmete põhjal otsuste toetamist.
+
+## Juhendi kasutamine
+
+Seda juhendit saab kasutada Business Analyst kandidaadi hindamisel kogu värbamisprotsessi jooksul: töökuulutuse koostamisel, CV ja LinkedIni ülevaatamisel, portfoolio hindamisel, intervjuu juhtumülesande ettevalmistamisel ja lõpliku värbamisotsuse tegemisel.
+
+Iga kandidaadi puhul tuleks hinnata kolme põhiküsimust:
+
+- kas kandidaat oskab ebamäärase ärivajaduse selgeks probleemiks sõnastada;
+- kas ta oskab koguda nõudeid ja küsida õigeid täpsustavaid küsimusi;
+- kas ta suudab olla sillaks äripoole, andmetiimi ja juhtkonna vahel.
+
+Soovituslik otsus:
+
+- **Sobib järgmisesse vooru**, kui kandidaat küsib täpsustavaid küsimusi, eristab sümptomeid ja põhjuseid ning oskab äriküsimuse analüüsiülesandeks muuta.
+- **Vajab lisakontrolli**, kui suhtlus on hea, aga andmeloogika, KPI-d või nõuete dokumenteerimine jäävad ebakindlaks.
+- **Ei sobi hetkel**, kui kandidaat räägib üldiselt andmetest, kuid ei suuda selgitada, millist äriprobleemi ta lahendaks.
 
 ## 4-liikmelise rühma tööjaotus
 
@@ -114,6 +130,17 @@ Rühma tulemus: Business Analyst intervjuu peab hindama suhtlemist, probleemi ra
 - Koostöö ja õppimisvõime: kas ta oskab eri osapoolte vajadusi kokku viia.
 
 ## Tugev vs nõrk kandidaat
+
+## Hindamisskaala kokkuvõte
+
+| Valdkond | 1 - vajab arendamist | 2 - sobiv tase | 3 - tugev tase |
+| --- | --- | --- | --- |
+| Probleemi raamimine | Võtab soovi liiga otse | Täpsustab eesmärki ja mõõdikuid | Muudab ebamäärase vajaduse selgeks analüüsiülesandeks |
+| Andmeloogika | Ei oska nimetada vajalikke andmeid | Saab aru KPI-dest ja lihtsast SQL-ist | Seob andmed otsuse ja mõjuga |
+| Sidusrühmade töö | Ei küsi osapoolte vajadusi | Kaardistab põhilised huvid | Lepitab erinevad ootused ja dokumenteerib kokkulepped |
+| Kommunikatsioon | Selgitus jääb üldiseks | Selgitab arusaadavalt | Suudab rääkida nii äripoole kui ka tehnilise tiimiga |
+
+Kandidaat on tugev soovitus, kui probleemi raamimine ja kommunikatsioon on vähemalt tasemel 2 ning üks neist on tasemel 3.
 
 **Tugev kandidaat:** oskab ebamäärase äriprobleemi muuta konkreetseks analüüsiülesandeks, küsib täpsustavaid küsimusi ja mõistab sidusrühmade vajadusi. Tema portfoolios või varasemas kogemuses on näide, kus ta kirjeldas ärivajaduse, kogus nõuded, kasutas andmeid ja jõudis praktilise soovituseni. Intervjuul suudab ta selgelt põhjendada, millist otsust analüüs toetab.
 

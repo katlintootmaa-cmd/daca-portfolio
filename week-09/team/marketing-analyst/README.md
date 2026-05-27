@@ -1,8 +1,24 @@
-# Rühmatöö rollile: Marketing Analyst
+# Värbamisjuhend rollile: Marketing Analyst
 
 ## Rolli fookus
 
 Marketing Analyst aitab UrbanStyle'il mõista kampaaniate tulemuslikkust, kliendisegmente, kanalite tasuvust ja turunduse mõju müügile. Roll ühendab andmeanalüüsi ja turundusloogika.
+
+## Juhendi kasutamine
+
+Seda juhendit saab kasutada Marketing Analyst kandidaadi hindamisel kogu värbamisprotsessi jooksul: töökuulutuse koostamisel, CV ja LinkedIni ülevaatamisel, kampaaniaportfoolio hindamisel, praktilise juhtumi ettevalmistamisel, intervjuu läbiviimisel ja lõpliku otsuse tegemisel.
+
+Iga kandidaadi puhul tuleks hinnata kolme põhiküsimust:
+
+- kas kandidaat oskab kampaaniaandmeid siduda müügi ja kasumlikkusega;
+- kas ta mõistab turundusmõõdikuid nagu konversioon, ROI, CAC ja retention;
+- kas ta suudab anda andmete põhjal praktilisi soovitusi turundustiimile.
+
+Soovituslik otsus:
+
+- **Sobib järgmisesse vooru**, kui kandidaat oskab analüüsida kampaania mõju, eristab nähtavusmõõdikuid ärimõjust ja pakub kontrollitavaid järgmisi samme.
+- **Vajab lisakontrolli**, kui kandidaat tunneb mõõdikuid, aga ei seo neid piisavalt müügi või kliendisegmentidega.
+- **Ei sobi hetkel**, kui kandidaat räägib ainult klikkidest ja vaatamistest ega oska hinnata kampaania tegelikku tasuvust.
 
 ## 4-liikmelise rühma tööjaotus
 
@@ -114,6 +130,17 @@ Rühma tulemus: Marketing Analyst intervjuu peab hindama kampaanialoogikat, andm
 - Koostöö ja õppimisvõime: kas ta suudab töötada koos turunduse ja müügiga ning küsida õigeid täpsustusi.
 
 ## Tugev vs nõrk kandidaat
+
+## Hindamisskaala kokkuvõte
+
+| Valdkond | 1 - vajab arendamist | 2 - sobiv tase | 3 - tugev tase |
+| --- | --- | --- | --- |
+| Mõõdikud | Tunneb ainult üldisi nähtavusmõõdikuid | Arvutab konversiooni, ROI või CAC-i | Seob mõõdikud müügi, kasumi ja segmendiga |
+| Analüüs | Kirjeldab tulemusi pealiskaudselt | Võrdleb kampaaniaid ja kanaleid | Leiab põhjuseid ja kontrollib hüpoteese |
+| Soovitused | Ei paku tegevust | Annab ühe praktilise soovituse | Pakub prioriseeritud järgmisi samme |
+| Koostöö | Ei arvesta turundustiimi vajadust | Selgitab tulemusi arusaadavalt | Tõlgib analüüsi kampaaniaplaaniks |
+
+Kandidaat on tugev soovitus, kui mõõdikute ja soovituste tase on vähemalt 2 ning analüüs jõuab ärimõjuni.
 
 **Tugev kandidaat:** mõistab kampaaniate, kliendisegmentide ja müügitulemuste seost. Ta oskab arvutada konversiooni, ROI-d või CAC-i ning selgitada, milline kanal või sihtrühm loob päriselt väärtust. Portfoolios on näiteks kampaaniaanalüüs või kliendisegmenteerimine, mille lõpus on praktiline turundussoovitus.
 

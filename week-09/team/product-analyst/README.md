@@ -1,8 +1,24 @@
-# Rühmatöö rollile: Product Analyst
+# Värbamisjuhend rollile: Product Analyst
 
 ## Rolli fookus
 
 Product Analyst aitab UrbanStyle'il mõista, kuidas kliendid toodete, e-poe, kampaaniate või funktsioonidega käituvad. Roll keskendub kasutajakäitumisele, tooteotsustele, eksperimenteerimisele ja mõõdikutele.
+
+## Juhendi kasutamine
+
+Seda juhendit saab kasutada Product Analyst kandidaadi hindamisel kogu värbamisprotsessi jooksul: töökuulutuse koostamisel, CV ja LinkedIni ülevaatamisel, portfoolio hindamisel, ostuteekonna juhtumi ettevalmistamisel, intervjuu läbiviimisel ja lõpliku otsuse tegemisel.
+
+Iga kandidaadi puhul tuleks hinnata kolme põhiküsimust:
+
+- kas kandidaat oskab kasutajakäitumist mõõdikuteks ja hüpoteesideks muuta;
+- kas ta mõistab funnel'it, konversiooni, retention'it ja eksperimenteerimist;
+- kas ta suudab teha tooteparanduse soovituse, mille mõju saab hiljem mõõta.
+
+Soovituslik otsus:
+
+- **Sobib järgmisesse vooru**, kui kandidaat oskab kirjeldada ostuteekonda, leida katkestamise kohti ja pakkuda testitavat tootehüpoteesi.
+- **Vajab lisakontrolli**, kui kandidaat tunneb mõõdikuid, aga ei seosta neid veel piisavalt konkreetse tooteotsusega.
+- **Ei sobi hetkel**, kui kandidaat vaatab ainult üldiseid numbreid ega oska öelda, millist kasutajaprobleemi need näitavad.
 
 ## 4-liikmelise rühma tööjaotus
 
@@ -114,6 +130,17 @@ Rühma tulemus: Product Analyst intervjuu peab hindama hüpoteeside loomist, mõ
 - Koostöö ja õppimisvõime: kas ta suudab töötada koos product manageri, disaini ja arendusega.
 
 ## Tugev vs nõrk kandidaat
+
+## Hindamisskaala kokkuvõte
+
+| Valdkond | 1 - vajab arendamist | 2 - sobiv tase | 3 - tugev tase |
+| --- | --- | --- | --- |
+| Product metrics | Ei tunne funnel'i ega retention'i loogikat | Valib sobivad põhimõõdikud | Seob mõõdikud toote tervise ja otsusega |
+| Hüpoteesid | Ei paku kontrollitavat oletust | Pakub ühe realistliku hüpoteesi | Seob hüpoteesi eksperimendi või mõõtmisega |
+| Tehniline oskus | Ei oska vajalikke event'e nimetada | Mõistab SQL-i ja sündmuste andmeid | Leiab kasutajateekonna probleemi andmetest |
+| Koostöö | Ei arvesta tootetiimi vajadusi | Selgitab soovitust product managerile | Prioriseerib soovituse mõju ja teostatavuse järgi |
+
+Kandidaat on tugev soovitus, kui ta suudab juhtumülesandes liikuda mõõdikust hüpoteesi ja sealt mõõdetava tootesoovituseni.
 
 **Tugev kandidaat:** mõistab kasutajateekonda, oskab valida product metrics mõõdikuid ja seob analüüsi konkreetse tooteotsusega. Ta püstitab hüpoteese, kasutab funnel'i või sündmuste andmeid ning pakub testitavaid järgmisi samme. Portfoolios on näiteks ostuteekonna, retention'i või A/B testi analüüs koos selge soovitusega product managerile.
 

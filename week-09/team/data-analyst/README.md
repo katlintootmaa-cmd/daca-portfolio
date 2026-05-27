@@ -1,8 +1,24 @@
-# Rühmatöö rollile: Data Analyst
+# Värbamisjuhend rollile: Data Analyst
 
 ## Rolli fookus
 
 Data Analyst ehk andmeanalüütik aitab UrbanStyle'il teha paremaid otsuseid müügi-, kliendi-, toote- ja operatsiooniandmete põhjal. Rolli keskmes on andmete kogumine, puhastamine, SQL-päringud, lihtsam Python-analüüs, dashboardid ja tulemuste selgitamine äripoolele.
+
+## Juhendi kasutamine
+
+Seda juhendit saab kasutada Data Analyst kandidaadi hindamisel kogu värbamisprotsessi jooksul: töökuulutuse koostamisel, CV ja LinkedIni ülevaatamisel, portfoolio hindamisel, tehnilise testi ettevalmistamisel, intervjuu läbiviimisel ja lõpliku värbamisotsuse tegemisel.
+
+Iga kandidaadi puhul tuleks hinnata kolme põhiküsimust:
+
+- kas kandidaat oskab andmetega praktiliselt töötada;
+- kas ta suudab tulemusi ärikontekstis selgitada;
+- kas tema tööviis sobib UrbanStyle'i tiimi igapäevasesse koostöösse.
+
+Soovituslik otsus:
+
+- **Sobib järgmisesse vooru**, kui kandidaat näitab praktilist SQL-i või Pythoni oskust, oskab oma portfooliot selgitada ja seob tulemused äriküsimusega.
+- **Vajab lisakontrolli**, kui tehniline baas on olemas, aga äriline selgitus või dokumenteerimine jääb nõrgaks.
+- **Ei sobi hetkel**, kui kandidaat loetleb ainult tööriistu ega suuda näidata, kuidas ta andmeid otsuste tegemiseks kasutaks.
 
 ## 4-liikmelise rühma tööjaotus
 
@@ -114,6 +130,17 @@ Rühma tulemus: Data Analyst intervjuu peab hindama nii tehnilist oskust kui ka 
 - Koostöö ja õppimisvõime: kas ta oskab küsida abi, võtta tagasisidet vastu ja töötada tiimis.
 
 ## Tugev vs nõrk kandidaat
+
+## Hindamisskaala kokkuvõte
+
+| Valdkond | 1 - vajab arendamist | 2 - sobiv tase | 3 - tugev tase |
+| --- | --- | --- | --- |
+| Tehniline oskus | Tunneb tööriistu pealiskaudselt | Lahendab lihtsa SQL/Python ülesande | Kontrollib tulemusi ja põhjendab lahendust |
+| Ärimõtlemine | Ei seo analüüsi otsusega | Selgitab põhilist ärilist tähendust | Pakub praktilisi soovitusi UrbanStyle'ile |
+| Portfoolio | Projektid on dokumenteerimata | Projektidel on selge probleem ja tulemus | Projektid näitavad mõõdetavat mõju |
+| Suhtlus | Selgitus on segane | Selgitab oma tööd arusaadavalt | Kohandab selgitust eri kuulajatele |
+
+Kandidaat on tugev soovitus, kui enamik valdkondi on tasemel 2 või 3 ning ükski põhivaldkond ei jää tasemele 1.
 
 **Tugev kandidaat:** oskab SQL-i ja Pythonit kasutada päris äriküsimuse lahendamiseks, kontrollib tulemuste loogikat ja selgitab järeldusi mitte-tehnilisele kuulajale. Tema portfoolios on 2-3 selgelt dokumenteeritud projekti, näiteks müügiandmete analüüs, kliendisegmenteerimine või dashboard koos soovitustega. CV-s ja LinkedInis on oskused seotud konkreetsete näidetega, näiteks "analüüsisin müügiandmeid ja leidsin kõige kasumlikumad kliendisegmendid".
 
