@@ -4,6 +4,13 @@
 
 Viienda peatüki ülesanne on koostada Liis Koppelile andmeanalüütiku tööpakkumise põhi. Töökuulutus peab olema aus, konkreetne ja oskuspõhine. See ei tohiks kasutada ebamääraseid väljendeid nagu "data ninja" või "rockstar analyst".
 
+## Rollide vaade ja töö selles peatükis
+
+- Palkamisjuht koostab tööpakkumise üldstruktuuri ja kontrollib, et rolli eesmärk oleks selge.
+- Tehniline intervjueerija täpsustab vajalikud tööriistad, tehnilised oskused ja portfoolio ootuse.
+- Personalijuht vaatab kuulutuse tooni, kandidaadisõbralikkust ja karjäärivahetajale sobivust.
+- Tiimijuht kirjeldab päris igapäevatööd, koostööd tiimidega ja analüütiku praktilist panust.
+
 ## Töökäik
 
 Selles peatükis alustasime sellest, et mõtlesime, milline tööpakkumine kõnetaks head junior andmeanalüütiku kandidaati. Eesmärk oli kirjutada kuulutus, mis on piisavalt konkreetne, aga ei hirmuta ära karjäärivahetajaid ega alustavaid analüütikuid.
@@ -63,7 +70,7 @@ Hea tööpakkumine ei nõua ainult kandidaadilt, vaid näitab ka, mida ettevõte
 
 Liis Koppelile soovitame tööpakkumist, mis on aus ja konkreetne. See peaks kutsuma kandideerima ka karjäärivahetajaid, kellel on tugev portfoolio ja äriline mõtlemine, isegi kui neil ei ole veel mitmeaastast ametlikku andmeanalüütiku kogemust.
 
-## Alaülesannete sooritamise tulemus 4-liikmelises rühmas
+## Rollide vaade ja alaülesannete sooritamise tulemus 4-liikmelises rühmas
 
 **Liige 1 ehk Roll A: palkamisjuhi vaade**
 

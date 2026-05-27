@@ -4,6 +4,13 @@
 
 Teise peatüki ülesanne on koostada juhend Kristi Tammele, UrbanStyle'i CEO-le. Kristi ei pruugi ise koodi detailselt hinnata, aga ta tahab aru saada, kas kandidaadi portfoolio näitab ärilist mõtlemist ja tööks valmisolekut.
 
+## Rollide vaade ja töö selles peatükis
+
+- Palkamisjuht vaatab, kas portfoolio toetab CV-d ja näitab kandidaadi tegelikku kogemust.
+- Tehniline intervjueerija hindab koodi, SQL-päringuid, Python-faile, GitHubi struktuuri ja dokumentatsiooni.
+- Personalijuht vaatab, kas portfoolio näitab suhtlemisoskust, õppimisvõimet ja eneserefleksiooni.
+- Tiimijuht hindab, kas projektid on piisavalt selged, et teine inimene saaks neid mõista ja edasi kasutada.
+
 ## Töökäik
 
 Selles peatükis alustasime portfoolio eesmärgi lahti mõtestamisest. Leidsime, et portfoolio ei ole ainult koht, kuhu panna koodifailid, vaid see peab näitama kandidaadi tööprotsessi, tehnilisi oskusi ja ärilist mõtlemist.
@@ -62,7 +69,7 @@ CEO vaates on kõige tähtsam küsimus: "Mida ettevõte selle teadmisega teha sa
 
 Kristi Tammele soovitame portfoolio hindamiseks kontrollnimekirja: selge README, vähemalt 2-3 tugevat projekti, mõõdetavad tulemused, nähtav ärimõju ja korrektne tehniline teostus. Kandidaat peaks suutma oma portfooliot 3-5 minutiga arusaadavalt tutvustada.
 
-## Alaülesannete sooritamise tulemus 4-liikmelises rühmas
+## Rollide vaade ja alaülesannete sooritamise tulemus 4-liikmelises rühmas
 
 **Liige 1 ehk Roll A: palkamisjuhi vaade**
 

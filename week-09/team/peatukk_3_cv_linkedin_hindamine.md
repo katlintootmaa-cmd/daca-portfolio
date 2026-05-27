@@ -4,6 +4,13 @@
 
 Kolmanda peatüki ülesanne on aidata Anna Metsal hinnata andmeanalüütiku CV-d ja LinkedIni profiili. Anna turundusjuhina pöörab tähelepanu sellele, kuidas kandidaat ennast esitleb ja kas tema väärtus on kiiresti mõistetav.
 
+## Rollide vaade ja töö selles peatükis
+
+- Palkamisjuht hindab CV üldstruktuuri, ATS-sõbralikkust ja tööpakkumisega sobivust.
+- Tehniline intervjueerija kontrollib, kas CV-s ja LinkedInis nimetatud oskused on portfoolios tõendatud.
+- Personalijuht vaatab professionaalset muljet, karjääriloo selgust ja kandidaadi motivatsiooni.
+- Tiimijuht hindab, kas profiilist paistab koostöövõime, selge kommunikatsioon ja sobivus tiimi.
+
 ## Töökäik
 
 Selles peatükis alustasime sellest, et määrasime, milline peab olema hea andmeanalüütiku CV ja LinkedIni profiil tööandja vaates. Meie eesmärk ei olnud hinnata ainult vormistust, vaid seda, kas kandidaadi oskused ja kogemus tulevad kiiresti ja usaldusväärselt esile.
@@ -85,7 +92,7 @@ Punased lipud:
 
 Anna Metsale soovitame hinnata CV-d ja LinkedIni kui kandidaadi professionaalset turundusmaterjali. Hea kandidaat ei pea olema kõige kogenum, aga tema profiilist peab kiiresti aru saama, mida ta oskab ja millist väärtust ta UrbanStyle'ile looks.
 
-## Alaülesannete sooritamise tulemus 4-liikmelises rühmas
+## Rollide vaade ja alaülesannete sooritamise tulemus 4-liikmelises rühmas
 
 **Liige 1 ehk Roll A: palkamisjuhi vaade**
 

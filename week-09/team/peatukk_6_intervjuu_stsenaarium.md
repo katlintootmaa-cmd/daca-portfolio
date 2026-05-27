@@ -4,6 +4,13 @@
 
 Kuuenda peatüki ülesanne on koostada intervjuu stsenaarium kogu UrbanStyle'i juhatusele. Intervjuu peab hindama nii tehnilisi oskusi, pehmeid oskusi kui ka ärilist mõtlemist.
 
+## Rollide vaade ja töö selles peatükis
+
+- Palkamisjuht juhib intervjuu üldstruktuuri, taustaküsimusi ja motivatsiooni hindamist.
+- Tehniline intervjueerija koostab praktilise SQL/Python ülesande ja hindab mõttekäiku.
+- Personalijuht lisab STAR-küsimused, mis näitavad koostööd, õppimisvõimet ja tagasisidega toimetulekut.
+- Tiimijuht hindab portfoolio esitlemist, tööstiili ja sobivust igapäevasesse tiimi.
+
 ## Töökäik
 
 Selles peatükis alustasime sellest, et panime paika intervjuu eesmärgi. Me ei tahtnud teha intervjuud, mis koosneb ainult tehnilisest testist, sest andmeanalüütiku töö nõuab ka suhtlemist, äriküsimuste mõistmist ja tulemuste selgitamist.
@@ -84,7 +91,7 @@ Kandidaat võiks intervjuu läbida, kui ta:
 
 Juhatusele soovitame intervjuud, mis ei keskendu ainult tehnilisele testile. Hea andmeanalüütik peab oskama kirjutada päringuid, aga sama oluline on oskus tulemusi selgitada ja pakkuda otsustamiseks kasulikke soovitusi.
 
-## Alaülesannete sooritamise tulemus 4-liikmelises rühmas
+## Rollide vaade ja alaülesannete sooritamise tulemus 4-liikmelises rühmas
 
 **Liige 1 ehk Roll A: palkamisjuhi vaade**
 

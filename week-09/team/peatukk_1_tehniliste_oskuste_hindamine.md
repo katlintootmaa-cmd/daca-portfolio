@@ -4,6 +4,13 @@
 
 Esimese peatüki ülesanne on koostada juhend Toomas Kasele, kes on UrbanStyle'i IT-direktor. Tema tahab teada, kuidas hinnata, kas kandidaat oskab päriselt andmetega töötada või on ta ainult CV-sse tööriistade nimed kirjutanud.
 
+## Rollide vaade ja töö selles peatükis
+
+- Palkamisjuht vaatab, millised tehnilised oskused peavad olema CV-s ja kandideerimismaterjalides tõendatud.
+- Tehniline intervjueerija koostab SQL-i ja Pythoniga praktilise testi ning hindab lahenduse kvaliteeti.
+- Personalijuht jälgib, kuidas kandidaat probleemi lahendades suhtleb, küsib ja oma mõttekäiku selgitab.
+- Tiimijuht hindab, kas kandidaadi töö oleks tiimis kasutatav: loetav, dokumenteeritud ja teistele arusaadav.
+
 ## Töökäik
 
 Selles peatükis alustasime sellest, et panime kirja, milliseid tehnilisi oskusi UrbanStyle'i andmeanalüütik oma igapäevatöös kasutaks. Me ei vaadanud ainult tööriistade nimesid, vaid mõtlesime, milliseid ülesandeid uus analüütik päriselt tegema hakkab: müügiandmete analüüs, kliendisegmentide leidmine, dashboardide koostamine ja andmete puhastamine.
@@ -79,7 +86,7 @@ Punased lipud:
 
 Toomas Kasele soovitame kasutada lühikest praktilist testi, kus kandidaat peab töötama UrbanStyle'i tüüpi müügiandmetega. Hindamisel tuleks arvestada nii tehnilist täpsust kui ka seda, kas kandidaat oskab tulemusi äriliselt tõlgendada.
 
-## Alaülesannete sooritamise tulemus 4-liikmelises rühmas
+## Rollide vaade ja alaülesannete sooritamise tulemus 4-liikmelises rühmas
 
 **Liige 1 ehk Roll A: palkamisjuhi vaade**
 

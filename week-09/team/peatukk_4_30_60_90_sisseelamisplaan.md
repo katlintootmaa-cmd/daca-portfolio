@@ -4,6 +4,13 @@
 
 Neljanda peatüki ülesanne on koostada Marko Saarele uue analüütiku sisseelamisplaan. Plaan peab sobima nii kontoris töötavale kui ka remote-kolleegile Soomes või Saksamaal.
 
+## Rollide vaade ja töö selles peatükis
+
+- Palkamisjuht määratleb, millist infot ja rolliselgust uus töötaja esimestel nädalatel vajab.
+- Tehniline intervjueerija kirjeldab tehnilise sisseelamise: andmebaasid, tööriistad, päringud ja raportid.
+- Personalijuht lisab mentorluse, check-in kohtumised, toe ja remote-töö suhtluskorralduse.
+- Tiimijuht seab ootused iseseisvale panusele, töö üleandmisele ja 60-90 päeva projektile.
+
 ## Töökäik
 
 Selles peatükis alustasime küsimusest, mida uus andmeanalüütik peab esimese kolme kuu jooksul õppima, et UrbanStyle'is iseseisvalt tööle hakata. Jagasime sisseelamise kolmeks etapiks: esimesed 30 päeva, päevad 30-60 ja päevad 60-90.
@@ -56,7 +63,7 @@ Kolmandal kuul võiks uus analüütik võtta enda peale ühe väikese projekti a
 
 Marko Saarele soovitame 30-60-90 päeva plaani, mis liigub Shu-Ha-Ri põhimõttel: alguses õpitakse ja jäljendatakse, siis kohandatakse ning lõpuks tehakse iseseisev panus. Remote onboarding peab olema eriti selge, sest kaugtöötaja vajab rohkem struktureeritud suhtlust.
 
-## Alaülesannete sooritamise tulemus 4-liikmelises rühmas
+## Rollide vaade ja alaülesannete sooritamise tulemus 4-liikmelises rühmas
 
 **Liige 1 ehk Roll A: palkamisjuhi vaade**
 

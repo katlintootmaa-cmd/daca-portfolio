@@ -25,3 +25,6 @@ tools/
 *.log
 *.sql
 *.nupkg
+
+# Generated week 09 team role PDFs
+week-09/team/*/*.pdf
