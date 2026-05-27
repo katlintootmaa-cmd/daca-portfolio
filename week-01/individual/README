@@ -1,1 +1,32 @@
 
+# Nädal 1: Iseseisev töö
+
+## Mida tegin
+
+Selle nädala iseseisva töö käigus harjutasin SQL-i põhikäskude kasutamist UrbanStyle'i andmebaasi näitel. Fookuses oli andmete uurimine ilma algandmeid muutmata: vaatasin müügi-, kliendi- ja tooteandmeid, filtreerisin tulemusi ning kontrollisin andmete kvaliteeti.
+
+## Kasutatud SQL oskused
+
+- `SELECT` ja `FROM` tabelitest andmete vaatamiseks.
+- `WHERE` tingimuste abil andmete filtreerimiseks.
+- `ORDER BY` ja `LIMIT` tulemuste sorteerimiseks ja piiramiseks.
+- `DISTINCT` unikaalsete väärtuste leidmiseks.
+- `COUNT(*)`, `COUNT(veerg)` ja `COUNT(DISTINCT veerg)` ridade ja väärtuste loendamiseks.
+- `BETWEEN`, `IN`, `LIKE` ja `IS NULL` täpsemaks filtreerimiseks.
+
+## Peamised tegevused
+
+- Uurisin `sales`, `customers` ja `products` tabelite sisu.
+- Leidsin suurimaid ja väikseimaid müügitehinguid.
+- Kontrollisin puuduvaid `customer_id` väärtusi.
+- Võrdlesin ridade koguarvu ja unikaalsete väärtuste arvu.
+- Märkasin andmekvaliteedi probleeme, näiteks puuduvaid väärtusi, duplikaate ja negatiivseid tehinguid.
+
+## Valminud failid
+
+- `week1[tabel]exploration.sql` - iseseisva töö SQL-päringud.
+- `week1_results_screenshot.png` ja lisapildid - päringute tulemuste ekraanipildid.
+
+## Õpitud teemad
+
+Sain aru, et SQL-i põhikäskudega saab kiiresti kontrollida, mis andmetes olemas on ja millised probleemid võivad analüüsi mõjutada. Kõige olulisem õppimiskoht oli see, et enne järelduste tegemist tuleb andmeid uurida ja kvaliteeti kontrollida.

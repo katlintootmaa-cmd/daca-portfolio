@@ -14,7 +14,7 @@ Suurimad tähelepanu vajavad seisjad on `Luksuslik orgaaniline dressikomplekt`, 
 
 Allolev tulpdiagramm võrdleb kategooriate kaupa müüdud ühikuid ja laojääki. Kuna laojääk on müüdud kogusest suurusjärgu võrra suurem, on näitajad loetavuse huvides pandud eraldi skaaladele.
 
-![Tulpdiagramm: müüdud ühikud ja laojääk](week4_myydud_ja_laojaak_tulpdiagramm.png)
+![Tulpdiagramm: müüdud ühikud ja laojääk](week4_inventuuristatistika.png)
 
 Lisaks näitavad järgmised diagrammid, millised kategooriad toovad rohkem tulu ja kasumit ning kus on müüdud/laos suhe kõige kiirem.
 

@@ -36,7 +36,7 @@ Valmis Tallinna kaupluse dashboard, mis näitab UrbanStyle'i suurima füüsilise
 
 Ekraanipilt:
 
-- Tallinna dashboard: `week6_roll_a_tallinn_dashboard.png`
+- Tallinna dashboard: `week 6_A_Kätlin.png`
 
 Power BI fail:
 
@@ -78,4 +78,3 @@ Kasutasin AI-d andmeloo ja annotatsioonide sõnastamise lihvimiseks. AI aitas mu
 ## Kokkuvõte
 
 Iseseisva töö tulemusena valmis Tallinna kaupluse andmelugu Power BI dashboard'i kujul. Selle töö käigus õppisin, kuidas muuta ühe asukoha müügiandmed juhtkonnale arusaadavaks vaateks, kus numbrid, graafikud ja lühike narratiiv toetavad ühist ärilist järeldust.
-

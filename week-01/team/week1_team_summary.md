@@ -32,8 +32,7 @@ Meeskond järgis DACA raamistikku JAGA-TEE-KOGU-ESITLE, jagades töö andmedomee
 - Meeskonnatöö efektiivsus andmeanalüüsis
 
 ## Failid
-- Tiimi SQL päringud: `week1_task_a_sales.sql`, `week1_task_b_customers.sql`, `week1_task_c_products.sql`, 
-
+- Tiimi SQL päringud: `week1_task_a_sales.sql`, `week1_task_b_customers.sql`, `week1_task_c_products.sql`
 
 ## Järgmised sammud
 - Andmete puhastamine ja valideerimine
