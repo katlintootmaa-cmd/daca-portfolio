@@ -97,6 +97,22 @@ Rühma tulemus: Risk Analyst intervjuu peab hindama kriitilist mõtlemist, täps
 - Vaadatakse: kas kandidaat küsib perioodi, kategooria, tarnija, kampaaniate, andmekvaliteedi ja mõju kohta ning pakub kontrollitavaid samme.
 - Küsitakse: "Tagastused kasvasid järsult. Mis võib olla põhjus?", "Kuidas kontrollid, kas see on normaalne hooajalisus?", "Millise hoiatuse või kontrolli looksid tulevikuks?"
 
+**Intervjuu täpsem ülesehitus**
+
+- 5 minutit: sissejuhatus ja kandidaadi tausta kuulamine.
+- 15 minutit: portfoolio või riskianalüüsi walk-through, kus kandidaat selgitab leitud riski, kontrolli ja mõju.
+- 15 minutit: praktiline juhtum, näiteks ühe kategooria tagastused kasvavad järsult ja tuleb hinnata, kas see on normaalne muutus või risk.
+- 15 minutit: STAR-meetodil küsimused täpsuse, vastutuse, tundlike teemade ja dokumenteerimise kohta.
+- 5 minutit: kandidaadi küsimused.
+- 5 minutit: järgmiste sammude selgitamine.
+
+**Intervjuu hindamiskriteeriumid**
+
+- Tehniline oskus: SQL, anomaaliate leidmine, andmekvaliteedi kontroll ja tulemuste valideerimine.
+- Äriline mõtlemine: kas kandidaat hindab riski mõju, mitte ainult ei kirjelda kõrvalekallet.
+- Kommunikatsioon: kas ta oskab tundlikku riski rahulikult ja täpselt selgitada.
+- Koostöö ja õppimisvõime: kas ta kaasab protsessiomanikke ning pakub praktilisi kontrollimeetmeid.
+
 ## Tugev vs nõrk kandidaat
 
 **Tugev kandidaat:** on täpne, kriitiline ja kontrollib andmeid enne järelduste tegemist. Ta oskab leida duplikaate, puuduvaid väärtusi, anomaaliaid ja ebaloogilisi mustreid ning hindab riski võimalikku mõju ärile. Portfoolios on näiteks tagastuste, varude erinevuste või makseprobleemide analüüs koos soovitatud kontrollimeetmega.

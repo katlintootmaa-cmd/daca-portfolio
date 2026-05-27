@@ -97,6 +97,22 @@ Rühma tulemus: Product Analyst intervjuu peab hindama hüpoteeside loomist, mõ
 - Vaadatakse: kas kandidaat püstitab hüpoteese, valib sobivad mõõdikud, arvestab kasutajateekonda ja pakub testitavaid samme.
 - Küsitakse: "Ostukorvi lisatakse palju, aga oste lõpetatakse vähe. Kuidas uurid?", "Milliseid event'e vajad?", "Kuidas esitad soovituse arendustiimile?"
 
+**Intervjuu täpsem ülesehitus**
+
+- 5 minutit: sissejuhatus ja kandidaadi tausta kuulamine.
+- 15 minutit: portfoolio või tooteanalüüsi walk-through, kus kandidaat selgitab hüpoteesi, mõõdikuid ja mõju.
+- 15 minutit: praktiline juhtum, näiteks ostukorvi lisatakse palju tooteid, kuid ostu lõpetatakse vähe.
+- 15 minutit: STAR-meetodil küsimused koostöö kohta product manageri, disaini ja arendusega.
+- 5 minutit: kandidaadi küsimused.
+- 5 minutit: järgmiste sammude selgitamine.
+
+**Intervjuu hindamiskriteeriumid**
+
+- Tehniline oskus: SQL, funnel-analüüs, sündmuste andmed ja product metrics.
+- Äriline mõtlemine: kas kandidaat seob kasutajakäitumise konkreetse tooteotsusega.
+- Kommunikatsioon: kas ta oskab soovituse tootetiimile selgelt ja praktiliselt esitada.
+- Koostöö ja õppimisvõime: kas ta suudab töötada koos product manageri, disaini ja arendusega.
+
 ## Tugev vs nõrk kandidaat
 
 **Tugev kandidaat:** mõistab kasutajateekonda, oskab valida product metrics mõõdikuid ja seob analüüsi konkreetse tooteotsusega. Ta püstitab hüpoteese, kasutab funnel'i või sündmuste andmeid ning pakub testitavaid järgmisi samme. Portfoolios on näiteks ostuteekonna, retention'i või A/B testi analüüs koos selge soovitusega product managerile.

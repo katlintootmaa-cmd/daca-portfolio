@@ -97,6 +97,22 @@ Rühma tulemus: Business Analyst intervjuu peab hindama suhtlemist, probleemi ra
 - Vaadatakse: kas kandidaat küsib täpsustavaid küsimusi, loob hüpoteese, eristab sümptomeid ja põhjuseid ning suhtleb selgelt.
 - Küsitakse: "Müük kasvab, aga kasum langeb. Kust alustad?", "Kuidas lahendad olukorra, kus osapooled tahavad eri asju?", "Kuidas dokumenteerid kokkulepitud nõuded?"
 
+**Intervjuu täpsem ülesehitus**
+
+- 5 minutit: sissejuhatus ja kandidaadi tausta kuulamine.
+- 15 minutit: varasema projekti või ärijuhtumi walk-through, kus kandidaat selgitab probleemi, osapooli ja otsust.
+- 15 minutit: praktiline juhtum, näiteks "müük kasvab, aga kasum väheneb" ning selle muutmine analüüsiülesandeks.
+- 15 minutit: STAR-meetodil küsimused sidusrühmade, konfliktsete soovide ja nõuete kokkuleppimise kohta.
+- 5 minutit: kandidaadi küsimused.
+- 5 minutit: järgmiste sammude selgitamine.
+
+**Intervjuu hindamiskriteeriumid**
+
+- Tehniline oskus: andmeloogika, SQL-i baastase, KPI-de mõistmine ja nõuete sõnastamine.
+- Äriline mõtlemine: kas kandidaat oskab ebamäärase äriprobleemi muuta konkreetseks analüüsiülesandeks.
+- Kommunikatsioon: kas ta küsib täpsustavaid küsimusi ja selgitab kokkuleppeid arusaadavalt.
+- Koostöö ja õppimisvõime: kas ta oskab eri osapoolte vajadusi kokku viia.
+
 ## Tugev vs nõrk kandidaat
 
 **Tugev kandidaat:** oskab ebamäärase äriprobleemi muuta konkreetseks analüüsiülesandeks, küsib täpsustavaid küsimusi ja mõistab sidusrühmade vajadusi. Tema portfoolios või varasemas kogemuses on näide, kus ta kirjeldas ärivajaduse, kogus nõuded, kasutas andmeid ja jõudis praktilise soovituseni. Intervjuul suudab ta selgelt põhjendada, millist otsust analüüs toetab.

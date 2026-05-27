@@ -97,6 +97,22 @@ Rühma tulemus: BI Analyst intervjuu peab hindama visualiseerimist, KPI-loogikat
 - Vaadatakse: kas kandidaat oskab dashboardi kaitsta, mõõdikuid põhjendada ja kasutaja vajadustest lähtuda.
 - Küsitakse: "Miks valisid selle visualiseeringu?", "Kuidas näitaksid müügi ja kasumi muutust?", "Mida teeksid, kui juht tahab ühele lehele liiga palju infot?"
 
+**Intervjuu täpsem ülesehitus**
+
+- 5 minutit: sissejuhatus ja kandidaadi tausta kuulamine.
+- 15 minutit: portfoolio või dashboardi walk-through, kus kandidaat selgitab sihtrühma, KPI-sid ja otsuseid.
+- 15 minutit: praktiline ülesanne, näiteks UrbanStyle'i müügidashboardi mõõdikute ja paigutuse kavandamine.
+- 15 minutit: STAR-meetodil küsimused kasutajate tagasiside, raporti parandamise ja koostöö kohta.
+- 5 minutit: kandidaadi küsimused.
+- 5 minutit: järgmiste sammude selgitamine.
+
+**Intervjuu hindamiskriteeriumid**
+
+- Tehniline oskus: SQL, andmemudelid, BI tööriistad ja andmekvaliteedi kontroll.
+- Äriline mõtlemine: kas kandidaat oskab KPI-d siduda juhtimisotsusega.
+- Kommunikatsioon: kas ta selgitab dashboardi kasutajale lihtsalt ja veenvalt.
+- Koostöö ja õppimisvõime: kas ta küsib tagasisidet ning parandab raportit kasutajate vajaduste põhjal.
+
 ## Tugev vs nõrk kandidaat
 
 **Tugev kandidaat:** oskab luua dashboarde, mis on selged, kasutatavad ja seotud juhtimisotsustega. Ta põhjendab KPI-de valikut, kontrollib andmete usaldusväärsust ja mõtleb kasutaja vajadusele. Tema portfoolios on näiteks Power BI, Tableau, Plotly või Streamlit dashboard, mille README selgitab sihtrühma, mõõdikuid ja otsuseid, mida dashboard toetab.

@@ -97,6 +97,22 @@ Rühma tulemus: Marketing Analyst intervjuu peab hindama kampaanialoogikat, andm
 - Vaadatakse: kas kandidaat uurib kogu ostuteekonda, mitte ainult kampaania klikke, ning pakub kontrollitavaid järgmisi samme.
 - Küsitakse: "Klikke on palju, müüki vähe. Mis võib olla põhjus?", "Kuidas kontrollid, kas probleem on sihtrühmas või pakkumises?", "Millise soovituse annaksid turundusjuhile?"
 
+**Intervjuu täpsem ülesehitus**
+
+- 5 minutit: sissejuhatus ja kandidaadi tausta kuulamine.
+- 15 minutit: portfoolio või kampaaniaanalüüsi walk-through, kus kandidaat selgitab eesmärki, mõõdikuid ja soovitust.
+- 15 minutit: praktiline juhtum, näiteks kampaania toob palju klikke, kuid müük ei kasva.
+- 15 minutit: STAR-meetodil küsimused koostöö kohta turunduse, müügi ja juhtkonnaga.
+- 5 minutit: kandidaadi küsimused.
+- 5 minutit: järgmiste sammude selgitamine.
+
+**Intervjuu hindamiskriteeriumid**
+
+- Tehniline oskus: SQL, kampaaniaandmed, konversioon, ROI/CAC ja visualiseerimine.
+- Äriline mõtlemine: kas kandidaat eristab nähtavusmõõdikuid tegelikust müügi- või kasumimõjust.
+- Kommunikatsioon: kas ta oskab tulemuse turundustiimile praktiliseks soovituseks muuta.
+- Koostöö ja õppimisvõime: kas ta suudab töötada koos turunduse ja müügiga ning küsida õigeid täpsustusi.
+
 ## Tugev vs nõrk kandidaat
 
 **Tugev kandidaat:** mõistab kampaaniate, kliendisegmentide ja müügitulemuste seost. Ta oskab arvutada konversiooni, ROI-d või CAC-i ning selgitada, milline kanal või sihtrühm loob päriselt väärtust. Portfoolios on näiteks kampaaniaanalüüs või kliendisegmenteerimine, mille lõpus on praktiline turundussoovitus.
