@@ -60,6 +60,22 @@ UrbanStyle'i andmeanalüütiku värbamisjuhend, kus analüüsisime kandidaati t�
 | 7-8 | Python analüüs | pandas + Supabase API | Segmentation script |
 | 9-10 | Portfoolio ja karjäär | Streamlit deploy | Deployed portfolio app |
 
+### Tiimi rollide rotatsioon
+
+| Nädal | A | B | C | D |
+|-------|---|---|---|---|
+| week-00 Onboarding | Karmo | Mari | Kätlin | Ragnar |
+| week-01 SQL Basics | Ragnar | Karmo | Mari | Kätlin |
+| week-02 SQL Cleaning | Kätlin | Ragnar | Karmo | Mari |
+| week-03 SQL JOINs | Mari | Kätlin | Ragnar | Karmo |
+| week-04 SQL Aggregation | Karmo | Mari | Kätlin | Ragnar |
+| week-05 Visualization Design | Ragnar | Karmo | Mari | Kätlin |
+| week-06 Visualization Storytelling | Kätlin | Ragnar | Karmo | Mari |
+| week-07 Python Pandas | Mari | Kätlin | Ragnar | Karmo |
+| week-08 API Pipeline | Karmo | Mari | Kätlin | Ragnar |
+| week-09 Portfolio Career | Ragnar | Karmo | Mari | Kätlin |
+| week-10 Portfolio Deploy | Kätlin | Ragnar | Karmo | Mari |
+
 ## Järgmised sammud
 - täiendada projektide README-faile ühtse struktuuriga
 - lisada portfooliosse rohkem ekraanipilte ja tulemuste näiteid
