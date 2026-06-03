@@ -218,16 +218,24 @@ def render_figures(figures: Iterable[go.Figure]) -> str:
     snippets: list[str] = []
     for index, fig in enumerate(figures):
         snippets.append(
-            f'<section class="chart">{fig.to_html(full_html=False, include_plotlyjs=index == 0)}</section>'
+            f'<section class="chart">{fig.to_html(full_html=False, include_plotlyjs="cdn" if index == 0 else False)}</section>'
         )
     return "\n".join(snippets)
 
 
 def build_dashboard() -> Path:
     """Write the combined Week 8 dashboard."""
-    figures = build_figures()
     generated_at = datetime.now().strftime("%Y-%m-%d %H:%M")
-    body = render_figures(figures)
+    output_links = [
+        ("combined_visuals_screenshot.png", "PNG koondpilt"),
+        ("../team/output/kpis_latest.csv", "KPI CSV"),
+        ("../team/output/weekly_aggregates_latest.csv", "Nadalase tulu CSV"),
+        ("../team/output/rfm_segment_summary_latest.csv", "RFM segmentide CSV"),
+        ("../team/output/rfm_segments_latest.csv", "RFM kliendisegmentide CSV"),
+    ]
+    links = "\n".join(
+        f'      <li><a href="{href}">{label}</a></li>' for href, label in output_links
+    )
     html = f"""<!doctype html>
 <html lang="et">
 <head>
@@ -260,12 +268,32 @@ def build_dashboard() -> Path:
       margin: 0;
       color: #52606d;
     }}
-    .chart {{
+    .visual {{
       background: #ffffff;
       border: 1px solid #d9e2ec;
       border-radius: 8px;
       padding: 12px;
       overflow: hidden;
+    }}
+    img {{
+      display: block;
+      width: 100%;
+      max-width: 1200px;
+      height: auto;
+    }}
+    h2 {{
+      margin: 0 0 10px;
+      font-size: 22px;
+    }}
+    ul {{
+      margin: 0;
+      padding-left: 20px;
+    }}
+    li {{
+      margin: 6px 0;
+    }}
+    a {{
+      color: #1d4ed8;
     }}
     @media (max-width: 720px) {{
       header,
@@ -285,7 +313,15 @@ def build_dashboard() -> Path:
     <p>Tiimitöö, individuaalne töö ja API pipeline ühel lehel. Loodud: {generated_at}</p>
   </header>
   <main>
-    {body}
+    <section class="visual">
+      <img src="combined_visuals_screenshot.png" alt="Week 8 API pipeline visuaalide koondpilt">
+    </section>
+    <section class="visual">
+      <h2>Failid</h2>
+      <ul>
+{links}
+      </ul>
+    </section>
   </main>
 </body>
 </html>
