@@ -57,6 +57,7 @@ Moodul sobib ka Week 8 tiimi pipeline'i tulemuste ekspordiks, sest `export_resul
 Visuaalne koondväljund:
 
 - [combined_visuals.html](combined_visuals.html)
+- [combined_visuals_screenshot.png](combined_visuals_screenshot.png)
 
 ## Õpitu ja väljakutsed
 

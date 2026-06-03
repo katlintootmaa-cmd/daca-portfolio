@@ -29,6 +29,10 @@ Selle nädala iseseisva töö käigus õppisin SQL JOIN-e ja harjutasin, kuidas 
 - Mitme tabeli ühendamine aitab vastata päris äriküsimustele, sest vajalik info on tihti jagatud mitme tabeli vahel.
 - Tabeli aliased muudavad SQL päringud selgemaks ja lihtsamini loetavaks.
 
+## Ekraanipilt
+
+- [week3_kadunud_kliendid_screenshot.png](week3_kadunud_kliendid_screenshot.png) - LEFT JOIN tulemuse pilt klientidest, kellel ei ole sales tabelis ostu.
+
 ## Kokkuvõte
 
 Iseseisva töö lõpuks oskan paremini ühendada `sales`, `customers` ja `products` tabeleid ning koostada päringuid, mis muudavad eraldi tabelites olevad andmed arusaadavaks raportiks. See aitab vastata küsimustele nagu kes on parimad kliendid, mida nad ostavad, millised tooted ei müü ja millistes linnades on erinevad tootekategooriad populaarsemad.
