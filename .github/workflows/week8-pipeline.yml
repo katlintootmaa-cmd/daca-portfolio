@@ -3,10 +3,12 @@ name: Week 8 Pipeline
 on:
   push:
     paths:
-      - "week-08/team/**"
+      - "week-08-API-Pipeline/team/**"
+      - ".github/workflows/week8-pipeline.yml"
   pull_request:
     paths:
-      - "week-08/team/**"
+      - "week-08-API-Pipeline/team/**"
+      - ".github/workflows/week8-pipeline.yml"
   schedule:
     - cron: "0 6 * * 1"
   workflow_dispatch:
@@ -39,7 +41,7 @@ jobs:
       - name: Install pipeline dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install pandas plotly python-dotenv supabase PyYAML
+          python -m pip install pandas plotly python-dotenv supabase PyYAML pytest
 
       - name: Show data source mode
         run: |
@@ -52,14 +54,17 @@ jobs:
       - name: Compile Week 8 Python files
         run: |
           python -m py_compile \
-            week-08/team/data_fetcher.py \
-            week-08/team/notifications.py \
-            week-08/team/transform.py \
-            week-08/team/visualize_export.py \
-            week-08/team/pipeline.py
+            week-08-API-Pipeline/team/data_fetcher.py \
+            week-08-API-Pipeline/team/notifications.py \
+            week-08-API-Pipeline/team/transform.py \
+            week-08-API-Pipeline/team/visualize_export.py \
+            week-08-API-Pipeline/team/pipeline.py
+
+      - name: Run Week 8 tests
+        run: python -m pytest week-08-API-Pipeline/team/tests
 
       - name: Run team pipeline
-        working-directory: week-08/team
+        working-directory: week-08-API-Pipeline/team
         run: |
           mkdir -p output logs
           python pipeline.py --date "$ANALYSIS_DATE"
@@ -68,7 +73,7 @@ jobs:
         if: always()
         run: |
           echo "Generated Week 8 files:"
-          find "${{ github.workspace }}/week-08/team" -maxdepth 2 -type f | sort
+          find "${{ github.workspace }}/week-08-API-Pipeline/team" -maxdepth 2 -type f | sort
 
       - name: Upload pipeline outputs
         if: always()
@@ -76,6 +81,6 @@ jobs:
         with:
           name: week8-pipeline-output
           path: |
-            ${{ github.workspace }}/week-08/team/output/
-            ${{ github.workspace }}/week-08/team/logs/
+            ${{ github.workspace }}/week-08-API-Pipeline/team/output/
+            ${{ github.workspace }}/week-08-API-Pipeline/team/logs/
           if-no-files-found: warn
