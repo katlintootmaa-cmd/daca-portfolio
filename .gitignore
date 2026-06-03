@@ -1,7 +1,6 @@
 .venv/
 .tmp/
 __pycache__/
-requirements.txt
 .env
 .vscode/settings.json
 
@@ -27,6 +26,9 @@ tools/
 *.log
 *.sql
 *.nupkg
+
+# Student summary files
+**/opilase_kokkuvote*.md
 
 # Generated week 09 team role PDFs
 week-09/team/*/*.pdf

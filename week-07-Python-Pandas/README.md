@@ -1,5 +1,7 @@
 # Nädal 7: Python Pandas
 
+English version: [readme-EN.md](readme-EN.md)
+
 Sel nädalal õppisin kasutama Pythonit ja pandas teeki andmete analüüsimiseks. Varasematel nädalatel töötasin palju SQL-i ja dashboard'idega, aga nüüd sain aru, kuidas samu andmeid saab Pythonis paindlikumalt uurida, puhastada, ühendada, arvutada ja visualiseerida.
 
 Kõigepealt õppisin, mis on pandas DataFrame. Sain aru, et DataFrame sarnaneb SQL-i tabeli või Exceli töölehega, aga Pythonis saab sellega teha rohkem vahepealseid arvutusi ja teisendusi. Harjutasin andmete laadimist ning esmast uurimist käskudega `read_csv()`, `head()`, `info()`, `describe()`, `shape` ja `dtypes`. Need käsud aitasid kiiresti aru saada, mitu rida ja veergu andmestikus on, millised on andmetüübid ning kas andmetes võib olla probleeme.

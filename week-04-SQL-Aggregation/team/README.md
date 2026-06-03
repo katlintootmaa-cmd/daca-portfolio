@@ -1,5 +1,23 @@
 # Nädal 4: Grupitöö
 
+English version: [README_EN.md](README_EN.md)
+
+## Rollijaotus
+
+| Roll | Tiimiliige | Ülesanne |
+|------|------------|----------|
+| A | Karmo | Müügi koondandmed: arvutas müügi KPI-d, perioodide võrdlused ja peamised tulumustrid. |
+| B | Mari | Kliendigruppide analüüs: koondas kliendid segmentide, linnade või ostukäitumise järgi. |
+| C | Kätlin | Inventuuristatistika: analüüsis laoseisu, toodete saadavust ja varude riske. |
+| D | Ragnar | Turunduskampaaniate ROI: hindas kampaaniate mõju müügile ja klientide aktiivsusele. |
+
+## Rollide kirjeldused
+
+- Roll A ehk müügi koondandmete analüütik vastutas juhtkonnale sobivate müügi KPI-de eest. Roll arvutas käibe, tellimuste arvu, keskmise ostu ja perioodide võrdlused.
+- Roll B ehk kliendigruppide analüütik vastutas klientide koondvaate eest. Roll leidis kliendisegmendid, aktiivsemad kliendid ja grupid, millele turundus või müük peaks tähelepanu pöörama.
+- Roll C ehk inventuuristatistika analüütik vastutas laoseisu ja tootevarude koondpildi eest. Roll hindas, millised kategooriad või tooted vajavad varude juhtimisel suuremat tähelepanu.
+- Roll D ehk turunduse ROI analüütik vastutas kampaaniate tulemuslikkuse mõõtmise eest. Roll võrdles kampaaniate mõju müügile, klientide aktiivsusele ja kanalite tasuvusele.
+
 ## Mida tegime
 
 Selle nädala grupitöö käigus rakendasime SQL agregatsiooni UrbanStyle'i äriprobleemi lahendamiseks. Eesmärk oli koostada Kristile juhatuse koosoleku jaoks koondraportid, mis annavad kiire ülevaate müügist, kliendigruppidest, inventuurist ja turunduse tulemuslikkusest.

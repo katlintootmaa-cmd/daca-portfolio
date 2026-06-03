@@ -1,18 +1,27 @@
 # Week 8 tiimitöö: Python API pipeline
 
+English version: [README_EN.md](README_EN.md)
+
 See kaust sisaldab Week 8 grupitöö modulaarset pipeline'i. Lahendus muudab Week 7 RFM analüüsi API kaudu käivitatavaks ja automatiseeritavaks ning lisab marketingi otsustuskihi.
 
 Fail `week-08/individual/week8_api_pipeline.py` on jäetud individuaalseks demo-/arhiiviversiooniks. Tiimitöö hooldatav pipeline asub siin kaustas.
 
 ## Rollid ja failid
 
-- `data_fetcher.py` - Roll A: Supabase API päringud (`fetch_sales`, `fetch_customers`, `fetch_products`), pagination, retry ja fallback.
-- `transform.py` - Roll B: puhastamine, ühendamine, KPI-d, RFM, cohort retention ja kampaaniaplaan.
-- `visualize_export.py` - Roll C: Plotly graafikud, executive dashboard ja HTML visuaalide eksport.
-- `pipeline.py` - Roll D: orkestreerib kogu protsessi `extract -> transform -> validate -> export -> notify`.
+- `data_fetcher.py` - Roll A, Karmo: Supabase API päringud (`fetch_sales`, `fetch_customers`, `fetch_products`), pagination, retry ja fallback.
+- `transform.py` - Roll B, Mari: puhastamine, ühendamine, KPI-d, RFM, cohort retention ja kampaaniaplaan.
+- `visualize_export.py` - Roll C, Kätlin: Plotly graafikud, executive dashboard ja HTML visuaalide eksport.
+- `pipeline.py` - Roll D, Ragnar: orkestreerib kogu protsessi `extract -> transform -> validate -> export -> notify`.
 - `notifications.py` - valikulised webhooki ja emaili teavitused.
 - `config.yaml` - kuupäevafiltrid, tabelinimed, retry, output kaust ja RFM võrdluskuupäev.
 - `tests/` - väikesed kontrollid RFM ja marketing-analüütika loogikale.
+
+## Rollide kirjeldused
+
+- Roll A ehk API andmepäringute arendaja vastutas andmete kättesaamise eest Supabase API kaudu. Rolli fookus oli `data_fetcher.py`, pagination, retry ja fallback, et pipeline ei katkeks esimese ühendusprobleemi peale.
+- Roll B ehk transformatsiooni arendaja vastutas andmete puhastamise, ühendamise ja analüütika arvutuste eest. Rolli fookus oli `transform.py`, KPI-d, RFM segmentatsioon, cohort retention ja kampaaniaplaan.
+- Roll C ehk visualiseerimise ja ekspordi arendaja vastutas selle eest, et pipeline'i tulemused oleksid loetavad ja jagatavad. Rolli fookus oli `visualize_export.py`, Plotly graafikud, HTML eksport ja executive dashboard.
+- Roll D ehk pipeline'i orkestreerija vastutas kogu töövoo ühendamise eest. Rolli fookus oli `pipeline.py`, et extract, transform, validate, export ja notify etapid töötaksid ühe käsuga.
 
 ## Käivitamine
 

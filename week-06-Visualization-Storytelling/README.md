@@ -1,4 +1,6 @@
 
+
+English version: [readme-EN.md](readme-EN.md)
 # Nädal 6: Visualiseerimise andmed
 
 Sel nädalal õppisin, kuidas muuta dashboard selgemaks andmelooks, mitte ainult graafikute kogumiks. Sain aru, et hea visualiseerimine ei näita ainult seda, mis andmetes juhtus, vaid aitab vaatajal mõista ka, miks see oluline on ja mida selle põhjal edasi teha.

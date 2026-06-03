@@ -1,5 +1,7 @@
 # Nädal 9: karjääri ettevalmistus ja tööandja vaade
 
+English version: [readme-EN.md](readme-EN.md)
+
 ## Nädala fookus
 
 Nädal 9 keskendus karjääri ettevalmistusele ja sellele, kuidas tööandja hindab andmeanalüütiku kandidaati. Selle asemel, et vaadata ainult enda CV-d või LinkedIni profiili, analüüsisime tööandja vaatepunkti: mida UrbanStyle'i juhid uue andmeanalüütiku puhul otsiksid ja kuidas nad kandidaate hindaksid.

@@ -1,5 +1,7 @@
 # Iseseisev töö: nädal 9 karjääri ettevalmistus
 
+English version: [README_EN.md](README_EN.md)
+
 ## Ülesande eesmärk
 
 Nädala 9 iseseisva töö eesmärk oli mõelda läbi, kuidas ma saan oma andmeanalüütiku oskuseid tööandjale paremini näidata. Fookus ei olnud ainult CV kirjutamisel, vaid kogu tööturuvalmiduse paketil: CV, LinkedIn, GitHubi portfoolio, intervjuuks valmistumine ja oma varasema kogemuse sidumine andmeanalüütika rolliga.

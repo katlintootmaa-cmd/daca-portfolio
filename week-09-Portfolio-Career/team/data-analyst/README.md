@@ -1,5 +1,7 @@
 # Värbamisjuhend rollile: Data Analyst
 
+English version: [README_EN.md](README_EN.md)
+
 ## Rolli fookus
 
 Data Analyst ehk andmeanalüütik aitab UrbanStyle'il teha paremaid otsuseid müügi-, kliendi-, toote- ja operatsiooniandmete põhjal. Rolli keskmes on andmete kogumine, puhastamine, SQL-päringud, lihtsam Python-analüüs, dashboardid ja tulemuste selgitamine äripoolele.
@@ -22,10 +24,17 @@ Soovituslik otsus:
 
 ## 4-liikmelise rühma tööjaotus
 
-- Liige 1 ehk palkamisjuhi vaade: hindab CV-d, LinkedIni ja rolli sobivust.
-- Liige 2 ehk tehnilise intervjueerija vaade: hindab SQL-i, Pythonit, GitHubi ja andmeanalüüsi töövoogu.
-- Liige 3 ehk personalijuhi vaade: hindab suhtlemist, õppimisvõimet ja meeskonda sobivust.
-- Liige 4 ehk tiimijuhi vaade: hindab iseseisvust, dokumenteerimist ja koostööd teiste osakondadega.
+- Ragnar ehk roll A, palkamisjuhi vaade: hindab CV-d, LinkedIni ja rolli sobivust.
+- Karmo ehk roll B, tehnilise intervjueerija vaade: hindab SQL-i, Pythonit, GitHubi ja andmeanalüüsi töövoogu.
+- Mari ehk roll C, personalijuhi vaade: hindab suhtlemist, õppimisvõimet ja meeskonda sobivust.
+- Kätlin ehk roll D, tiimijuhi vaade: hindab iseseisvust, dokumenteerimist ja koostööd teiste osakondadega.
+
+## Rollide kirjeldused Data Analyst vaates
+
+- Roll A ehk palkamisjuht hindab, kas kandidaadi CV, LinkedIn ja portfoolio näitavad praktilist andmeanalüüsi kogemust ning sobivad Data Analyst rolli ootustega.
+- Roll B ehk tehniline intervjueerija hindab SQL-i, Pythonit, andmepuhastust, GitHubi kasutust ja seda, kas kandidaat kontrollib oma analüüsi tulemusi.
+- Roll C ehk personalijuht hindab, kas kandidaat oskab oma analüüsi arusaadavalt selgitada, tagasisidet vastu võtta ja tiimis õppida.
+- Roll D ehk tiimijuht hindab, kas kandidaat suudab ülesandeid iseseisvalt vedada, dokumenteerida töövoogu ja teha koostööd äripoolega.
 
 ## Rollide vaade ja töö
 

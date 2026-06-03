@@ -1,5 +1,7 @@
 # Nädal 4: Iseseisev töö
 
+English version: [README_EN.md](README_EN.md)
+
 ## Mida tegin
 
 Selle nädala iseseisva töö käigus õppisin SQL agregatsiooni ja harjutasin, kuidas muuta üksikud andmeread kokkuvõtlikeks näitajateks. Fookuses olid `GROUP BY`, `HAVING`, `CTE` ja `window function`-id ning nende kasutamine UrbanStyle'i müügi-, kliendi- ja inventuuriandmete analüüsimisel.

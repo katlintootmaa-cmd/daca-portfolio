@@ -1,5 +1,7 @@
 # Värbamisjuhend rollile: Marketing Analyst
 
+English version: [README_EN.md](README_EN.md)
+
 ## Rolli fookus
 
 Marketing Analyst aitab UrbanStyle'il mõista kampaaniate tulemuslikkust, kliendisegmente, kanalite tasuvust ja turunduse mõju müügile. Roll ühendab andmeanalüüsi ja turundusloogika.
@@ -22,10 +24,17 @@ Soovituslik otsus:
 
 ## 4-liikmelise rühma tööjaotus
 
-- Liige 1 ehk palkamisjuhi vaade: hindab CV-d, LinkedIni ja turunduskogemust.
-- Liige 2 ehk tehnilise intervjueerija vaade: hindab SQL-i, kampaaniaandmeid ja dashboarde.
-- Liige 3 ehk personalijuhi vaade: hindab suhtlemist turundustiimiga ja tulemuste selgitamist.
-- Liige 4 ehk tiimijuhi vaade: hindab soovituste praktilisust ja koostööd müügiga.
+- Ragnar ehk roll A, palkamisjuhi vaade: hindab CV-d, LinkedIni ja turunduskogemust.
+- Karmo ehk roll B, tehnilise intervjueerija vaade: hindab SQL-i, kampaaniaandmeid ja dashboarde.
+- Mari ehk roll C, personalijuhi vaade: hindab suhtlemist turundustiimiga ja tulemuste selgitamist.
+- Kätlin ehk roll D, tiimijuhi vaade: hindab soovituste praktilisust ja koostööd müügiga.
+
+## Rollide kirjeldused Marketing Analyst vaates
+
+- Roll A ehk palkamisjuht hindab, kas kandidaadi CV, LinkedIn ja portfoolio näitavad kampaaniaanalüüsi, kanalite mõistmist ja turundustulemuste tõlgendamist.
+- Roll B ehk tehniline intervjueerija hindab, kas kandidaat oskab töötada kampaaniaandmetega, arvutada mõõdikuid ja kasutada SQL-i või Pythonit turundusküsimustele vastamiseks.
+- Roll C ehk personalijuht hindab, kas kandidaat oskab teha koostööd turundustiimiga, selgitada tulemusi loovale tiimile ja pakkuda praktilisi ideid.
+- Roll D ehk tiimijuht hindab, kas kandidaat suudab prioriseerida kampaaniaid, mõelda eksperimendipõhiselt ja siduda analüüsi ärilise mõjuga.
 
 ## Rollide vaade ja töö
 

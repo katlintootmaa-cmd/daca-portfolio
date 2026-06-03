@@ -1,5 +1,7 @@
 # Nädal 8: mida ma õppisin
 
+English version: [readme-EN.md](readme-EN.md)
+
 Selle nädala jooksul õppisin, kuidas muuta varasem RFM analüüs automatiseeritud Python pipeline'iks. Kui varem töötasin rohkem CSV failidega, siis nüüd sain andmeid küsida otse Supabase API kaudu. Sain aru, miks API kasutamine on praktiline: raport saab võtta värsked andmed otse allikast ja ma ei pea faile käsitsi eksportima.
 
 Õppisin ka seda, et API päringud vajavad korralikku struktuuri. Supabase tagastab ühe päringuga piiratud hulga ridu, seega lisasin andmete laadimise lehekülgede kaupa. See aitas kätte saada kogu vajaliku müügi- ja kliendiandmestiku, mitte ainult esimesed read.

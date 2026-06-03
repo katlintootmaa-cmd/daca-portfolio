@@ -1,5 +1,7 @@
 # Värbamisjuhend rollile: Product Analyst
 
+English version: [README_EN.md](README_EN.md)
+
 ## Rolli fookus
 
 Product Analyst aitab UrbanStyle'il mõista, kuidas kliendid toodete, e-poe, kampaaniate või funktsioonidega käituvad. Roll keskendub kasutajakäitumisele, tooteotsustele, eksperimenteerimisele ja mõõdikutele.
@@ -22,10 +24,17 @@ Soovituslik otsus:
 
 ## 4-liikmelise rühma tööjaotus
 
-- Liige 1 ehk palkamisjuhi vaade: hindab CV-d, LinkedIni ja tooteanalüüsi kogemust.
-- Liige 2 ehk tehnilise intervjueerija vaade: hindab SQL-i, funnel-analüüsi ja sündmuste andmeid.
-- Liige 3 ehk personalijuhi vaade: hindab koostööd tootejuhi, disaini ja arendusega.
-- Liige 4 ehk tiimijuhi vaade: hindab prioriseerimist ja soovituste praktilisust.
+- Ragnar ehk roll A, palkamisjuhi vaade: hindab CV-d, LinkedIni ja tooteanalüüsi kogemust.
+- Karmo ehk roll B, tehnilise intervjueerija vaade: hindab SQL-i, funnel-analüüsi ja sündmuste andmeid.
+- Mari ehk roll C, personalijuhi vaade: hindab koostööd tootejuhi, disaini ja arendusega.
+- Kätlin ehk roll D, tiimijuhi vaade: hindab prioriseerimist ja soovituste praktilisust.
+
+## Rollide kirjeldused Product Analyst vaates
+
+- Roll A ehk palkamisjuht hindab, kas kandidaadi CV, LinkedIn ja portfoolio näitavad tooteanalüüsi, kasutajakäitumise mõistmist ja otsuste mõjutamist.
+- Roll B ehk tehniline intervjueerija hindab SQL-i, funnelite, retentioni, eksperimendiandmete ja tootemõõdikute kasutamise oskust.
+- Roll C ehk personalijuht hindab, kas kandidaat oskab suhelda tootejuhi, disaineri ja arendajaga ning selgitada andmeid eri tiimidele.
+- Roll D ehk tiimijuht hindab, kas kandidaat suudab prioriseerida analüüse, mõõta mõju ja siduda leiud konkreetsete tooteotsustega.
 
 ## Rollide vaade ja töö
 

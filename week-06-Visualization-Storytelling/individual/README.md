@@ -1,14 +1,14 @@
-# Nädal 6: Iseseisev töö
+# UrbanStyle Tallinna Kaupluse Dashboard
 
-## Mida tegin
+English version: [README_EN.md](README_EN.md)
 
-Selle nädala iseseisva töö käigus tegin alaülesande A ehk Tallinna kaupluse dashboard'i ja andmeloo. Minu ülesanne oli vaadata UrbanStyle'i suurimat füüsilist kauplust eraldi ning näidata, millised müügimustrid, tooted ja kliendinäitajad Tallinna tulemusi kõige rohkem mõjutavad.
+## Äriprobleem
 
-Fookus oli sellel, et dashboard ei jääks ainult numbrite ja graafikute kogumiks. Lisasin vaatele juhtide kokkuvõtte, annotatsioonid, viitejoone ja lühikese narratiivi, et tulemused oleksid Anna ja juhtkonna jaoks kiiresti arusaadavad.
+UrbanStyle vajas eraldi vaadet Tallinna kauplusele, sest Tallinn on ettevõtte peakontori asukoht ja suurim füüsiline müügikoht. Juhtkond pidi kiiresti aru saama, millised müügimustrid, tooted ja kliendinäitajad Tallinna tulemust kõige rohkem mõjutavad.
 
-## Alaülesanne A: Tallinna kaupluse lugu
+## Lähenemine
 
-Tallinn on UrbanStyle'i peakontori asukoht ja suurim kauplus. Seetõttu on Tallinna vaate eesmärk näidata, mis teeb selle asukoha tugevaks ning milliseid toimivaid mustreid võiks kasutada ka teiste kaupluste arendamisel.
+Tegin alaülesande A ehk Tallinna kaupluse dashboard'i ja andmeloo. Kasutasin eelmise nädala Power BI faili, filtreerisin raporti Tallinna kauplusele ning lisasin juhtidele mõeldud kokkuvõtte, annotatsioonid, viitejoone ja ärilise soovituse.
 
 Dashboard pidi vastama küsimustele:
 
@@ -18,29 +18,33 @@ Dashboard pidi vastama küsimustele:
 - millised kliendisegmendid on Tallinna jaoks olulisemad;
 - milline soovitus tuleneb andmetest.
 
-## Tegevused
+## Peamised leiud
 
-- Avasin eelmise nädala UrbanStyle Power BI faili ja salvestasin sellest nädal 6 töö jaoks uue koopia.
-- Filtreerisin raportilehe ainult Tallinna kaupluse andmetele.
-- Lisasin KPI kaardid kogutulu, tellimuste arvu, klientide arvu ja keskmise tellimuse jaoks.
-- Koostasin müügitulu trendi joondiagrammi kuude lõikes.
-- Lisasin TOP 5 toodete või kategooriate tulpdiagrammi.
-- Lisasin kliendisegmentide vaate, et näha, millised kliendigrupid Tallinna müüki mõjutavad.
-- Lisasin vähemalt kaks annotatsiooni, mis selgitavad olulisi tulemusi.
-- Lisasin viitejoone, et võrrelda müügitulemust eesmärgi või keskmisega.
-- Kirjutasin Tallinna dashboard'i juurde lühikese andmeloo ja ärilise soovituse.
+- Tallinn on UrbanStyle'i peamine füüsiline müügikoht ja sobib võrdluspunktiks teistele asukohtadele.
+- Müügitulu trend näitab, kas tugev tulemus on püsiv või sõltub üksikutest kampaaniatest.
+- TOP toodete ja kategooriate vaade aitab otsustada, milliste toodete laoseisu tuleb hoida.
+- Soovitus on kasutada Tallinna tugevaid mustreid ka teiste kaupluste arendamisel, kuid kontrollida sobivust kohaliku kliendiga.
 
-## Valminud väljund
+## Tehniline pinurida
 
-Valmis Tallinna kaupluse dashboard, mis näitab UrbanStyle'i suurima füüsilise müügikoha tulemusi. Dashboard koondab peamised KPI-d, müügitrendi, tugevamad tooted või kategooriad ning lühikese ärilise tõlgenduse.
+- Power BI
+- KPI kaardid, joondiagramm, tulpdiagramm ja filtrid
+- Data storytelling, annotatsioonid ja juhtide kokkuvõte
 
-Ekraanipilt:
+## Ekraanipildid
 
-- Tallinna dashboard: `week 6_A_Kätlin.png`
+![UrbanStyle Tallinna kaupluse dashboard](week%206_A_K%C3%A4tlin.png)
 
-Power BI fail:
+## Valminud failid
 
 - `urbanstyle_power_bi_week_6.pbix`
+- `week 6_A_Kätlin.png`
+
+## Kuidas avada
+
+1. Ava fail `urbanstyle_power_bi_week_6.pbix` Power BI Desktopis.
+2. Vaata Tallinna kaupluse raportilehte.
+3. Kui Power BI faili ei saa avada, kasuta README-s olevat ekraanipilti kiireks ülevaateks.
 
 ## Disainiotsused
 
@@ -50,31 +54,10 @@ Annotatsioonide eesmärk oli tuua välja mitte ainult suur number, vaid ka selle
 
 Värvides ja stiilis lähtusin UrbanStyle'i varasemast dashboard'i kujundusest: rahulik taust, selged pealkirjad, KPI-de esiletõstmine ning piiratud arv rõhuvärve.
 
-## Andmelugu
+## Õpitu ja väljakutsed
 
-Tallinn on UrbanStyle'i suurim ja kõige olulisem füüsiline kauplus. Dashboard näitab, millised müügiperioodid, tooted ja kliendisegmendid annavad Tallinna tulemusse kõige suurema panuse. See tähendab, et Tallinn võib olla ettevõtte jaoks võrdluspunkt, mille põhjal saab hinnata ka teiste asukohtade arenguvõimalusi. Soovitus on hoida Tallinna tugevamate kategooriate laoseis piisav ning kasutada Tallinna toimivaid kampaania- ja tootevaliku mustreid ka teistes kauplustes.
-
-## Juhtide kokkuvõte
-
-- Tallinn on UrbanStyle'i peamine füüsiline müügikoht ja seetõttu oluline võrdluspunkt teistele asukohtadele.
-- Müügitrend aitab näha, kas Tallinna tugev tulemus on püsiv või sõltub üksikutest kampaaniatest.
-- TOP toodete või kategooriate vaade näitab, millised tooterühmad Tallinna müüki kõige rohkem veavad.
-- Kliendisegmentide analüüs aitab mõista, kellele Tallinna kauplus kõige paremini töötab.
-- Soovitus on kasutada Tallinna tugevaid mustreid teiste asukohtade parandamiseks, kuid kontrollida enne, kas sama muster sobib ka kohaliku kliendiga.
+Suurim väljakutse oli muuta ühe kaupluse andmed juhtkonnale loetavaks looks. Õppisin, et annotatsioon peab vastama küsimusele "ja mis siis?", mitte ainult kordama graafikul olevat numbrit.
 
 ## AI kasutamine
 
-Kasutasin AI-d andmeloo ja annotatsioonide sõnastamise lihvimiseks. AI aitas muuta järeldused lühemaks ja juhtkonna jaoks arusaadavamaks, kuid kontrollisin, et lõplik tekst põhineks Power BI dashboard'il nähtavatel tulemustel.
-
-## Õpitud teemad
-
-- Asukohapõhine filter muudab sama andmestiku palju konkreetsemaks ja paremini tõlgendatavaks.
-- KPI kaardid sobivad hästi juhtide kiireks ülevaateks.
-- Joondiagramm aitab näha, kas müük kasvab, langeb või kõigub.
-- Annotatsioon peab vastama küsimusele "Ja mis siis?", mitte ainult kordama graafikul olevat numbrit.
-- Viitejoon annab tulemusele konteksti ja aitab aru saada, kas tulemus on ootuspärane.
-- Dashboard'i väärtus suureneb siis, kui sellele lisada selge soovitus.
-
-## Kokkuvõte
-
-Iseseisva töö tulemusena valmis Tallinna kaupluse andmelugu Power BI dashboard'i kujul. Selle töö käigus õppisin, kuidas muuta ühe asukoha müügiandmed juhtkonnale arusaadavaks vaateks, kus numbrid, graafikud ja lühike narratiiv toetavad ühist ärilist järeldust.
+Kasutasin AI-d andmeloo ja annotatsioonide sõnastuse lihvimiseks. Kontrollisin, et lõplik tekst põhineks Power BI dashboard'il nähtavatel tulemustel ja et äriline soovitus jääks minu enda tõlgenduseks.

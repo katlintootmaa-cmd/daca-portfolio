@@ -1,4 +1,6 @@
 # Nädal 2: SQL Cleaning
+
+English version: [readme-EN.md](readme-EN.md)
 # Kokkuvõte: mida ma õppisin
 
 Sel nädalal õppisin SQL-is andmete puhastamist ja sain aru, et enne analüüsi tegemist peab andmete kvaliteedi alati üle kontrollima. Õppisin, et vigased või segased andmed võivad anda täiesti valesid järeldusi ning seepärast ei tohi andmeid kohe muuta, vaid kõigepealt tuleb probleemid tuvastada, dokumenteerida, testida ja alles siis parandada.

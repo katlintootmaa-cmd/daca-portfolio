@@ -1,5 +1,7 @@
 # Värbamisjuhend rollile: Risk Analyst
 
+English version: [README_EN.md](README_EN.md)
+
 ## Rolli fookus
 
 Risk Analyst aitab UrbanStyle'il märgata ja vähendada äririske. Need võivad olla seotud varude, maksete, tagastuste, pettuste, tarnete, andmekvaliteedi või finantsmõjuga. Roll nõuab täpsust, kriitilist mõtlemist ja oskust leida ebatavalisi mustreid.
@@ -22,10 +24,17 @@ Soovituslik otsus:
 
 ## 4-liikmelise rühma tööjaotus
 
-- Liige 1 ehk palkamisjuhi vaade: hindab CV-d, LinkedIni ja riskimõtlemise kogemust.
-- Liige 2 ehk tehnilise intervjueerija vaade: hindab SQL-i, anomaaliate leidmist ja andmekontrolli.
-- Liige 3 ehk personalijuhi vaade: hindab täpsust, vastutustunnet ja rahulikku suhtlemist.
-- Liige 4 ehk tiimijuhi vaade: hindab riskisoovituste praktilisust ja dokumenteerimist.
+- Ragnar ehk roll A, palkamisjuhi vaade: hindab CV-d, LinkedIni ja riskimõtlemise kogemust.
+- Karmo ehk roll B, tehnilise intervjueerija vaade: hindab SQL-i, anomaaliate leidmist ja andmekontrolli.
+- Mari ehk roll C, personalijuhi vaade: hindab täpsust, vastutustunnet ja rahulikku suhtlemist.
+- Kätlin ehk roll D, tiimijuhi vaade: hindab riskisoovituste praktilisust ja dokumenteerimist.
+
+## Rollide kirjeldused Risk Analyst vaates
+
+- Roll A ehk palkamisjuht hindab, kas kandidaadi CV, LinkedIn ja portfoolio näitavad riskimõtlemist, kontrolliloogikat ja tähelepanu andmete usaldusväärsusele.
+- Roll B ehk tehniline intervjueerija hindab SQL-i, kontrollpäringuid, anomaaliate leidmist, mõõdikute defineerimist ja riskiraporti koostamise oskust.
+- Roll C ehk personalijuht hindab täpsust, vastutustunnet, rahulikku suhtlust ja võimet rääkida riskidest ilma paanikat tekitamata.
+- Roll D ehk tiimijuht hindab, kas kandidaat dokumenteerib kontrollid, prioriseerib riske ja oskab olulisi probleeme õigel ajal eskaleerida.
 
 ## Rollide vaade ja töö
 

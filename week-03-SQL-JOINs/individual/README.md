@@ -1,5 +1,7 @@
 # Nädal 3: Iseseisev töö
 
+English version: [README_EN.md](README_EN.md)
+
 ## Mida tegin
 
 Selle nädala iseseisva töö käigus õppisin SQL JOIN-e ja harjutasin, kuidas ühendada eri tabelites olevad andmed üheks tervikvaateks. Fookuses olid UrbanStyle'i andmebaasi tabelid `sales`, `customers` ja `products`.

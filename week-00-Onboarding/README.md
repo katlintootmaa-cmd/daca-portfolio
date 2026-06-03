@@ -1,5 +1,7 @@
 # DACA nädal 0: Onboarding
 
+English version: [readme-EN.md](readme-EN.md)
+
 **Tegu:** programmeerisin ülesandena esimest vertikaalset lahendust (`Supabase + GitHub + VS Code`)
 
 ## 1) Setup

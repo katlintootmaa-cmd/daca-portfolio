@@ -1,5 +1,7 @@
 # Nädal 7 tiimitöö: RFM kliendisegmenteerimine
 
+English version: [README_EN.md](README_EN.md)
+
 ## Failid
 
 - `week7_rfm_complete.ipynb` - terviklik grupitöö notebook rollidega A, B, C ja D.
@@ -20,10 +22,17 @@ Vajalikud paketid on projekti `.venv` keskkonnas olemas. Notebooki avamisel vali
 
 ## Rollid
 
-- Roll A: laeb `sales` ja `customers` tabelid Supabase'ist ning teeb merge'i `customer_id` põhjal.
-- Roll B: puhastab andmed, eemaldab duplikaadid, NULL-id, vigased kuupäevad ja mittepositiivsed summad.
-- Roll C: arvutab Recency, Frequency ja Monetary väärtused ning määrab RFM segmendid.
-- Roll D: loob kolm Plotly diagrammi ja sõnastab soovitused Markole.
+- Roll A: Mari laeb `sales` ja `customers` tabelid Supabase'ist ning teeb merge'i `customer_id` põhjal.
+- Roll B: Kätlin puhastab andmed, eemaldab duplikaadid, NULL-id, vigased kuupäevad ja mittepositiivsed summad.
+- Roll C: Ragnar arvutab Recency, Frequency ja Monetary väärtused ning määrab RFM segmendid.
+- Roll D: Karmo loob kolm Plotly diagrammi ja sõnastab soovitused Markole.
+
+## Rollide kirjeldused
+
+- Roll A ehk andmete laadija vastutas Supabase'ist vajalike tabelite kättesaamise ja ühendamise eest. Rolli väljund oli analüüsiks valmis ühendatud andmestik, kus müügi- ja kliendiinfo on seotud.
+- Roll B ehk andmete puhastaja vastutas Pandase puhastusetappide eest. Roll eemaldas duplikaadid, vigased kuupäevad, tühjad väärtused ja ebaloogilised summad, et RFM tulemus oleks usaldusväärne.
+- Roll C ehk RFM analüütik vastutas Recency, Frequency ja Monetary arvutuste eest. Roll määras skoorid, segmendid ja kontrollis, et segmentide loogika vastaks turunduse eesmärgile.
+- Roll D ehk visualiseerija ja soovituste koostaja vastutas tulemuste esitlemise eest. Roll lõi graafikud, tõlgendas segmente ja sõnastas Markole kampaaniasoovitused.
 
 ## Kuupäevapiirang
 

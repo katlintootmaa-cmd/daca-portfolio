@@ -1,5 +1,7 @@
 # Värbamisjuhend rollile: BI Analyst
 
+English version: [README_EN.md](README_EN.md)
+
 ## Rolli fookus
 
 BI Analyst ehk ärianalüütika spetsialist keskendub dashboardidele, raportitele ja juhtimisinfo kättesaadavaks tegemisele. UrbanStyle'is aitaks BI Analyst luua vaateid müügile, klientidele, toodetele, varudele ja kampaaniate tulemustele.
@@ -22,10 +24,17 @@ Soovituslik otsus:
 
 ## 4-liikmelise rühma tööjaotus
 
-- Liige 1 ehk palkamisjuhi vaade: hindab CV-d, LinkedIni ja dashboardide kogemust.
-- Liige 2 ehk tehnilise intervjueerija vaade: hindab SQL-i, andmemudeleid ja BI tööriistu.
-- Liige 3 ehk personalijuhi vaade: hindab oskust selgitada dashboarde kasutajatele.
-- Liige 4 ehk tiimijuhi vaade: hindab raportite hooldatavust ja koostööd juhtidega.
+- Ragnar ehk roll A, palkamisjuhi vaade: hindab CV-d, LinkedIni ja dashboardide kogemust.
+- Karmo ehk roll B, tehnilise intervjueerija vaade: hindab SQL-i, andmemudeleid ja BI tööriistu.
+- Mari ehk roll C, personalijuhi vaade: hindab oskust selgitada dashboarde kasutajatele.
+- Kätlin ehk roll D, tiimijuhi vaade: hindab raportite hooldatavust ja koostööd juhtidega.
+
+## Rollide kirjeldused BI Analyst vaates
+
+- Roll A ehk palkamisjuht hindab, kas kandidaadi CV, LinkedIn ja portfoolio näitavad selgelt BI dashboardide, KPI-de ja raportite loomise kogemust.
+- Roll B ehk tehniline intervjueerija hindab, kas kandidaat oskab kasutada SQL-i, mõistab andmemudeleid ja suudab BI tööriistas luua usaldusväärse raporti.
+- Roll C ehk personalijuht hindab, kas kandidaat oskab dashboarde ärikasutajatele selgitada, tagasisidet vastu võtta ja muuta tehniline info arusaadavaks.
+- Roll D ehk tiimijuht hindab, kas kandidaadi raportid oleksid hooldatavad, dokumenteeritud ja juhtide igapäevases otsustamises päriselt kasutatavad.
 
 ## Rollide vaade ja töö
 

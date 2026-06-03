@@ -1,5 +1,23 @@
 # Nädal 6: Grupitöö
 
+English version: [README_EN.md](README_EN.md)
+
+## Rollijaotus
+
+| Roll | Tiimiliige | Ülesanne |
+|------|------------|----------|
+| A | Kätlin | Tallinna kaupluse lugu: lõi Tallinna dashboardi ja tõi välja tugevused ning kasvuvõimalused. |
+| B | Ragnar | Tartu kaupluse lugu: analüüsis Tartu langustrendi põhjuseid ja pakkus lahendusi. |
+| C | Karmo | Pärnu kaupluse lugu: näitas hooajalisuse mustrit ja selle ärilist tähendust. |
+| D | Mari | E-poe lugu: visualiseeris online-kanali kasvutempot ja digitaalse müügi potentsiaali. |
+
+## Rollide kirjeldused
+
+- Roll A ehk Tallinna kaupluse loo koostaja vastutas suurima füüsilise kaupluse andmeloo eest. Rolli eesmärk oli näidata Tallinna tugevusi, võrrelda tulemusi eesmärkidega ja leida õppetunnid teistele asukohtadele.
+- Roll B ehk Tartu kaupluse loo koostaja vastutas probleemide ja parenduskohtade leidmise eest. Roll otsis langustrende, erandeid ja perioode, kus Tartu vajab juhtkonna tähelepanu.
+- Roll C ehk Pärnu kaupluse loo koostaja vastutas hooajalisuse selgitamise eest. Roll tõi välja suvekuude mõju, madalhooaja riskid ja selle, kuidas Pärnu tulemusi õiglaselt tõlgendada.
+- Roll D ehk e-poe loo koostaja vastutas digitaalse kanali kasvuloo eest. Roll näitas online-müügi tempot, skaleeritavust ja seda, miks e-pood on UrbanStyle'i tuleviku jaoks oluline.
+
 ## Mida tegime
 
 Selle nädala grupitöö käigus viimistleti UrbanStyle'i eelmise nädala dashboard'id andmelooks. Fookus ei olnud enam ainult graafikute loomisel, vaid sellel, et iga vaade annaks konkreetsele juhile kiiresti aru, mis toimub, miks see oluline on ja mida selle põhjal edasi teha.
@@ -79,4 +97,3 @@ AI aitas sõnastada andmelugusid ja kontrollida, kas järeldused vastavad "Ja mi
 ## Kokkuvõte
 
 Grupitöö tulemusena õppisime, kuidas muuta Power BI dashboard'id selgemaks andmelooks. Harjutasime visualiseeringute viimistlemist, annotatsioonide lisamist, viitejoonte kasutamist ja ärilise tõlgenduse sõnastamist. Kõige olulisem õppetund oli see, et dashboard on valmis alles siis, kui vaataja saab aru, mida andmed tähendavad ja millist otsust need toetavad.
-

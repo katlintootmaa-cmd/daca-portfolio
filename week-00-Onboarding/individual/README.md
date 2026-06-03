@@ -1,5 +1,7 @@
 # Mina NotebookLM Seadistajana
 
+English version: [README_EN.md](README_EN.md)
+
 ## 1) Seadistamine
 - Lõin uue NotebookLM notebook'i nimega "UrbanStyle Marketing data"
 - Laadisn üles 4 CORE RAG-faili (CORE_R1 kuni R4) ja ootasin nende töötlemist

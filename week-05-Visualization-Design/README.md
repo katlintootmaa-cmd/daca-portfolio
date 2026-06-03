@@ -1,5 +1,7 @@
 # Nädal 5: Visualiseerimise disain
 
+English version: [readme-EN.md](readme-EN.md)
+
 Sel nädalal õppisin, kuidas muuta andmed visuaalseks looks, mida on lihtne mõista ja mille põhjal saab kiiremini otsuseid teha. Sain aru, et hea dashboard ei ole lihtsalt kogum graafikuid, vaid läbimõeldud tööriist, mis vastab konkreetsetele äriküsimustele.
 
 Kõigepealt õppisin valima õiget diagrammitüüpi vastavalt küsimusele. Kui tahan näidata muutust ajas, sobib hästi joondiagramm. Kui tahan võrrelda kategooriaid, on parem kasutada tulpdiagrammi. KPI kaart aitab esile tuua ühe kõige olulisema numbri, näiteks käibe või kasvu. Sain aru, et diagrammi valik mõjutab otseselt seda, kui kiiresti vaataja sõnumist aru saab.

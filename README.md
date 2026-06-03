@@ -1,7 +1,13 @@
 # DACA Portfoolio -- Kätlin Tootmaa
 
+**Junior Data Analyst** | Tartu, Estonia
+
+English version: [README_EN.md](README_EN.md)
+
 ## Minust
-Soovin teha karjääripööret ning alustada andmeanalüütikuna. Selle portfoolio eesmärk on näidata minu arengut DACA õppeprojekti jooksul: SQL-ist ja andmete puhastamisest kuni Power BI dashboard'ide, Python analüüsi, automatiseeritud pipeline'i ja karjääri ettevalmistuseni.
+Soovin teha karjääripööret ning alustada andmeanalüütikuna. Ehitan andmepõhiseid lahendusi SQL-i, Python Pandase ja Power BI abil ning keskendun sellele, et analüüsi tulemus oleks äriliselt arusaadav ja kasutatav.
+
+Selle portfoolio eesmärk on näidata minu arengut DACA õppeprojekti jooksul: SQL-ist ja andmete puhastamisest kuni Power BI dashboard'ide, Python analüüsi, automatiseeritud pipeline'i ja karjääri ettevalmistuseni.
 
 ## Eesmärk
 Õppida andmeanalüüsi praktiliste projektide kaudu ning ehitada professionaalne portfoolio, mis näitab tehnilisi oskusi, ärilist mõtlemist ja oskust tulemusi selgelt esitleda.
@@ -51,14 +57,19 @@ UrbanStyle'i andmeanalüütiku värbamisjuhend, kus analüüsisime kandidaati t�
 - Peamine õppetund: oskuste nimekirjast üksi ei piisa, portfoolios peab olema konkreetne probleem, lahendus ja tulemus
 
 ## Nädala kaupa
-| Nädalad | Fookus | Tööriist | Portfoolio väljund |
-|---------|--------|----------|--------------------|
-| 0 | Onboarding | Setup + GitHub | GitHub profiil |
-| 1-2 | SQL alused | PostgreSQL | Data cleaning script |
-| 3-4 | SQL edasijõud | JOINs, Aggregation | Complex analysis queries |
-| 5-6 | Visualiseerimine | Power BI / Plotly + Streamlit | Live dashboard/app |
-| 7-8 | Python analüüs | pandas + Supabase API | Segmentation script |
-| 9-10 | Portfoolio ja karjäär | Streamlit deploy | Deployed portfolio app |
+| Nädal | Fookus | Tööriist | Portfoolio väljund | Ingliskeelne README |
+|-------|--------|----------|--------------------|---------------------|
+| 0 | Onboarding | Setup + GitHub | GitHub profiil | [EN](week-00-Onboarding/README_EN.md) |
+| 1 | SQL alused | PostgreSQL | Esimesed SQL päringud | [EN](week-01-SQL-Basics/README_EN.md) |
+| 2 | SQL puhastamine | PostgreSQL | Data cleaning script | [EN](week-02-SQL-Cleaning/README_EN.md) |
+| 3 | SQL JOIN-id | PostgreSQL | Complex analysis queries | [EN](week-03-SQL-JOINs/README_EN.md) |
+| 4 | SQL agregeerimine | PostgreSQL | Aggregation analysis queries | [EN](week-04-SQL-Aggregation/README_EN.md) |
+| 5 | Visualiseerimise disain | Power BI | Investor dashboard | [EN](week-05-Visualization-Design/README_EN.md) |
+| 6 | Andmelugu | Power BI / Plotly + Streamlit | Live dashboard/app | [EN](week-06-Visualization-Storytelling/README_EN.md) |
+| 7 | Python analüüs | pandas | Segmentation script | [EN](week-07-Python-Pandas/README_EN.md) |
+| 8 | API pipeline | pandas + Supabase API | Automated pipeline outputs | [EN](week-08-API-Pipeline/README_EN.md) |
+| 9 | Portfoolio ja karjäär | GitHub + career materials | Career preparation package | [EN](week-09-Portfolio-Career/README_EN.md) |
+| 10 | Portfoolio deploy | Streamlit deploy | Deployed portfolio app | [EN](week-10-Portfolio-Deploy/README_EN.md) |
 
 ### Tiimi rollide rotatsioon
 
@@ -81,3 +92,9 @@ UrbanStyle'i andmeanalüütiku värbamisjuhend, kus analüüsisime kandidaati t�
 - lisada portfooliosse rohkem ekraanipilte ja tulemuste näiteid
 - korrastada CV ja LinkedIn mõõdetavate projektitulemuste põhjal
 - harjutada portfoolio lühikest esitlemist intervjuu jaoks
+
+## Kontakt
+
+- E-post: [katlin.tootmaa@gmail.com](mailto:katlin.tootmaa@gmail.com)
+- LinkedIn: [linkedin.com/in/kätlin-tootmaa-406717411](https://www.linkedin.com/in/k%C3%A4tlin-tootmaa-406717411/)
+- Asukoht: Tartu, Estonia

@@ -1,5 +1,7 @@
 # Värbamisjuhend rollile: Business Analyst
 
+English version: [README_EN.md](README_EN.md)
+
 ## Rolli fookus
 
 Business Analyst aitab UrbanStyle'il mõista ärivajadusi, sõnastada probleeme ja tõlkida need analüüsiülesanneteks. Roll on vähem puhtalt tehniline kui Data Analyst, kuid vajab väga head ärilist mõtlemist, suhtlemist ja andmete põhjal otsuste toetamist.
@@ -22,10 +24,17 @@ Soovituslik otsus:
 
 ## 4-liikmelise rühma tööjaotus
 
-- Liige 1 ehk palkamisjuhi vaade: hindab CV-d, LinkedIni ja ärikogemuse sobivust.
-- Liige 2 ehk tehnilise intervjueerija vaade: hindab andmeloogikat, SQL-i põhitaset ja nõuete sõnastamist.
-- Liige 3 ehk personalijuhi vaade: hindab suhtlemist, kuulamist ja sidusrühmadega töötamist.
-- Liige 4 ehk tiimijuhi vaade: hindab iseseisvust, prioriseerimist ja koostööd.
+- Ragnar ehk roll A, palkamisjuhi vaade: hindab CV-d, LinkedIni ja ärikogemuse sobivust.
+- Karmo ehk roll B, tehnilise intervjueerija vaade: hindab andmeloogikat, SQL-i põhitaset ja nõuete sõnastamist.
+- Mari ehk roll C, personalijuhi vaade: hindab suhtlemist, kuulamist ja sidusrühmadega töötamist.
+- Kätlin ehk roll D, tiimijuhi vaade: hindab iseseisvust, prioriseerimist ja koostööd.
+
+## Rollide kirjeldused Business Analyst vaates
+
+- Roll A ehk palkamisjuht hindab, kas kandidaadi CV, LinkedIn ja portfoolio näitavad äriprobleemide mõistmist, nõuete kogumist ja otsuste toetamist.
+- Roll B ehk tehniline intervjueerija hindab, kas kandidaat saab aru KPI-dest, andmeloogikast, SQL-i põhitasemest ja oskab äriküsimust analüüsiülesandeks muuta.
+- Roll C ehk personalijuht hindab, kas kandidaat oskab kuulata, küsida täpsustavaid küsimusi ja töötada eri sidusrühmadega.
+- Roll D ehk tiimijuht hindab, kas kandidaat suudab prioriseerida, kokkuleppeid dokumenteerida ja olla sillaks äripoole ning andmetiimi vahel.
 
 ## Rollide vaade ja töö
 

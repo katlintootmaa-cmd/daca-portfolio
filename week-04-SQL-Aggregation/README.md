@@ -1,5 +1,7 @@
 # Nädal 4: SQL agregatsioon
 
+English version: [readme-EN.md](readme-EN.md)
+
 Sel nädalal õppisin, kuidas muuta üksikud andmeread sisukateks kokkuvõteteks, mida saab kasutada päris äriküsimustele vastamiseks. Sain aru, et analüütiku töö ei ole ainult andmete kuvamine, vaid nende koondamine nii, et juhtidel oleks võimalik teha otsuseid selgete numbrite põhjal.
 
 Kõigepealt õppisin kasutama `GROUP BY` lauset ja agregaatfunktsioone nagu `COUNT()`, `SUM()`, `AVG()`, `MIN()` ja `MAX()`. Mõistsin, et `GROUP BY` aitab koondada suuri andmehulkasid väiksemateks loogilisteks gruppideks, näiteks kuude, linnade või kategooriate kaupa. See aitas mul näha, kuidas 1247 müügireast saab teha mõne olulise võtmenäitajaga ülevaate.

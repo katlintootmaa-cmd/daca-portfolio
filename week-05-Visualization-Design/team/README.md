@@ -1,5 +1,23 @@
 # Nädal 5: Grupitöö
 
+English version: [README_EN.md](README_EN.md)
+
+## Rollijaotus
+
+| Roll | Tiimiliige | Ülesanne |
+|------|------------|----------|
+| A | Ragnar | CEO dashboard: koostas Kristi jaoks kõrgtaseme KPI-d, müügitulu trendi ja kasvuvaate. |
+| B | Karmo | Marketing dashboard: analüüsis Anna jaoks müügikanalite efektiivsust ja kliendihankimist. |
+| C | Mari | Operations dashboard: visualiseeris Liisi jaoks inventuuri, kaupluste ja operatsioonide näitajad. |
+| D | Kätlin | Investor dashboard: sünteesis A, B ja C leiud koondvaateks ning sõnastas investori kokkuvõtte. |
+
+## Rollide kirjeldused
+
+- Roll A ehk CEO dashboardi koostaja vastutas Kristi kõrgtaseme vaate eest. Roll valis KPI-d, mis annavad kiire vastuse kasvu, müügitulu ja klientide üldseisu kohta.
+- Roll B ehk marketing dashboardi koostaja vastutas Anna turundusvaate eest. Roll võrdles müügikanaleid, kliendihankimist ja kanalite efektiivsust, et leida parimad kasvukohad.
+- Roll C ehk operations dashboardi koostaja vastutas Liisi operatsioonide vaate eest. Roll visualiseeris varusid, kaupluste tulemusi ja kategooriate seisu, et toetada praktilisi töökorralduse otsuseid.
+- Roll D ehk investor dashboardi koostaja vastutas koondvaate eest. Roll sidus A, B ja C leiud üheks juhtkonnale ja investorile arusaadavaks looks ning tõi välja peamise soovituse.
+
 ## Mida tegime
 
 Selle nädala grupitöö käigus rakendasime visualiseerimise disaini põhimõtteid UrbanStyle'i äriprobleemi lahendamiseks. Eesmärk oli luua erinevatele stakeholder'itele sobivad dashboard'id, sest Kristi, Anna ja Liis vajavad samadest andmetest erinevat vaadet.

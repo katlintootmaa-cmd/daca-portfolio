@@ -1,5 +1,7 @@
 # Nädal 1: SQL Basics
 
+English version: [readme-EN.md](readme-EN.md)
+
 Sel nädalal õppisin SQL-i põhikäske ja harjutasin andmete lugemist, filtreerimist ning loendamist UrbanStyle'i andmebaasi näitel. Fookuses oli arusaamine, kuidas päringutega andmeid uurida ilma algandmeid muutmata.
 
 ## Mida õppisin

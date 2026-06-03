@@ -1,4 +1,6 @@
 
+
+English version: [readme-EN.md](readme-EN.md)
 # Nädal 3: SQL JOINs
 
 Sel nädalal õppisin SQL JOIN-e ehk seda, kuidas ühendada eri tabelites olevad andmed üheks tervikvaateks.
