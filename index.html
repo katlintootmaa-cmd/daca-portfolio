@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="et">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kätlin Tootmaa | Junior Data Analyst</title>
+  <meta name="description" content="Kätlin Tootmaa andmeanalüütika portfoolio: SQL, Power BI, Python Pandas, RFM analüüs ja API pipeline.">
+  <style>
+    :root {
+      --ink: #17201d;
+      --muted: #5b6964;
+      --line: #d9e3df;
+      --paper: #fbfcfb;
+      --soft: #eef4f1;
+      --accent: #0f6f64;
+      --accent-strong: #09564d;
+      --sun: #d9953d;
+      --white: #ffffff;
+      --shadow: 0 18px 44px rgba(23, 32, 29, 0.1);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Inter, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(217, 227, 223, 0.8);
+      background: rgba(251, 252, 251, 0.94);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(1120px, calc(100% - 32px));
+      min-height: 68px;
+      margin: 0 auto;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--white);
+      background: var(--accent);
+      font-size: 0.85rem;
+      letter-spacing: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-strong);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 18px;
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      color: var(--white);
+      background: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .button.secondary {
+      color: var(--accent-strong);
+      background: transparent;
+    }
+
+    .hero {
+      background:
+        linear-gradient(110deg, rgba(251, 252, 251, 0.96) 0%, rgba(251, 252, 251, 0.9) 48%, rgba(238, 244, 241, 0.68) 100%),
+        url("https://raw.githubusercontent.com/katlintootmaa-cmd/daca-portfolio/main/week-06-Visualization-Storytelling/individual/week%206_A_K%C3%A4tlin.png") center right / cover no-repeat;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 380px;
+      width: min(1120px, calc(100% - 32px));
+      min-height: calc(100vh - 68px);
+      margin: 0 auto;
+      padding: 74px 0 56px;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 14px;
+      color: var(--accent-strong);
+      font-size: 0.9rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 820px;
+      font-size: clamp(2.5rem, 7vw, 5.4rem);
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+    }
+
+    h3 {
+      font-size: 1.25rem;
+    }
+
+    .lead {
+      max-width: 680px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .hero-panel {
+      padding: 24px;
+      border: 1px solid rgba(217, 227, 223, 0.88);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: var(--shadow);
+    }
+
+    .metric-list {
+      display: grid;
+      gap: 18px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--accent-strong);
+      font-size: 1.7rem;
+      line-height: 1;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    section {
+      padding: 76px 0;
+    }
+
+    .section-inner {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 34px;
+      align-items: end;
+    }
+
+    .section-head p {
+      max-width: 540px;
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    .text-block {
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .text-block p {
+      margin: 0 0 16px;
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .skill {
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--ink);
+      font-weight: 650;
+      font-size: 0.94rem;
+    }
+
+    .projects-band {
+      background: var(--soft);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .project-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      box-shadow: 0 10px 28px rgba(23, 32, 29, 0.07);
+    }
+
+    .project-media {
+      aspect-ratio: 16 / 9;
+      background: #e3ebe7;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .project-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top left;
+    }
+
+    .project-body {
+      padding: 22px;
+    }
+
+    .project-meta {
+      margin: 0 0 8px;
+      color: var(--accent-strong);
+      font-size: 0.82rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .project-body p {
+      margin: 12px 0 18px;
+      color: var(--muted);
+    }
+
+    .project-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .project-links a {
+      color: var(--accent-strong);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .week {
+      min-height: 118px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+    }
+
+    .week strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--accent-strong);
+      font-size: 0.9rem;
+    }
+
+    .week span {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .contact-band {
+      color: var(--white);
+      background: #19332f;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .contact-band p {
+      max-width: 680px;
+      margin: 16px 0 0;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .contact-links .button {
+      border-color: rgba(255, 255, 255, 0.72);
+      color: var(--white);
+      background: transparent;
+    }
+
+    footer {
+      padding: 24px 0;
+      color: var(--muted);
+      background: var(--paper);
+      font-size: 0.92rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      gap: 20px;
+    }
+
+    @media (max-width: 860px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 0;
+      }
+
+      .nav-links {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+
+      .hero-inner,
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-inner {
+        min-height: auto;
+        padding-top: 56px;
+      }
+
+      .hero-panel {
+        max-width: 480px;
+      }
+
+      .section-head {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .project-grid,
+      .timeline {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-links {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .brand span:last-child {
+        max-width: 210px;
+      }
+
+      .nav-links {
+        gap: 14px;
+        font-size: 0.9rem;
+      }
+
+      section {
+        padding: 58px 0;
+      }
+
+      .hero-actions,
+      .project-links,
+      .contact-links,
+      .footer-inner {
+        flex-direction: column;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="Peamenüü">
+      <a class="brand" href="#top" aria-label="Kätlin Tootmaa avaleht">
+        <span class="brand-mark">KT</span>
+        <span>Kätlin Tootmaa</span>
+      </a>
+      <div class="nav-links">
+        <a href="#minust">Minust</a>
+        <a href="#projektid">Projektid</a>
+        <a href="#teekond">Teekond</a>
+        <a href="#kontakt">Kontakt</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div>
+          <p class="eyebrow">Junior Data Analyst | Tartu</p>
+          <h1 id="hero-title">Andmepõhine portfoolio SQL-ist Power BI ja Pythonini.</h1>
+          <p class="lead">Ehitan analüüse, dashboarde ja automatiseeritud väljundeid, mis aitavad äriprobleemi lihtsas keeles selgitada ning otsuseid toetada.</p>
+          <div class="hero-actions">
+            <a class="button" href="#projektid">Vaata projekte</a>
+            <a class="button secondary" href="https://github.com/katlintootmaa-cmd/daca-portfolio">Ava GitHub README</a>
+          </div>
+        </div>
+
+        <aside class="hero-panel" aria-label="Portfoolio põhinäitajad">
+          <ul class="metric-list">
+            <li class="metric">
+              <strong>19.08%</strong>
+              <span>UrbanStyle 2024 käibe kasv võrreldes 2023. aastaga</span>
+            </li>
+            <li class="metric">
+              <strong>8,950</strong>
+              <span>puhastatud müügirida RFM analüüsi sisendiks</span>
+            </li>
+            <li class="metric">
+              <strong>2,540</strong>
+              <span>unikaalset klienti kliendisegmenteerimise projektis</span>
+            </li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section id="minust" aria-labelledby="about-title">
+      <div class="section-inner">
+        <div class="section-head">
+          <h2 id="about-title">Minust</h2>
+          <p>Portfoolio näitab minu arengut DACA õppeprojekti jooksul: andmete puhastamisest kuni juhtidele mõeldud visuaalsete kokkuvõteteni.</p>
+        </div>
+        <div class="about-grid">
+          <div class="text-block">
+            <p>Soovin teha karjääripööret ning alustada tööd andmeanalüütikuna. Minu tugevus on ühendada tehniline töö ärilise küsimusega: miks seda analüüsi vaja on, mida tulemus tähendab ja kuidas seda saab otsustamisel kasutada.</p>
+            <p>Olen töötanud SQL päringute, Power BI dashboardide, Python Pandase, Plotly visualiseerimise, API-põhise andmetöötluse ja GitHubi dokumenteerimisega.</p>
+          </div>
+          <div class="skills" aria-label="Oskused">
+            <span class="skill">SQL päringud</span>
+            <span class="skill">JOIN-id ja agregeerimine</span>
+            <span class="skill">Andmete puhastamine</span>
+            <span class="skill">Power BI dashboardid</span>
+            <span class="skill">Data storytelling</span>
+            <span class="skill">Python Pandas</span>
+            <span class="skill">RFM analüüs</span>
+            <span class="skill">Plotly</span>
+            <span class="skill">API pipeline</span>
+            <span class="skill">GitHub dokumentatsioon</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="projects-band" id="projektid" aria-labelledby="projects-title">
+      <div class="section-inner">
+        <div class="section-head">
+          <h2 id="projects-title">Valitud projektid</h2>
+          <p>Iga projekt on seotud konkreetse äriküsimuse, tööriista ja väljundiga. Fookus on arusaadaval tulemusel, mitte ainult failide olemasolul.</p>
+        </div>
+
+        <div class="project-grid">
+          <article class="project-card">
+            <div class="project-media">
+              <img src="https://raw.githubusercontent.com/katlintootmaa-cmd/daca-portfolio/main/week-05-Visualization-Design/individual/week%205%20D.png" alt="UrbanStyle investori Power BI dashboardi ekraanipilt">
+            </div>
+            <div class="project-body">
+              <p class="project-meta">Power BI | Investorivaade</p>
+              <h3>UrbanStyle investori dashboard</h3>
+              <p>Koondvaade käibest, kasvust, kategooriatest ja kanalitest, et hinnata UrbanStyle'i investeerimisväärsust.</p>
+              <div class="project-links">
+                <a href="https://github.com/katlintootmaa-cmd/daca-portfolio/tree/main/week-05-Visualization-Design/individual">Projekt</a>
+                <a href="https://github.com/katlintootmaa-cmd/daca-portfolio/blob/main/week-05-Visualization-Design/individual/urbanstyle_power_bi_week_5.pbix">Power BI fail</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-media">
+              <img src="https://raw.githubusercontent.com/katlintootmaa-cmd/daca-portfolio/main/week-06-Visualization-Storytelling/individual/week%206_A_K%C3%A4tlin.png" alt="Tallinna kaupluse Power BI dashboardi ekraanipilt">
+            </div>
+            <div class="project-body">
+              <p class="project-meta">Power BI | Andmelugu</p>
+              <h3>Tallinna kaupluse dashboard</h3>
+              <p>Asukohapõhine vaade Tallinna kauplusele koos KPI-de, trendide, TOP toodete ja juhtkonnale mõeldud soovitusega.</p>
+              <div class="project-links">
+                <a href="https://github.com/katlintootmaa-cmd/daca-portfolio/tree/main/week-06-Visualization-Storytelling/individual">Projekt</a>
+                <a href="https://github.com/katlintootmaa-cmd/daca-portfolio/blob/main/week-06-Visualization-Storytelling/individual/urbanstyle_power_bi_week_6.pbix">Power BI fail</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-media">
+              <img src="https://raw.githubusercontent.com/katlintootmaa-cmd/daca-portfolio/main/week-07-Python-Pandas/team/rfm_segmentide_scatter.png" alt="RFM segmentide scatter plot">
+            </div>
+            <div class="project-body">
+              <p class="project-meta">Python | Pandas</p>
+              <h3>RFM kliendisegmenteerimine</h3>
+              <p>Andmete puhastamine ja RFM sisendi ettevalmistus, mille põhjal tuvastati näiteks VIP Champions kliendid.</p>
+              <div class="project-links">
+                <a href="https://github.com/katlintootmaa-cmd/daca-portfolio/tree/main/week-07-Python-Pandas/individual">Individuaalne töö</a>
+                <a href="https://github.com/katlintootmaa-cmd/daca-portfolio/tree/main/week-07-Python-Pandas/team">Tiimitöö</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-media">
+              <img src="https://raw.githubusercontent.com/katlintootmaa-cmd/daca-portfolio/main/week-08-API-Pipeline/individual/combined_visuals_screenshot.png" alt="API pipeline'i Plotly koondväljundi ekraanipilt">
+            </div>
+            <div class="project-body">
+              <p class="project-meta">Python | Plotly | Eksport</p>
+              <h3>API pipeline ja tulemuste eksport</h3>
+              <p>Korduvkasutatavad funktsioonid CSV ja HTML väljundite salvestamiseks, koos KPI kokkuvõtete ja segmentide graafikutega.</p>
+              <div class="project-links">
+                <a href="https://github.com/katlintootmaa-cmd/daca-portfolio/tree/main/week-08-API-Pipeline/individual">Projekt</a>
+                <a href="https://github.com/katlintootmaa-cmd/daca-portfolio/blob/main/week-08-API-Pipeline/individual/combined_visuals.html">HTML väljund</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="teekond" aria-labelledby="journey-title">
+      <div class="section-inner">
+        <div class="section-head">
+          <h2 id="journey-title">Õpiteekond</h2>
+          <p>DACA projekt liikus samm-sammult tehnilisest baasist portfoolio ja tööotsingu materjalideni.</p>
+        </div>
+        <div class="timeline">
+          <div class="week"><strong>Nädal 1-2</strong><span>SQL alused ja andmete puhastamine</span></div>
+          <div class="week"><strong>Nädal 3-4</strong><span>JOIN-id, agregeerimine ja ärilised kokkuvõtted</span></div>
+          <div class="week"><strong>Nädal 5-6</strong><span>Power BI dashboardid ja data storytelling</span></div>
+          <div class="week"><strong>Nädal 7-8</strong><span>Python, Pandas, RFM ja API pipeline</span></div>
+          <div class="week"><strong>Nädal 9-10</strong><span>Karjäärimaterjalid ja portfoolio deploy</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-band" id="kontakt" aria-labelledby="contact-title">
+      <div class="section-inner contact-grid">
+        <div>
+          <h2 id="contact-title">Võtame ühendust</h2>
+          <p>Olen avatud Junior Data Analyst rollidele, praktikale ja projektidele, kus on vaja selget andmetöötlust, dashboarde või analüüsi dokumenteerimist.</p>
+        </div>
+        <div class="contact-links">
+          <a class="button" href="mailto:katlin.tootmaa@gmail.com">E-post</a>
+          <a class="button" href="https://www.linkedin.com/in/k%C3%A4tlin-tootmaa-406717411/">LinkedIn</a>
+          <a class="button" href="https://github.com/katlintootmaa-cmd/daca-portfolio">GitHub</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>© 2026 Kätlin Tootmaa</span>
+      <span>Junior Data Analyst | Tartu, Estonia</span>
+    </div>
+  </footer>
+</body>
+</html>
