@@ -122,13 +122,32 @@
     }
 
     .hero {
-      background:
-        linear-gradient(110deg, rgba(251, 252, 251, 0.96) 0%, rgba(251, 252, 251, 0.9) 48%, rgba(238, 244, 241, 0.68) 100%),
-        url("https://raw.githubusercontent.com/katlintootmaa-cmd/daca-portfolio/main/week-06-Visualization-Storytelling/individual/week%206_A_K%C3%A4tlin.png") center right / cover no-repeat;
+      position: relative;
+      overflow: hidden;
+      background: var(--paper);
       border-bottom: 1px solid var(--line);
     }
 
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -28px;
+      background: url("https://raw.githubusercontent.com/katlintootmaa-cmd/daca-portfolio/main/week-06-Visualization-Storytelling/individual/week%206_A_K%C3%A4tlin.png") center right / cover no-repeat;
+      filter: blur(18px);
+      opacity: 0.42;
+      transform: scale(1.03);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, rgba(251, 252, 251, 0.96) 0%, rgba(251, 252, 251, 0.9) 48%, rgba(238, 244, 241, 0.82) 100%);
+    }
+
     .hero-inner {
+      position: relative;
+      z-index: 1;
       display: grid;
       grid-template-columns: minmax(0, 1fr) 380px;
       width: min(1120px, calc(100% - 32px));
