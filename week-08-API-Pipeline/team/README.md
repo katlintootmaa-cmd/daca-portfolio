@@ -4,7 +4,7 @@ English version: [README_EN.md](README_EN.md)
 
 See kaust sisaldab Week 8 grupitöö modulaarset pipeline'i. Lahendus muudab Week 7 RFM analüüsi API kaudu käivitatavaks ja automatiseeritavaks ning lisab marketingi otsustuskihi.
 
-Fail `week-08/individual/week8_api_pipeline.py` on jäetud individuaalseks demo-/arhiiviversiooniks. Tiimitöö hooldatav pipeline asub siin kaustas.
+Fail `week-08-API-Pipeline/individual/week8_api_pipeline.py` on jäetud individuaalseks demo-/arhiiviversiooniks. Tiimitöö hooldatav pipeline asub siin kaustas.
 
 ## Rollid ja failid
 
@@ -28,19 +28,19 @@ Fail `week-08/individual/week8_api_pipeline.py` on jäetud individuaalseks demo-
 Projekti virtuaalkeskkonnaga:
 
 ```bash
-.\.venv\Scripts\python.exe week-08/team/pipeline.py
+.\.venv\Scripts\python.exe week-08-API-Pipeline/team/pipeline.py
 ```
 
 Kui virtuaalkeskkond on aktiveeritud:
 
 ```bash
-python week-08/team/pipeline.py
+python week-08-API-Pipeline/team/pipeline.py
 ```
 
 Valikulise analüüsi lõppkuupäevaga:
 
 ```bash
-python week-08/team/pipeline.py --date 2025-02-28
+python week-08-API-Pipeline/team/pipeline.py --date 2025-02-28
 ```
 
 API jaoks peavad projekti `.env` failis olema:
@@ -122,7 +122,7 @@ Teavitus sisaldab pipeline'i staatust, kestust, väljundkausta, andmeallikat nin
 ## Testid
 
 ```bash
-python -m pytest week-08/team/tests
+python -m unittest discover -s week-08-API-Pipeline/team/tests
 ```
 
 ## Süntees Markole

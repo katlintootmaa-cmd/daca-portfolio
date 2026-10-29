@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+import unittest
 from pathlib import Path
 
 import pandas as pd
@@ -18,6 +19,15 @@ from transform import (  # noqa: E402
     calculate_rfm,
     calculate_segment_summary,
 )
+
+
+def load_tests(loader, tests, pattern):
+    """Allow the existing function tests to run without installing pytest."""
+    return unittest.TestSuite(
+        unittest.FunctionTestCase(value)
+        for name, value in globals().items()
+        if name.startswith("test_") and callable(value)
+    )
 
 
 def sample_clean_sales() -> pd.DataFrame:

@@ -2,7 +2,7 @@
 
 See fail ühendab Roll A, B ja C moodulid üheks pipeline'iks:
 extract -> transform -> validate -> export. Käivitamiseks kasuta
-`python week-08/team/pipeline.py`.
+`python week-08-API-Pipeline/team/pipeline.py`.
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ from typing import Any, Callable
 import pandas as pd
 import yaml
 
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from data_fetcher import create_supabase_client, csv_fallback_data, fetch_customers, fetch_products, fetch_sales, sample_data
 from notifications import send_pipeline_notification
@@ -158,6 +158,8 @@ def extract(config: dict[str, Any]) -> tuple[Any, Any, Any, str]:
             sales = sales_future.result()
             customers = customers_future.result()
             products = products_future.result()
+        if sales.empty or customers.empty:
+            raise ValueError("API tagastas tühjad müügi- või kliendiandmed.")
         logger.info("[EXTRACT] done: sales=%s customers=%s products=%s", len(sales), len(customers), len(products))
         return sales, customers, products, "supabase_api"
     except Exception:
@@ -181,9 +183,18 @@ def transform_data(sales: Any, customers: Any, products: Any, config: dict[str, 
     data_quality = calculate_data_quality_report(merged, clean)
     before_cutoff = len(clean)
     reference_date = config["pipeline"].get("reference_date")
+    date_filter = config.get("date_filter", {})
+    if date_filter.get("start_date"):
+        clean = clean[clean["sale_date"] >= pd.to_datetime(date_filter["start_date"])].copy()
+    if date_filter.get("end_date"):
+        # Include the entire final day, including timestamped sales.
+        end_exclusive = pd.to_datetime(date_filter["end_date"]).normalize() + pd.Timedelta(days=1)
+        clean = clean[clean["sale_date"] < end_exclusive].copy()
     if reference_date:
-        cutoff = pd.to_datetime(reference_date)
-        clean = clean[clean["sale_date"] <= cutoff].copy()
+        cutoff = pd.to_datetime(reference_date).normalize() + pd.Timedelta(days=1)
+        clean = clean[clean["sale_date"] < cutoff].copy()
+    if clean.empty:
+        raise ValueError("Pärast puhastamist ja kuupäevafiltreid ei jäänud analüüsiks müügiandmeid.")
     period_start = clean["sale_date"].min().date() if not clean.empty else "puudub"
     period_end = clean["sale_date"].max().date() if not clean.empty else "puudub"
     period_label = f"andmebaasi algusest kuni {reference_date}" if reference_date else "kogu saadaolev periood"
@@ -339,7 +350,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Week 8 team API pipeline")
     parser.add_argument(
         "--date",
-        help="Valikuline analüüsi lõppkuupäev formaadis YYYY-MM-DD. Kui puudub, kasutatakse kõiki müügiridu.",
+        help="Valikuline analüüsi lõppkuupäev formaadis YYYY-MM-DD. Kui puudub, kasutatakse config.yaml kuupäevi.",
     )
     return parser.parse_args()
 

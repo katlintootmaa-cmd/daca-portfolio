@@ -246,7 +246,7 @@ def calculate_rfm(df: pd.DataFrame, reference_date: str | None = None) -> pd.Dat
         )
         .reset_index()
     )
-    rfm["recency_days"] = (today - rfm["last_purchase_date"]).dt.days
+    rfm["recency_days"] = (today.normalize() - rfm["last_purchase_date"].dt.normalize()).dt.days
     rfm["customer_lifespan_days"] = (rfm["last_purchase_date"] - rfm["first_purchase_date"]).dt.days.clip(lower=0)
     rfm["avg_order_value"] = rfm["monetary_value"] / rfm["frequency"]
     rfm["R_score"] = _score_column(rfm["recency_days"], [5, 4, 3, 2, 1])

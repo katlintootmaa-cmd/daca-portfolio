@@ -43,12 +43,8 @@ FALLBACK_PRODUCT_PATHS = [
 
 
 def load_environment() -> None:
-    """Leia lähim .env fail ja lae API tunnused keskkonnamuutujatesse."""
-    dotenv_path = next(
-        (path for path in [Path.cwd() / ".env", *[parent / ".env" for parent in Path.cwd().parents]] if path.exists()),
-        None,
-    )
-    load_dotenv(dotenv_path=dotenv_path)
+    """Lae projekti .env sõltumata käsu käivitamise kaustast."""
+    load_dotenv(dotenv_path=PROJECT_ROOT / ".env")
 
 
 def create_supabase_client() -> Any:
@@ -74,6 +70,8 @@ def fetch_table(
     end_date: str | None = None,
 ) -> pd.DataFrame:
     """Päri üks Supabase tabel lehekülgede kaupa ja proovi vea korral uuesti."""
+    if page_size < 1 or max_retries < 1 or retry_base_seconds < 0:
+        raise ValueError("page_size ja max_retries peavad olema positiivsed ning retry_base_seconds vähemalt 0.")
     rows: list[dict[str, Any]] = []
     start = 0
 
@@ -86,7 +84,8 @@ def fetch_table(
                 if date_column and start_date:
                     query = query.gte(date_column, start_date)
                 if date_column and end_date:
-                    query = query.lte(date_column, end_date)
+                    end_exclusive = (pd.to_datetime(end_date).normalize() + pd.Timedelta(days=1)).isoformat()
+                    query = query.lt(date_column, end_exclusive)
 
                 response = query.range(start, end).execute()
                 page = response.data or []

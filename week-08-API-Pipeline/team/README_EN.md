@@ -4,7 +4,7 @@ Estonian version: [README.md](README.md)
 
 This folder contains the modular pipeline for the Week 8 group work. The solution turns the Week 7 RFM analysis into an API-driven and automatable workflow and adds a marketing decision layer.
 
-The file `week-08/individual/week8_api_pipeline.py` is kept as an individual demo/archive version. The maintainable team pipeline is located in this folder.
+The file `week-08-API-Pipeline/individual/week8_api_pipeline.py` is kept as an individual demo/archive version. The maintainable team pipeline is located in this folder.
 
 ## Roles and Files
 
@@ -28,19 +28,19 @@ The file `week-08/individual/week8_api_pipeline.py` is kept as an individual dem
 With the project virtual environment:
 
 ```bash
-.\.venv\Scripts\python.exe week-08/team/pipeline.py
+.\.venv\Scripts\python.exe week-08-API-Pipeline/team/pipeline.py
 ```
 
 If the virtual environment is activated:
 
 ```bash
-python week-08/team/pipeline.py
+python week-08-API-Pipeline/team/pipeline.py
 ```
 
 With an optional analysis end date:
 
 ```bash
-python week-08/team/pipeline.py --date 2025-02-28
+python week-08-API-Pipeline/team/pipeline.py --date 2025-02-28
 ```
 
 For the API, the project `.env` file must contain:
@@ -122,7 +122,7 @@ The notification includes pipeline status, duration, output folder, data source,
 ## Tests
 
 ```bash
-python -m pytest week-08/team/tests
+python -m unittest discover -s week-08-API-Pipeline/team/tests
 ```
 
 ## Synthesis for Marko
