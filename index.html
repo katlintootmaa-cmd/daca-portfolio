@@ -131,6 +131,7 @@
     .hero {
       position: relative;
       overflow: hidden;
+      padding-top: 38px;
       background: var(--paper);
       border-bottom: 1px solid var(--line);
     }
@@ -158,9 +159,8 @@
       display: grid;
       grid-template-columns: minmax(0, 1fr) 380px;
       width: min(1120px, calc(100% - 32px));
-      min-height: calc(100vh - 68px);
       margin: 0 auto;
-      padding: 74px 0 56px;
+      padding: 37px 0 56px;
       gap: 48px;
       align-items: center;
     }
@@ -448,7 +448,7 @@
 
       .hero-inner {
         min-height: auto;
-        padding-top: 56px;
+        padding-top: 28px;
       }
 
       .hero-panel {
@@ -482,6 +482,10 @@
 
       section {
         padding: 58px 0;
+      }
+
+      .hero {
+        padding-top: 29px;
       }
 
       .hero-actions,
@@ -549,14 +553,15 @@
       <div class="section-inner">
         <div class="section-head">
           <h2 id="about-title">Minust</h2>
-          <p>Portfoolio näitab minu arengut DACA õppeprojekti jooksul: andmete puhastamisest kuni juhtidele mõeldud visuaalsete kokkuvõteteni.</p>
         </div>
         <div class="about-grid">
           <div class="text-block">
             <p>Soovin teha karjääripööret ning alustada tööd andmeanalüütikuna. Minu tugevus on ühendada tehniline töö ärilise küsimusega: miks seda analüüsi vaja on, mida tulemus tähendab ja kuidas seda saab otsustamisel kasutada.</p>
             <p>Olen töötanud SQL päringute, Power BI dashboardide, Python Pandase, Plotly visualiseerimise, API-põhise andmetöötluse ja GitHubi dokumenteerimisega.</p>
           </div>
-          <div class="skills" aria-label="Oskused">
+          <div class="text-block">
+            <p>Portfoolio näitab minu arengut DACA õppeprojekti jooksul: andmete puhastamisest kuni juhtidele mõeldud visuaalsete kokkuvõteteni.</p>
+            <div class="skills" aria-label="Oskused">
             <span class="skill">SQL päringud</span>
             <span class="skill">JOIN-id ja agregeerimine</span>
             <span class="skill">Andmete puhastamine</span>
@@ -567,6 +572,7 @@
             <span class="skill">Plotly</span>
             <span class="skill">API pipeline</span>
             <span class="skill">GitHub dokumentatsioon</span>
+            </div>
           </div>
         </div>
       </div>
